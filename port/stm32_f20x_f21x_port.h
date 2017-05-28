@@ -60,7 +60,7 @@ public:
 	void		reset			( void ) const;					// Устанавливает "0" на выходе (для случая, когда вывод настроен как выход).
 	void		invert			( void ) const;					// Логическое "не" состояния на выходе вывода (для случая, когда вывод настроен как выход).
 	int			read			( void ) const;					// Считывает состояние вывода (для случая, когда вывод настроен как вход).
-	answer_pin_reinit reinit (uint32_t number_config) const;	// Переинициализирует вывод в ходе выполнения программы в выбранную конфигурацию.
+	EC_ANSWER_PIN_REINIT reinit (uint32_t number_config) const;	// Переинициализирует вывод в ходе выполнения программы в выбранную конфигурацию.
 
 private:
 	constexpr	uint32_t		set_msk_get				( const pin_config_t *const pin_cfg_array );
@@ -95,29 +95,29 @@ public:
 	// Это нужно на случай, когда требуется переинициализировать некоторые (1 и более) выводов
 	// не трогая другие.
 	// Данное поведение можно сменить в stm32_f20x_f21x_conf.h, NO_REINIT_PORT_AFTER_LOOKING.
-	answer_global_port		reinit_all_ports			( void ) const;					// Метод инициализирует в реальном времени все порты ввода-вывода контроллера,
+	E_ANSWER_GP		reinit_all_ports			( void ) const;					// Метод инициализирует в реальном времени все порты ввода-вывода контроллера,
 																						// основываясь на переданном во время формирования объекта pin_config массива.
-	answer_global_port		reinit_port					( enum_port_name port ) const;	// Переинициализирует конкретный порт.
-	port_locked_key			get_state_locked_key_port	( enum_port_name port ) const;	// Узнаем, заблокирован порт или нет.
-	answer_port_set_lock	set_locked_key_port			( enum_port_name port ) const;	// Блокируем порт в соответствии с конфигурацией.
-	answer_port_set_lock	set_locked_keys_all_port	( void ) const; 				// Блокируем все порты в соответствии с конфигурацией.
+	E_ANSWER_GP		reinit_port					( EC_PORT_NAME port ) const;	// Переинициализирует конкретный порт.
+	E_PORT_LOCKED_KEY			get_state_locked_key_port	( EC_PORT_NAME port ) const;	// Узнаем, заблокирован порт или нет.
+	E_ANSWER_PORT_SET_LOCK	set_locked_key_port			( EC_PORT_NAME port ) const;	// Блокируем порт в соответствии с конфигурацией.
+	E_ANSWER_PORT_SET_LOCK	set_locked_keys_all_port	( void ) const; 				// Блокируем все порты в соответствии с конфигурацией.
 
 private:
 	const		global_port_msk_reg_struct				gb_msk_struct;						// Маски регистров всех портов.
 				void 						write_image_port_in_registrs	( uint32_t number ) const;		// Служебный метод: записывает образ начальной инициализации в регистры порта.
-	constexpr	uint32_t					moder_reg_reset_init_msk_get	( enum_port_name port_name );
-	constexpr	uint32_t					reg_moder_init_msk				( const pin_config_t *const pin_cfg_array, const uint32_t pin_count, const enum_port_name port_name );
-	constexpr	uint32_t					reg_otyper_init_msk				( const pin_config_t *const pin_cfg_array, const uint32_t pin_count, const enum_port_name port_name );
-	constexpr	uint32_t					speed_reg_reset_init_msk_get	( enum_port_name port_name );
-	constexpr	uint32_t					reg_speed_init_msk				( const pin_config_t *const pin_cfg_array, const uint32_t pin_count, const enum_port_name port_name );
-	constexpr	uint32_t					pupd_reg_reset_init_msk_get		( enum_port_name port_name );
-	constexpr	uint32_t					reg_pupd_init_msk				( const pin_config_t *const pin_cfg_array, const uint32_t pin_count, const enum_port_name port_name );
-	constexpr	uint32_t					reg_lck_init_msk				( const pin_config_t *const pin_cfg_array, const uint32_t pin_count, const enum_port_name port_name );
-	constexpr	uint32_t					reg_afl_init_msk				( const pin_config_t *const pin_cfg_array, const uint32_t pin_count, const enum_port_name port_name );
-	constexpr	uint32_t					reg_afh_msk_init_get			( const pin_config_t *const pin_cfg_array, const uint32_t pin_count, const enum_port_name port_name );
-	constexpr	uint32_t					reg_od_msk_init_get			( const pin_config_t *const pin_cfg_array, const uint32_t pin_count, const enum_port_name port_name );
+	constexpr	uint32_t					moder_reg_reset_init_msk_get	( EC_PORT_NAME port_name );
+	constexpr	uint32_t					reg_moder_init_msk				( const pin_config_t *const pin_cfg_array, const uint32_t pin_count, const EC_PORT_NAME port_name );
+	constexpr	uint32_t					reg_otyper_init_msk				( const pin_config_t *const pin_cfg_array, const uint32_t pin_count, const EC_PORT_NAME port_name );
+	constexpr	uint32_t					speed_reg_reset_init_msk_get	( EC_PORT_NAME port_name );
+	constexpr	uint32_t					reg_speed_init_msk				( const pin_config_t *const pin_cfg_array, const uint32_t pin_count, const EC_PORT_NAME port_name );
+	constexpr	uint32_t					pupd_reg_reset_init_msk_get		( EC_PORT_NAME port_name );
+	constexpr	uint32_t					reg_pupd_init_msk				( const pin_config_t *const pin_cfg_array, const uint32_t pin_count, const EC_PORT_NAME port_name );
+	constexpr	uint32_t					reg_lck_init_msk				( const pin_config_t *const pin_cfg_array, const uint32_t pin_count, const EC_PORT_NAME port_name );
+	constexpr	uint32_t					reg_afl_init_msk				( const pin_config_t *const pin_cfg_array, const uint32_t pin_count, const EC_PORT_NAME port_name );
+	constexpr	uint32_t					reg_afh_msk_init_get			( const pin_config_t *const pin_cfg_array, const uint32_t pin_count, const EC_PORT_NAME port_name );
+	constexpr	uint32_t					reg_od_msk_init_get			( const pin_config_t *const pin_cfg_array, const uint32_t pin_count, const EC_PORT_NAME port_name );
 	constexpr 	global_port_msk_reg_struct	fill_out_mas_struct				( const pin_config_t *const pin_cfg_array, const uint32_t pin_count );
-	constexpr	port_registers_flash_copy_struct fill_out_one_port_struct( enum_port_name p_name, const pin_config_t *const pin_cfg_array, const uint32_t pin_count );
+	constexpr	port_registers_flash_copy_struct fill_out_one_port_struct( EC_PORT_NAME p_name, const pin_config_t *const pin_cfg_array, const uint32_t pin_count );
 
 };
 #include <stm32_f20x_f21x_port_constexpr_func_class_global_port.h>

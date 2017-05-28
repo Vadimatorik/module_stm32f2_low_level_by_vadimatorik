@@ -11,34 +11,34 @@
  * Возвращает указатель на базовый адрес выбранного порта ввода-вывода
  * на карте памяти в соответствии с выбранным контроллером.
  */
-constexpr uint32_t p_base_port_address_get( enum_port_name port_name ) {
+constexpr uint32_t p_base_port_address_get( EC_PORT_NAME port_name ) {
 	switch(port_name){
 #ifdef PORTA
-		case PORT_A:	return 0x40020000;
+		case EC_PORT_NAME::A:	return 0x40020000;
 #endif
 #ifdef PORTB
-		case PORT_B:	return 0x40020400;
+		case EC_PORT_NAME::B:	return 0x40020400;
 #endif
 #ifdef PORTC
-		case PORT_C:	return 0x40020800;
+		case EC_PORT_NAME::C:	return 0x40020800;
 #endif
 #ifdef PORTD
-		case PORT_D:	return 0x40020C00;
+		case EC_PORT_NAME::D:	return 0x40020C00;
 #endif
 #ifdef PORTE
-		case port_e:	return 0x40021000;
+		case EC_PORT_NAME::E:	return 0x40021000;
 #endif
 #ifdef PORTF
-		case port_f:	return 0x40021400;
+		case EC_PORT_NAME::F:	return 0x40021400;
 #endif
 #ifdef PORTG
-		case port_g:	return 0x40021800;
+		case EC_PORT_NAME::G:	return 0x40021800;
 #endif
 #ifdef PORTH
-		case PORT_H:	return 0x40021C00;
+		case EC_PORT_NAME::H:	return 0x40021C00;
 #endif
 #ifdef PORTI
-		case port_i:	return 0x40022000;
+		case EC_PORT_NAME::I:	return 0x40022000;
 #endif
 		default:
 			/*
@@ -51,10 +51,10 @@ constexpr uint32_t p_base_port_address_get( enum_port_name port_name ) {
 }
 
 // Указатель на bit_banding область памяти, в которой находится бит блокировки порта.
-constexpr uint32_t bb_p_port_look_key_get ( enum_port_name port_name ) {
+constexpr uint32_t bb_p_port_look_key_get ( EC_PORT_NAME port_name ) {
 	uint32_t port_point = p_base_port_address_get(port_name);	// Получаем физический адресс порта вывода.
 	port_point += 0x1C;											// Прибавляем смещение к IDR регистру.
-	return MACRO_GET_BB_P_PER(port_point, 16);					// Получаем адрес конкретного бита регистра IDR (состояние на входе).
+	return M_GET_BB_P_PER(port_point, 16);					// Получаем адрес конкретного бита регистра IDR (состояние на входе).
 }
 
 #endif

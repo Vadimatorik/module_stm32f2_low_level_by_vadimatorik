@@ -6,6 +6,24 @@
 #ifdef MODULE_PORT
 
 /*
+ * Структура содержит необходимые для инициализации порта данные.
+ * Заполняется внутри объекта global_port при передаче в него массива pin_config элементов.
+ */
+struct __attribute__((packed)) port_registers_flash_copy_struct {
+	uint32_t				p_port;			// Указатель на структуру порта port_registers_struct в области памяти периферии (базовое смещение порта в карте памяти контроллера).
+	uint32_t				mode;			// Данные регистра выбора режима работы выводов.
+	uint32_t				mode_res;		// Значение регистра moder, которое имеет порт по умолчанию (для безопасного переключения).
+	uint32_t				otype;			// Данные регистра выбора режима выхода (в случае, если вывод настроен как выход).
+	uint32_t				speed;			// Данные регистра выбора скорости выводов.
+	uint32_t				pupd;			// Данные регистра включения подтяжки выводов.
+	uint32_t				lck;			// Данные регистра блокировки настроек.
+	uint32_t				afl;			// Данные младший регистра настроек альтернативных функций выводов.
+	uint32_t				afh;			// Данные старший регистр настроек альтернативных функций выводов.
+	uint32_t				od;				// Состояние на выводах порта после инициализации (в случае, если выводы настроены как выходы).
+	uint32_t				p_look_key;		// Указатель на бит блокировки в bit band регионе (быстрое чтение).
+};
+
+/*
  * Структура содержит в себе маски портов всех имеющихся регистров.
  * STM32_F2_PORT_COUNT - этот define автоматически определяется при
  * выборе конкретного контроллера в stm32_f20x_f21x_conf.h
@@ -14,19 +32,13 @@ struct __attribute__((packed)) global_port_msk_reg_struct {
 	port_registers_flash_copy_struct	port[STM32_F2_PORT_COUNT];
 };
 
-enum answer_pin_reinit {						// Возвращаемые значения функции пере инициализации порта
-	ANSWER_PIN_REINIT_OK				= 0,	// Вывод был успешно пере инициализирован.
-	ANSWER_PIN_REINIT_LOCKED			= 1,	// Конфигурация вывода была заблокирована.
-	ANSWER_PIN_REINIT_CFG_NUMBER_ERROR	= 2		// Вы попытались инициализировать вывод несуществующей конфигурацией.
-};
-
 /*
  * Ответы от функций reinit_all, reinit_port объекта global_port.
  */
-enum answer_global_port {
-	GLOBAL_PORT_REINIT_SUCCESS			= 0,	// Переинициализация была успешной.
-	GLOBAL_PORT_REINIT_LOOK				= 1		// Порт заблокирован, переинициализация некоторых
-												// (или всех) выводов невозможна.
+enum class E_ANSWER_GP {
+	SUCCESS		= 0,			// Переинициализация была успешной.
+	LOOK		= 1				// Порт заблокирован, переинициализация некоторых
+								// (или всех) выводов невозможна.
 	// В случае reinit_all может быть, что выводы одного или нескольких портов не были переинициализированы.
 	// В случае обнаружения блокировки порта - производится попытка пере инициализации (на случай, если
 	// требуется пере инициализировать те выводы, которые заблокированы не были).
@@ -35,53 +47,17 @@ enum answer_global_port {
 };
 
 // Состояние ключа блокировки порта.
-enum port_locked_key {
-	PORT_LOCKED_KAY_SET					= 1,
-	PORT_LOCKED_KAY_RESET				= 0
+enum class E_PORT_LOCKED_KEY {
+	SET			= 1,
+	RESET		= 0
 };
 
 // Возвращаемые значения функции блокировки порта/портов.
-enum answer_port_set_lock {
-	ANSWER_PORT_LOCK_OK			= 0,			// Порт был успешно заблокирован.
-	ANSWER_PORT_LOCK_ALREADY	= 1,			// Порт был уже заблокирован до нас.
-	ANSWER_PORT_LOCK_ERROR		= 2				// После попытки заблокировать порт - порт не был заблокирован.
+enum class E_ANSWER_PORT_SET_LOCK {
+	OK			= 0,			// Порт был успешно заблокирован.
+	ALREADY		= 1,			// Порт был уже заблокирован до нас.
+	ERROR		= 2				// После попытки заблокировать порт - порт не был заблокирован.
 };
-
-// Готовые шаблоны.
-/*
- * Данный макрос следует использовать вместо ручного заполнения
- * структуры конфигурации вывода (pin_config_t), когда вывод
- * используется как вход ADC и не меняет своей функции на протяжении
- * всего времени жизни программы.
- *
- * Пример использования.
- * До:
- * const constexpr pin_config_t ayplayer_pin_cfg = {
-		.port				= PORT_A,
-		.pin_name			= PORT_PIN_0,
-		.mode				= PIN_ANALOG_MODE,
-		.output_config		= PIN_OUTPUT_NOT_USE,
-		.speed				= PIN_LOW_SPEED,
-		.pull				= PIN_NO_PULL,
-		.af					= PIN_AF_NOT_USE,
-		.locked				= PIN_CONFIG_LOCKED,
-		.state_after_init	= PIN_STATE_NO_USE
-	};
-	После:
-	const constexpr pin_config_t ayplayer_pin_cfg = MACRO_PIN_CFG_ADC(PORT_A, PORT_PIN_0);
- */
-
-#define MACRO_PIN_CFG_ADC(PORT,PIN)	{				\
-	.port				= PORT,						\
-	.pin_name			= PIN,						\
-	.mode				= PIN_ANALOG_MODE,			\
-	.output_config		= PIN_OUTPUT_NOT_USE,		\
-	.speed				= PIN_LOW_SPEED,			\
-	.pull				= PIN_NO_PULL,				\
-	.af					= PIN_AF_NOT_USE,			\
-	.locked				= PIN_CONFIG_LOCKED,		\
-	.state_after_init	= PIN_STATE_NO_USE			\
-}
 
 #endif
 #endif

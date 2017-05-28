@@ -42,19 +42,19 @@ constexpr pin::pin ( const pin_config_t *pin_cfg_array, const uint32_t pin_cout 
  */
 // Маска установки выхода в "1".
 constexpr uint32_t pin::set_msk_get ( const pin_config_t *const pin_cfg_array ) {
-	return 1 << pin_cfg_array->pin_name;
+	return 1 << M_EC_TO_U8(pin_cfg_array->pin_name);
 }
 
 // Маска установки выхода в "0".
 constexpr uint32_t pin::reset_msk_get ( const pin_config_t *const pin_cfg_array ) {
-	return 1 << (pin_cfg_array->pin_name + 16);
+	return 1 << (M_EC_TO_U8(pin_cfg_array->pin_name) + 16);
 }
 
 // Указатель на bit_banding область памяти, в которой находится бит состояния входа.
 constexpr uint32_t pin::bb_p_idr_read_get (const pin_config_t *const pin_cfg_array ) {
 	uint32_t p_port	= p_base_port_address_get(pin_cfg_array->port);		// Получаем физический адресс порта вывода.
 	uint32_t p_idr	= p_port + 0x10;									// Прибавляем смещение к IDR регистру.
-	return MACRO_GET_BB_P_PER(p_idr, pin_cfg_array->pin_name);			// Получаем адрес конкретного бита регистра IDR (состояние на входе).
+	return M_GET_BB_P_PER(p_idr, M_EC_TO_U8(pin_cfg_array->pin_name));			// Получаем адрес конкретного бита регистра IDR (состояние на входе).
 }
 
 // Возвращаем указатель на регистр ODR, к которому относится вывод.
@@ -67,14 +67,14 @@ constexpr uint32_t pin::p_odr_get( const pin_config_t *const pin_cfg_array ) {
 constexpr uint32_t pin::odr_bit_read_bb_p_get ( const pin_config_t *const pin_cfg_array ) {
 	uint32_t p_port	= p_base_port_address_get(pin_cfg_array->port);		// Получаем физический адресс порта вывода.
 	uint32_t p_reg_odr	= p_port + 0x14;								// Прибавляем смещение к ODR регистру.
-	return MACRO_GET_BB_P_PER(p_reg_odr, pin_cfg_array->pin_name);		// Получаем адрес конкретного бита регистра ODR (состояние на входе).
+	return M_GET_BB_P_PER(p_reg_odr, M_EC_TO_U8(pin_cfg_array->pin_name));		// Получаем адрес конкретного бита регистра ODR (состояние на входе).
 }
 
 // Получаем указатель на бит блокировки конфигурации конкретного вывода.
 constexpr uint32_t pin::bb_p_looking_bit_get ( const pin_config_t *const pin_cfg_array ) {
 	uint32_t p_port	= p_base_port_address_get(pin_cfg_array->port);		// Получаем физический адресс порта вывода.
 	uint32_t p_looking_bit = p_port + 0x1C;								// Прибавляем смещение к LCKR регистру.
-	return MACRO_GET_BB_P_PER(p_looking_bit, pin_cfg_array->pin_name);	// Получаем адрес конкретного бита регистра LCKR.
+	return M_GET_BB_P_PER(p_looking_bit, M_EC_TO_U8(pin_cfg_array->pin_name));	// Получаем адрес конкретного бита регистра LCKR.
 }
 
 #endif
