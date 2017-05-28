@@ -1,5 +1,5 @@
-#ifndef STM32F2_API_PORT_STM32_F20X_F21X_PORT_FUNC_H_
-#define STM32F2_API_PORT_STM32_F20X_F21X_PORT_FUNC_H_
+#ifndef STM32F2_API_PORT_STM32_F20X_F21X_PORT_CONSTEXPR_FUNC_H_
+#define STM32F2_API_PORT_STM32_F20X_F21X_PORT_CONSTEXPR_FUNC_H_
 
 #include "stm32_f20x_f21x_conf.h"
 
@@ -59,4 +59,3 @@ constexpr uint32_t bb_p_port_look_key_get ( enum_port_name port_name ) {
 
 #endif
 #endif
-

@@ -1,9 +1,13 @@
-#ifndef STM32F2_API_PORT_STM32_F20X_F21X_PORT_FUNC_CLASS_PIN_CONSTEXPR_H_
-#define STM32F2_API_PORT_STM32_F20X_F21X_PORT_FUNC_CLASS_PIN_CONSTEXPR_H_
+#ifndef STM32F2_API_PORT_STM32_F20X_F21X_PORT_CONSTEXPR_FUNC_CLASS_PIN_H_
+#define STM32F2_API_PORT_STM32_F20X_F21X_PORT_CONSTEXPR_FUNC_CLASS_PIN_H_
 
 #include "stm32_f20x_f21x_conf.h"
 
 #ifdef MODULE_PORT
+
+#include "stm32_f20x_f21x_port_struct.h"
+#include "stm32_f20x_f21x_port_struct_class_pin.h"
+
 
 /****************************************************************************************************
  * Конструктры класса pin.

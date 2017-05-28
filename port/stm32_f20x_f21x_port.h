@@ -5,8 +5,10 @@
 
 #ifdef MODULE_PORT
 
-#include "stm32_f20x_f21x_port_struct.h"				// Используемые структуры enum-ы.
-#include "stm32_f20x_f21x_port_func.h"					// constexpr функции.
+#include "stm32_f20x_f21x_port_struct.h"							// Используемые структуры enum-ы.
+#include "stm32_f20x_f21x_port_struct_class_global_port.h"			// Структуры обоих классов.
+#include "stm32_f20x_f21x_port_struct_class_pin.h"
+#include "stm32_f20x_f21x_port_constexpr_func.h"					// Общие для обоих классов constexpr функции.
 
 /*
  * В данном файле содержатся классы объектов для полноценной работы с портами ввода-вывода.
@@ -79,7 +81,7 @@ private:
 	const		uint32_t		p_bb_key_looking;			// Указатель на ключ блокировки порта, к которому относится вывод.
 	const		uint32_t		p_bb_looking_bit;			// Указатель на бит блокировки конкретного вывода в порту, к которому относится вывод.
 };
-#include "stm32_f20x_f21x_port_func_class_pin_constexpr.h"
+#include <stm32_f20x_f21x_port_constexpr_func_class_pin.h>
 
 /*
  * Класс глобального порта. Через него происходит управление выводами и сменой конфигурации.
@@ -118,7 +120,7 @@ private:
 	constexpr	port_registers_flash_copy_struct fill_out_one_port_struct( enum_port_name p_name, const pin_config_t *const pin_cfg_array, const uint32_t pin_count );
 
 };
-#include "stm32_f20x_f21x_port_func_class_global_port_constexpr.h"
+#include <stm32_f20x_f21x_port_constexpr_func_class_global_port.h>
 
 #endif
 #endif
