@@ -6,11 +6,21 @@
 \usepackage [T2A]{fontenc}		            % Выбор внутренней TEX−кодировки.
 \usepackage [utf8]{inputenc}		        % Выбор кодовой страницы документа.
 \usepackage [english, russian]{babel}		% Выбор языка документа.
-\usepackage{amsmath}						% Математика.
-\usepackage{svg}
-\usepackage{graphicx}						% Картинки.
-\usepackage{xcolor}
-\usepackage{indentfirst}					% Красная строка в начале абзаца.
+\usepackage {amsmath}						% Математика.
+\usepackage {svg}
+\usepackage {graphicx}						% Картинки.
+\usepackage {xcolor}
+\usepackage {indentfirst}					% Красная строка в начале абзаца.
+\usepackage {listings}
+\lstloadlanguages {C++, make}
+\lstset {
+	language		= C++,			% Выбираем язык по умолчанию.
+	extendedchars	= true,			% Включаем не латиницу.
+	escapechar		= |,			% |«выпадаем» в LATEX|.
+	frame			= tb,			% Рамка сверху и снизу.
+	commentstyle	= \itshape,		% Шрифт для комментариев.
+	stringstyle		= \bfseries		% Шрифт для строк.
+} 
 
 %Настраиваем гиппер-ссылки.
 \usepackage[pdfpagelayout=OneColumn, 		% pdf отображается как сплошная полоса из A4.
