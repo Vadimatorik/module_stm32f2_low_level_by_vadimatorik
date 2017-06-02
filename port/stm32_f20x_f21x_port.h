@@ -104,8 +104,8 @@ public:
 	// Данное поведение можно сменить в stm32_f20x_f21x_conf.h, NO_REINIT_PORT_AFTER_LOOKING.
 	E_ANSWER_GP		reinit_all_ports			( void ) const;					// Метод инициализирует в реальном времени все порты ввода-вывода контроллера,
 																						// основываясь на переданном во время формирования объекта pin_config массива.
-	E_ANSWER_GP		reinit_port					( EC_PORT_NAME port ) const;	// Переинициализирует конкретный порт.
-	E_PORT_LOCKED_KEY			get_state_locked_key_port	( EC_PORT_NAME port ) const;	// Узнаем, заблокирован порт или нет.
+	E_ANSWER_GP				reinit_port					( EC_PORT_NAME port ) const;	// Переинициализирует конкретный порт.
+	E_PORT_LOCKED_KEY		get_state_locked_key_port	( EC_PORT_NAME port ) const;	// Узнаем, заблокирован порт или нет.
 	E_ANSWER_PORT_SET_LOCK	set_locked_key_port			( EC_PORT_NAME port ) const;	// Блокируем порт в соответствии с конфигурацией.
 	E_ANSWER_PORT_SET_LOCK	set_locked_keys_all_port	( void ) const; 				// Блокируем все порты в соответствии с конфигурацией.
 
