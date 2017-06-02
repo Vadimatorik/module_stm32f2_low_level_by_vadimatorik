@@ -75,12 +75,12 @@ private:
 	constexpr uint32_t	bb_p_looking_bit_get	( const pin_config_t *const pin_cfg_array );
 
 	const pin_config_t	*cfg;				// Указатель на конфигурации, используемые выводом.
-	const uint32_t		count;				// Колличество объектов конфигурации.
+	const uint32_t	count;				// Колличество объектов конфигурации.
 	const uint32_t		p_odr;				// Указатель на ODR регистр порта, к которому относится вывод.
 	const uint32_t		p_port;				// Указатель на структуру регистров порта в памяти периферии мк.
 	const uint32_t		p_bb_odr_read;		// Для быстрого чтения выставленного в ODR (пользователем)
 											// состояния вывода (нужно для invert метода).
-	const uint32_t		set_msk;			// По этой маске устанавливается бит в ODR.
+	const uint32_t	set_msk;			// По этой маске устанавливается бит в ODR.
 	const uint32_t		reset_msk;			// Соответственно, сбрасывается бит в ODR.
 	const uint32_t		p_bb_idr_read;		// Для быстрого чтения состояния вывода.
 	const uint32_t		p_bb_key_looking;	// Указатель на ключ блокировки порта, к которому относится вывод.
@@ -110,7 +110,7 @@ public:
 	E_ANSWER_PORT_SET_LOCK	set_locked_keys_all_port	( void ) const; 				// Блокируем все порты в соответствии с конфигурацией.
 
 private:
-	const		global_port_msk_reg_struct				gb_msk_struct;						// Маски регистров всех портов.
+	const global_port_msk_reg_struct	gb_msk_struct;						// Маски регистров всех портов.
 				void 						write_image_port_in_registrs	( uint32_t number ) const;		// Служебный метод: записывает образ начальной инициализации в регистры порта.
 	constexpr	uint32_t					moder_reg_reset_init_msk_get	( EC_PORT_NAME port_name );
 	constexpr	uint32_t					reg_moder_init_msk				( const pin_config_t *const pin_cfg_array, const uint32_t pin_count, const EC_PORT_NAME port_name );
