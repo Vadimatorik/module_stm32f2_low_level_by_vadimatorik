@@ -11,6 +11,7 @@
  * Возвращает указатель на базовый адрес выбранного порта ввода-вывода
  * на карте памяти в соответствии с выбранным контроллером.
  */
+
 constexpr uint32_t p_base_port_address_get( EC_PORT_NAME port_name ) {
 	switch(port_name){
 #ifdef PORTA

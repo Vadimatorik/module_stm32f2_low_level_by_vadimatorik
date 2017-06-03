@@ -1,27 +1,262 @@
 \section{Оформление .h файлов библиотеки}\label{file:h}
 \subsection{Общее оформление}
 \begin{enumerate}
-	\item Файл должен включать в себя защиту от повторного включения в процесс компиляции по типу \textit{ifndef-define-endif}, оканчивающуюся пустой строкой.\\\textbf{Пример:}\begin{lstlisting}[language=C++, frame=tlBR, basicstyle=\fontsize{8}{8}\ttfamily]
-	#ifndef STM32F2_API_STM32_F20X_F21X_PORT_H_
-	#define STM32F2_API_STM32_F20X_F21X_PORT_H_
+	\item Файл должен включать в себя защиту от повторного включения в процесс компиляции по типу \textit{ifndef-define-endif}, оканчивающуюся пустой строкой.\\\textbf{Пример:}\begin{lstlisting}[language=C++, frame=tlBR, basicstyle=\fontsize{10}{10}\ttfamily]
+#ifndef STM32F2_API_STM32_F20X_F21X_PORT_H_
+#define STM32F2_API_STM32_F20X_F21X_PORT_H_
 	
-	#endif\end{lstlisting}
+#endif\end{lstlisting}
 	
-	\item После \textit{define} строки защиты следует пустая строка, за которой располагается \textit{include} на файл конфигурации библиотеки, имеющий имя \textbf{perfix\_conf.h} (название библиотеки выступает в качестве префикса).\\\textbf{Пример:}\begin{lstlisting}[language=C++, frame=tlBR, basicstyle=\fontsize{8}{8}\ttfamily]
-	#define STM32F2_API_STM32_F20X_F21X_PORT_H_
+	\item После \textit{define} строки защиты следует пустая строка, за которой располагается \textit{include} на файл конфигурации библиотеки, имеющий имя \textbf{perfix\_conf.h} (название библиотеки выступает в качестве префикса).\\\textbf{Пример:}\begin{lstlisting}[language=C++, frame=tlBR, basicstyle=\fontsize{10}{10}\ttfamily]
+#define STM32F2_API_STM32_F20X_F21X_PORT_H_
 	
-	#include "stm32_f20x_f21x_conf.h"\end{lstlisting}
+#include "stm32_f20x_f21x_conf.h"\end{lstlisting}
 	
-	\item В случае, если файл стоит включать в процесс компиляции только при каком-то условии, это условие (обернутое в \textit{ifdef}) необходимо указать через одну пустую строку после \textit{include} файла конфигурации библиотеки. Блок \textit{endif}, закрывающий тело блока условной компиляции должен быть написан без пустой строки перед \textit{endif}, закрывающим блок защиты повторной компиляции.\\\textbf{Пример:}\begin{lstlisting}[language=C++, frame=tlBR, basicstyle=\fontsize{8}{8}\ttfamily]
-	#ifndef STM32F2_API_STM32_F20X_F21X_PORT_H_
-	#define STM32F2_API_STM32_F20X_F21X_PORT_H_
+	\item В случае, если файл стоит включать в процесс компиляции только при каком-то условии, это условие (обернутое в \textit{ifdef}) необходимо указать через одну пустую строку после \textit{include} файла конфигурации библиотеки. Блок \textit{endif}, закрывающий тело блока условной компиляции должен быть написан без пустой строки перед \textit{endif}, закрывающим блок защиты повторной компиляции.\\\textbf{Пример:}\begin{lstlisting}[language=C++, frame=tlBR, basicstyle=\fontsize{10}{10}\ttfamily]
+#ifndef STM32F2_API_STM32_F20X_F21X_PORT_H_
+#define STM32F2_API_STM32_F20X_F21X_PORT_H_
 	
-	#include "stm32_f20x_f21x_conf.h"
+#include "stm32_f20x_f21x_conf.h"
 	
-	#ifdef MODULE_PORT
+#ifdef MODULE_PORT
 	
-	CODE
+CODE
 	
-	#endif
-	#endif\end{lstlisting}
+#endif
+#endif\end{lstlisting}
+	\item Внутри всех необходимых обёрток, описанных выше (на месте слова <<CODE>> примера из предыдущего пункта), располагается основное содержимое, уникальное для каждого типа .h файла:\begin{itemize}
+		\item \textit{perfix\_moduleName.h} (подраздел~\ref{p:modul:h});
+		\item \textit{perfix\_moduleName\_constexpr\_func.h} (подраздел~\ref{p:conf:h});
+		\item \textit{perfix\-\_moduleName\-\_constexpr\-\_func\-\_class\-\_className.h} (подраздел~\ref{p:conf:ch});
+		\item \textit{perfix\_moduleName\_struct.h} и \textit{perfix\_moduleName\_struct\_class\_className.h} (подраздел~\ref{p:struc:h});
+	\end{itemize}
 \end{enumerate}
+
+\subsection{Содержимое perfix\_moduleName.h файла}\label{p:modul:h}
+\begin{enumerate}
+	\item include \textit{perfix\_moduleName\_struct.h} и \textit{perfix\_moduleName\_constexpr\_func.h}  файлов, если таковые имеются;
+	\item пустая строка;
+	\item краткое описание всего модуля, включающее в себя описание всех классов модуля, обернутое в много строчный комментарий;
+	\item пустая строка;
+	\item краткое описание класса, обернутое в много строчный комментарий;
+	\item пустая строка ;
+	\item include \textit{perfix\_moduleName\_struct\_class\_className.h}, если имеется;
+	\item пустая строка;
+	\item тело класса;
+	\item пустая строка;
+	\item include файла \textit{perfix\-\_moduleName\-\_constexpr\-\_func\-\_class\-\_className.h}, если имеется;
+	\item пустая строка;
+	\item пункты 5-12 повторить для всех требуемых классов;
+	\item пустая строка.
+\end{enumerate}
+\textbf{Пример всего файла:}\begin{lstlisting}[language=C++, frame=tlBR, basicstyle=\fontsize{10}{10}\ttfamily]
+#ifndef STM32F2_API_STM32_F20X_F21X_PORT_H_
+#define STM32F2_API_STM32_F20X_F21X_PORT_H_
+
+#include "stm32_f20x_f21x_conf.h"
+
+#ifdef MODULE_PORT
+
+#include "stm32_f20x_f21x_port_struct.h"						
+#include "stm32_f20x_f21x_port_constexpr_func.h"				
+
+/*
+ * Module description...
+ */
+
+/*
+ * Pin class description...
+ */
+
+#include "stm32_f20x_f21x_port_struct_class_pin.h"
+
+class pin {
+public:
+	...
+
+private:
+	...
+};
+
+#include "stm32_f20x_f21x_port_constexpr_func_class_pin.h"
+
+/*
+ * Global_port description...
+ */
+
+#include "stm32_f20x_f21x_port_struct_class_global_port.h"		
+
+class global_port {
+public:
+	...
+private:
+	...
+};
+
+#include "stm32_f20x_f21x_port_constexpr_func_class_global_port.h"
+
+#endif
+#endif\end{lstlisting}
+
+\subsection{Содержимое perfix\_moduleName\_constexpr\_func.h файла}\label{p:conf:h}
+\begin{enumerate}
+	\item include \textit{perfix\_moduleName\_struct.h} файла, если таковой имеются;
+	\item пустая строка;
+	\item краткое описание constexpr функции, обернутое в много строчный комментарий;
+	\item тело функции;
+	\item пустая строка;
+	\item пункты 3-5 повторить для всех имеющихся методов;
+\end{enumerate}
+\textbf{Пример всего файла:}\begin{lstlisting}[language=C++, frame=tlBR, basicstyle=\fontsize{10}{10}\ttfamily]
+#ifndef STM32F2_API_PORT_STM32_F20X_F21X_PORT_CONSTEXPR_FUNC_H_
+#define STM32F2_API_PORT_STM32_F20X_F21X_PORT_CONSTEXPR_FUNC_H_
+
+#include "stm32_f20x_f21x_conf.h"
+
+#ifdef MODULE_PORT
+
+#include "stm32_f20x_f21x_port_struct.h"
+
+/*
+ * p_base_port_address_get func description...
+ */
+constexpr uint32_t p_base_port_address_get( EC_PORT_NAME port_name ) {
+	CODE;
+}
+
+/*
+ * bb_p_port_look_key_get func description...
+ */
+constexpr uint32_t bb_p_port_look_key_get ( EC_PORT_NAME port_name ) {
+	CODE;
+}
+
+#endif
+#endif
+\end{lstlisting}
+
+\subsection{Содержимое perfix\-\_moduleName\-\_constexpr\-\_func\-\_class\-\_class\-Name.h файла}\label{p:conf:ch}
+\begin{enumerate}
+	\item include \textit{perfix\_moduleName\_struct.h} и \textit{perfix\_moduleName\_struct\_class\_className.h} файлов, если таковые имеются;
+	\item пустая строка;
+	\item комментарий о начале области с constexpr constructor-ом(-ами), обернутый в много строчный комментарий с явно прописанными границами, бросающимися в газа;
+	\item тело constexpr constructor конструктора;
+	\item пустая строка;
+	\item пункты 3-5 повторяются для всех имеющихся конструкторов;
+	\item комментарий о начале области с constexpr методами, , обернутый в много строчный комментарий с явно прописанными границами, бросающимися в газа;
+	\item пустая строка;
+	\item краткое описание constexpr функции, обернутое в много строчный комментарий;
+	\item тело функции;
+	\item пустая строка;
+	\item пункты 9-11 повторить для всех имеющихся методов;
+	
+\end{enumerate}
+\textbf{Пример всего файла:}\begin{lstlisting}[language=C++, frame=tlBR, basicstyle=\fontsize{9}{9}\ttfamily]
+#ifndef STM32F2_API_PORT_STM32_F20X_F21X_PORT_CONSTEXPR_FUNC_CLASS_PIN_H_
+#define STM32F2_API_PORT_STM32_F20X_F21X_PORT_CONSTEXPR_FUNC_CLASS_PIN_H_
+
+#include "stm32_f20x_f21x_conf.h"
+
+#ifdef MODULE_PORT
+
+#include "stm32_f20x_f21x_port_struct.h"
+#include "stm32_f20x_f21x_port_struct_class_pin.h"
+
+/*********************************************************************
+ * constructor label.
+ *********************************************************************/
+constexpr pin::pin ( const pin_config_t *pin_cfg_array ):
+	cfg			(pin_cfg_array),
+	count			(1),
+	p_port			(p_base_port_address_get(pin_cfg_array->port)),
+	p_bb_key_looking	(bb_p_port_look_key_get(pin_cfg_array->port)),
+	p_odr			(this->p_odr_get(pin_cfg_array)),
+	p_bb_odr_read		(this->odr_bit_read_bb_p_get(pin_cfg_array)),
+	set_msk			(this->set_msk_get(pin_cfg_array)),
+	reset_msk		(this->reset_msk_get(pin_cfg_array)),
+	p_bb_idr_read		(this->bb_p_idr_read_get(pin_cfg_array)),
+	p_bb_looking_bit	(this->bb_p_looking_bit_get(pin_cfg_array)) {};
+
+constexpr pin::pin ( const pin_config_t *pin_cfg_array, const uint32_t pin_cout ):
+	CODE_INIT_PARAM {};
+
+/*********************************************************************
+ * constexpr func region label.
+ *********************************************************************/
+ 
+/*
+ * constexpr func set_msk_get description...
+ */
+constexpr uint32_t pin::set_msk_get ( const pin_config_t *const pin_cfg_array ) {
+	CODE;
+}
+
+/*
+ * constexpr func reset_msk_get description...
+ */
+constexpr uint32_t pin::reset_msk_get ( const pin_config_t *const pin_cfg_array ) {
+	CODE;
+}
+
+#endif
+#endif\end{lstlisting}
+
+\subsection{Содержимое perfix\_moduleName\_struct.h и\\erfix\_moduleName\_struct\_class\_className.h файлов}\label{p:struc:h}
+В файлах располагаются следующие конструкции (сверху вниз):
+\begin{enumerate}
+	\item packed структуры;
+	\item структуры;
+	\item enum class-ы;
+	\item макросы.
+\end{enumerate}
+Правила оформления следующие:
+\begin{enumerate}
+	\item перед каждым пунктом размещается комментарий о начале области этого пункта, обернутый в много строчный комментарий с явно прописанными границами, бросающимися в газа.  После чего вставляется пустая строка;
+	\item перед каждым элементом пункта размещается краткое описание элемента, обернутое в много строчный комментарий. После краткого описания пустая строка не ставится;;
+	\item между предыдущим элементом пункта и комментарием следующего элемента этого же пункта вставляется пустая строка.
+	\item между предыдущим элементом пункта и комментария области следующего пункта вставляется пустая строка.
+\end{enumerate}
+\textbf{Пример всего файла:}\begin{lstlisting}[language=C++, frame=tlBR, basicstyle=\fontsize{9}{9}\ttfamily]
+#ifndef STM32F2_API_PORT_STM32_F20X_F21X_PORT_STRUCT_CLASS_PIN_H_
+#define STM32F2_API_PORT_STM32_F20X_F21X_PORT_STRUCT_CLASS_PIN_H_
+
+#include "stm32_f20x_f21x_conf.h"
+
+#ifdef MODULE_PORT
+
+/*********************************************************************
+ * Struct reg region label.
+ *********************************************************************/
+ 
+/*
+ * Struct description...
+ */
+struct __attribute__((packed)) port_registers_struct {
+	VALUE_FIELDS;
+};
+
+/*********************************************************************
+ * Enum class region label.
+ *********************************************************************/
+ 
+/*
+ * Enum class description...
+ */
+enum class EC_PORT_PIN_NAME {
+	VALUE_FIELDS;
+};
+
+
+/*********************************************************************
+* Macros region label.
+*********************************************************************/
+
+/*
+ * Macros description...
+ */
+#define M_PIN_CFG_ADC(PORT,PIN)	{
+	VALUE_FIELDS;
+}
+
+#endif
+#endif\end{lstlisting}

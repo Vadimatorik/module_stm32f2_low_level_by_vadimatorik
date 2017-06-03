@@ -107,7 +107,7 @@ struct __attribute__((packed)) pin_config_t {
 	EC_PIN_STATE_AFTER_INIT		state_after_init;		// Состояние на выходе после инициализации (в случае, если вывод настроен как выход).
 };
 
-#define MACRO_PIN_CFG_ADC(PORT,PIN)	{						\
+#define M_PIN_CFG_ADC(PORT,PIN)	{							\
 	.port				= PORT,								\
 	.pin_name			= PIN,								\
 	.mode				= EC_PIN_MODE::ANALOG,				\
@@ -118,5 +118,6 @@ struct __attribute__((packed)) pin_config_t {
 	.locked				= EC_LOCKED::LOCKED,				\
 	.state_after_init	= EC_PIN_STATE_AFTER_INIT::NO_USE	\
 }
+
 #endif
 #endif

@@ -6,8 +6,6 @@
 #ifdef MODULE_PORT
 
 #include "stm32_f20x_f21x_port_struct.h"							// Используемые структуры enum-ы.
-#include "stm32_f20x_f21x_port_struct_class_global_port.h"			// Структуры обоих классов.
-#include "stm32_f20x_f21x_port_struct_class_pin.h"
 #include "stm32_f20x_f21x_port_constexpr_func.h"					// Общие для обоих классов constexpr функции.
 
 /*
@@ -52,6 +50,8 @@
  * линии порта ввода-вывода, которые можно менять в процессе работы. Подробнее в примерах.
  */
 
+#include "stm32_f20x_f21x_port_struct_class_pin.h"
+
 class pin {
 public:
 	constexpr pin ( const pin_config_t *pin_cfg_array, const uint32_t pin_cout );
@@ -89,11 +89,14 @@ private:
 	const pin_config_t	*cfg;			// Указатель на конфигурации, используемые выводом.
 };
 
-#include <stm32_f20x_f21x_port_constexpr_func_class_pin.h>
+#include "stm32_f20x_f21x_port_constexpr_func_class_pin.h"
 
 /*
  * Класс глобального порта. Через него происходит управление выводами и сменой конфигурации.
  */
+
+#include "stm32_f20x_f21x_port_struct_class_global_port.h"			// Структуры обоих классов.
+
 class global_port {
 public:
 	constexpr	global_port	( const pin_config_t *const pin_cfg_array, const uint32_t pin_count );
@@ -128,7 +131,7 @@ private:
 	constexpr	port_registers_flash_copy_struct fill_out_one_port_struct( EC_PORT_NAME p_name, const pin_config_t *const pin_cfg_array, const uint32_t pin_count );
 
 };
-#include <stm32_f20x_f21x_port_constexpr_func_class_global_port.h>
+#include "stm32_f20x_f21x_port_constexpr_func_class_global_port.h"
 
 #endif
 #endif
