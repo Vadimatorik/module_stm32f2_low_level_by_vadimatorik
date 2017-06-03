@@ -1,0 +1,27 @@
+\section{Оформление .h файлов библиотеки}\label{file:h}
+\subsection{Общее оформление}
+\begin{enumerate}
+	\item Файл должен включать в себя защиту от повторного включения в процесс компиляции по типу \textit{ifndef-define-endif}, оканчивающуюся пустой строкой.\\\textbf{Пример:}\begin{lstlisting}[language=C++, frame=tlBR, basicstyle=\fontsize{8}{8}\ttfamily]
+	#ifndef STM32F2_API_STM32_F20X_F21X_PORT_H_
+	#define STM32F2_API_STM32_F20X_F21X_PORT_H_
+	
+	#endif\end{lstlisting}
+	
+	\item После \textit{define} строки защиты следует пустая строка, за которой располагается \textit{include} на файл конфигурации библиотеки, имеющий имя \textbf{perfix\_conf.h} (название библиотеки выступает в качестве префикса).\\\textbf{Пример:}\begin{lstlisting}[language=C++, frame=tlBR, basicstyle=\fontsize{8}{8}\ttfamily]
+	#define STM32F2_API_STM32_F20X_F21X_PORT_H_
+	
+	#include "stm32_f20x_f21x_conf.h"\end{lstlisting}
+	
+	\item В случае, если файл стоит включать в процесс компиляции только при каком-то условии, это условие (обернутое в \textit{ifdef}) необходимо указать через одну пустую строку после \textit{include} файла конфигурации библиотеки. Блок \textit{endif}, закрывающий тело блока условной компиляции должен быть написан без пустой строки перед \textit{endif}, закрывающим блок защиты повторной компиляции.\\\textbf{Пример:}\begin{lstlisting}[language=C++, frame=tlBR, basicstyle=\fontsize{8}{8}\ttfamily]
+	#ifndef STM32F2_API_STM32_F20X_F21X_PORT_H_
+	#define STM32F2_API_STM32_F20X_F21X_PORT_H_
+	
+	#include "stm32_f20x_f21x_conf.h"
+	
+	#ifdef MODULE_PORT
+	
+	CODE
+	
+	#endif
+	#endif\end{lstlisting}
+\end{enumerate}
