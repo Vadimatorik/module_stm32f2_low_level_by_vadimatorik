@@ -57,13 +57,13 @@ public:
 	constexpr pin ( const pin_config_t *pin_cfg_array, const uint32_t pin_cout );
 	constexpr pin ( const pin_config_t *pin_cfg_array );
 
-	void	set		( void ) const;	// Устанавливает "1" на выходе (для случая, когда вывод настроен как выход).
-	void	reset	( void ) const;	// Устанавливает "0" на выходе (для случая, когда вывод настроен как выход).
-	void	invert	( void ) const;	// Логическое "не" состояния на выходе вывода
-									// (для случая, когда вывод настроен как выход).
-	int		read	( void ) const;	// Считывает состояние вывода (для случая, когда вывод настроен как вход).
+	void	set		( void ) const;		// Устанавливает "1" на выходе (для случая, когда вывод настроен как выход).
+	void	reset	( void ) const;		// Устанавливает "0" на выходе (для случая, когда вывод настроен как выход).
+	void	invert	( void ) const;		// Логическое "не" состояния на выходе вывода
+										// (для случая, когда вывод настроен как выход).
+	int		read	( void ) const;		// Считывает состояние вывода (для случая, когда вывод настроен как вход).
 
-	EC_ANSWER_PIN_REINIT	reinit	(uint32_t number_config) const;	// Пере инициализирует вывод в ходе
+	EC_ANSWER_PIN_REINIT	reinit	(uint32_t number_config) const;	// Переинициализирует вывод в ходе
 																	// выполнения программы в выбранную конфигурацию.
 
 private:
@@ -74,18 +74,19 @@ private:
 	constexpr uint32_t	odr_bit_read_bb_p_get	( const pin_config_t *const pin_cfg_array );
 	constexpr uint32_t	bb_p_looking_bit_get	( const pin_config_t *const pin_cfg_array );
 
-	const pin_config_t	*cfg;				// Указатель на конфигурации, используемые выводом.
 	const uint32_t	count;				// Колличество объектов конфигурации.
-	const uint32_t		p_odr;				// Указатель на ODR регистр порта, к которому относится вывод.
-	const uint32_t		p_port;				// Указатель на структуру регистров порта в памяти периферии мк.
-	const uint32_t		p_bb_odr_read;		// Для быстрого чтения выставленного в ODR (пользователем)
-											// состояния вывода (нужно для invert метода).
+	const uint32_t	p_odr;				// Указатель на ODR регистр порта, к которому относится вывод.
+	const uint32_t	p_port;				// Указатель на структуру регистров порта в памяти периферии мк.
+	const uint32_t	p_bb_odr_read;		// Для быстрого чтения выставленного в ODR (пользователем)
+										// состояния вывода (нужно для invert метода).
 	const uint32_t	set_msk;			// По этой маске устанавливается бит в ODR.
-	const uint32_t		reset_msk;			// Соответственно, сбрасывается бит в ODR.
-	const uint32_t		p_bb_idr_read;		// Для быстрого чтения состояния вывода.
-	const uint32_t		p_bb_key_looking;	// Указатель на ключ блокировки порта, к которому относится вывод.
-	const uint32_t		p_bb_looking_bit;	// Указатель на бит блокировки конкретного вывода в порту,
-											// к которому относится вывод.
+	const uint32_t	reset_msk;			// Соответственно, сбрасывается бит в ODR.
+	const uint32_t	p_bb_idr_read;		// Для быстрого чтения состояния вывода.
+	const uint32_t	p_bb_key_looking;	// Указатель на ключ блокировки порта, к которому относится вывод.
+	const uint32_t	p_bb_looking_bit;	// Указатель на бит блокировки конкретного вывода в порту,
+										// к которому относится вывод.
+
+	const pin_config_t	*cfg;			// Указатель на конфигурации, используемые выводом.
 };
 
 #include <stm32_f20x_f21x_port_constexpr_func_class_pin.h>

@@ -4,11 +4,12 @@
 
 Стандарт распространяется на:
 \begin{enumerate}
-	\item Средства сборки (раздел~\ref{compgcc:0}).
-	\item Дерево проекта и именование файлов (раздел~\ref{dn:0}).
-	\item Принятые сокращения (подраздел~\ref{sk:0}).
-	\item Общие правила оформления имен (раздел~\ref{general:rules:0}).
-	\item Оформление .h файлов библиотеки (раздел~\ref{file:h}).
+	\item средства сборки (раздел~\ref{compgcc:0});
+	\item дерево проекта и именование файлов (раздел~\ref{dn:0});
+	\item принятые сокращения (подраздел~\ref{sk:0});
+	\item общие правила оформления имен (раздел~\ref{general:rules:0});
+	\item оформление .h файлов библиотеки (раздел~\ref{file:h});
+	\item объявление классов в .h файлах (раздел~\ref{class:0}).
 \end{enumerate}
 
 \section{Средства сборки}
@@ -17,8 +18,7 @@
 
 Для компиляции библиотеки следует использовать arm-none-eabi-g++ не старее (GNU Tools for ARM Embedded Processors 6-2017-q1-update) 6.3.1 20170215 (release) [ARM/embedded-6-branch revision 245512].
 
-\section{Дерево проекта и именование файлов}
-\label{dn:0}
+\section{Дерево проекта и именование файлов}\label{dn:0}
 Правила, касающиеся оформления библиотеки:
 \begin{enumerate}
 	\item Для файлов, относящихся к работе с блоками периферии, должна существовать своя папка на каждый модуль.\\
@@ -70,8 +70,7 @@ stm32_f20x_f21x_port.h
 	\end{lstlisting}
 \end{enumerate}
 
-\section{Принятые сокращения}
-\label{sk:0}
+\section{Принятые сокращения}\label{sk:0}
 \begin{enumerate}
 	\item Если uint32\_t переменная содержит внутри себя адрес в памяти (является указателем), то перед ее именем должен быть префикс <<p\_>>.
 	
@@ -85,8 +84,7 @@ stm32_f20x_f21x_port.h
 	
 \end{enumerate}
 
-\section{Общие правила оформления имен}
-\label{general:rules:0}
+\section{Общие правила оформления имен}\label{general:rules:0}
 \begin{enumerate}
 	\item Все имена переменных, структур, объектов, функций должны быть написаны строчными латинскими символами (маленькие английские буквы).
 	
@@ -112,24 +110,38 @@ stm32_f20x_f21x_port.h
 	\textbf{Пример: }<<EC\_PORT\_NAME::A>>
 \end{enumerate}
 
-\section{Оформление .h файлов библиотеки}
-\label{file:h}
+\section{Оформление .h файлов библиотеки}\label{file:h}
 \subsection{Общее оформление}
 \begin{enumerate}
-	\item <<.h>> файл должен включать в себя защиту от повторного включения файла в процесс компиляции. 
-	\begin{lstlisting}[language=C++, frame=tlBR]
+	\item Файл должен включать в себя защиту от повторного включения в процесс компиляции по типу \textit{ifndef-define-endif}, оканчивающуюся пустой строкой.\\\textbf{Пример:}\begin{lstlisting}[language=C++, frame=tlBR, basicstyle=\fontsize{8}{8}\ttfamily]
 #ifndef STM32F2_API_STM32_F20X_F21X_PORT_H_
 #define STM32F2_API_STM32_F20X_F21X_PORT_H_
 
+#endif\end{lstlisting}
+
+	\item После \textit{define} строки защиты следует пустая строка, за которой располагается \textit{include} на файл конфигурации библиотеки, имеющий имя \textbf{perfix\_conf.h} (название библиотеки выступает в качестве префикса).\\\textbf{Пример:}\begin{lstlisting}[language=C++, frame=tlBR, basicstyle=\fontsize{8}{8}\ttfamily]
+#define STM32F2_API_STM32_F20X_F21X_PORT_H_
+
+#include "stm32_f20x_f21x_conf.h"\end{lstlisting}
+	
+	\item В случае, если файл стоит включать в процесс компиляции только при каком-то условии, это условие (обернутое в \textit{ifdef}) необходимо указать через одну пустую строку после \textit{include} файла конфигурации библиотеки. Блок \textit{endif}, закрывающий тело блока условной компиляции должен быть написан без пустой строки перед \textit{endif}, закрывающим блок защиты повторной компиляции.\\\textbf{Пример:}\begin{lstlisting}[language=C++, frame=tlBR, basicstyle=\fontsize{8}{8}\ttfamily]
+#ifndef STM32F2_API_STM32_F20X_F21X_PORT_H_
+#define STM32F2_API_STM32_F20X_F21X_PORT_H_
+
+#include "stm32_f20x_f21x_conf.h"
+
+#ifdef MODULE_PORT
+
+CODE
+
 #endif
-	\end{lstlisting}
+#endif\end{lstlisting}
 \end{enumerate}
 
 \input{chapter/class_h.tex}
 	
+\section{Оформление enum class-ов}
 
-	
 \if 0
-\subsection{Enum class-ы}
 \subsection{Комментарии/разделения}
 \fi
