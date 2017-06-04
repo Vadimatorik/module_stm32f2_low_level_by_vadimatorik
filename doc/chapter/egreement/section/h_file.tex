@@ -28,7 +28,7 @@ CODE
 		\item \textit{perfix\_moduleName.h} (подраздел~\ref{p:modul:h});
 		\item \textit{perfix\_moduleName\_constexpr\_func.h} (подраздел~\ref{p:conf:h});
 		\item \textit{perfix\-\_moduleName\-\_constexpr\-\_func\-\_class\-\_className.h} (подраздел~\ref{p:conf:ch});
-		\item \textit{perfix\_moduleName\_struct.h} и \textit{perfix\_moduleName\_struct\_class\_className.h} (подраздел~\ref{p:struc:h});
+		\item \textit{perfix\_moduleName\_struct.h} и \textit{perfix\-\_moduleName\-\_struct\-\_class\-\_class\-Name.h}\\(подраздел~\ref{p:struc:h});
 	\end{itemize}
 \end{enumerate}
 
@@ -36,7 +36,7 @@ CODE
 \begin{enumerate}
 	\item include \textit{perfix\_moduleName\_struct.h} и \textit{perfix\_moduleName\_constexpr\_func.h}  файлов, если таковые имеются;
 	\item пустая строка;
-	\item краткое описание всего модуля, включающее в себя описание всех классов модуля, обернутое в много строчный комментарий;
+	\item краткое описание всего модуля, включающее в себя описание всех классов модуля, обернутое в многострочный комментарий с явно обозначенными границами символами <<*>> в количестве 70 штук.
 	\item пустая строка;
 	\item краткое описание класса, обернутое в много строчный комментарий;
 	\item пустая строка ;
@@ -60,12 +60,12 @@ CODE
 #include "stm32_f20x_f21x_port_struct.h"						
 #include "stm32_f20x_f21x_port_constexpr_func.h"				
 
-/*
- * Module description...
- */
+/**********************************************************************
+ * Краткое описание модуля...
+ **********************************************************************/
 
 /*
- * Pin class description...
+ * Краткое описание класса pin...
  */
 
 #include "stm32_f20x_f21x_port_struct_class_pin.h"
@@ -81,7 +81,7 @@ private:
 #include "stm32_f20x_f21x_port_constexpr_func_class_pin.h"
 
 /*
- * Global_port description...
+ * Краткое описание класса global_port...
  */
 
 #include "stm32_f20x_f21x_port_struct_class_global_port.h"		
@@ -118,14 +118,15 @@ private:
 #include "stm32_f20x_f21x_port_struct.h"
 
 /*
- * p_base_port_address_get func description...
+ * Краткое описание constexpr функции p_base_port_address_get...
  */
+
 constexpr uint32_t p_base_port_address_get( EC_PORT_NAME port_name ) {
 	CODE;
 }
 
 /*
- * bb_p_port_look_key_get func description...
+ * Краткое описание constexpr функции bb_p_port_look_key_get...
  */
 constexpr uint32_t bb_p_port_look_key_get ( EC_PORT_NAME port_name ) {
 	CODE;
@@ -139,7 +140,7 @@ constexpr uint32_t bb_p_port_look_key_get ( EC_PORT_NAME port_name ) {
 \begin{enumerate}
 	\item include \textit{perfix\_moduleName\_struct.h} и \textit{perfix\_moduleName\_struct\_class\_className.h} файлов, если таковые имеются;
 	\item пустая строка;
-	\item комментарий о начале области с constexpr constructor-ом(-ами), обернутый в много строчный комментарий с явно прописанными границами, бросающимися в газа;
+	\item комментарий о начале области с constexpr constructor-ом(-ами), обернутый в многострочный комментарий с явно обозначенными границами символами <<*>> в количестве 70 штук. После комментария должна следовать  пустая строка;
 	\item тело constexpr constructor конструктора;
 	\item пустая строка;
 	\item пункты 3-5 повторяются для всех имеющихся конструкторов;
@@ -151,7 +152,7 @@ constexpr uint32_t bb_p_port_look_key_get ( EC_PORT_NAME port_name ) {
 	\item пункты 9-11 повторить для всех имеющихся методов;
 	
 \end{enumerate}
-\textbf{Пример всего файла:}\begin{lstlisting}[language=C++, frame=tlBR, basicstyle=\fontsize{9}{9}\ttfamily]
+\textbf{Пример всего файла:}\begin{lstlisting}[language=C++, frame=tlBR, basicstyle=\fontsize{10}{10}\ttfamily]
 #ifndef STM32F2_API_PORT_STM32_F20X_F21X_PORT_CONSTEXPR_FUNC_CLASS_PIN_H_
 #define STM32F2_API_PORT_STM32_F20X_F21X_PORT_CONSTEXPR_FUNC_CLASS_PIN_H_
 
@@ -162,39 +163,40 @@ constexpr uint32_t bb_p_port_look_key_get ( EC_PORT_NAME port_name ) {
 #include "stm32_f20x_f21x_port_struct.h"
 #include "stm32_f20x_f21x_port_struct_class_pin.h"
 
-/*********************************************************************
- * constructor label.
- *********************************************************************/
+/**********************************************************************
+ * Область constructor конструкторов.
+ **********************************************************************/
 constexpr pin::pin ( const pin_config_t *pin_cfg_array ):
-	cfg			(pin_cfg_array),
-	count			(1),
-	p_port			(p_base_port_address_get(pin_cfg_array->port)),
-	p_bb_key_looking	(bb_p_port_look_key_get(pin_cfg_array->port)),
-	p_odr			(this->p_odr_get(pin_cfg_array)),
-	p_bb_odr_read		(this->odr_bit_read_bb_p_get(pin_cfg_array)),
-	set_msk			(this->set_msk_get(pin_cfg_array)),
-	reset_msk		(this->reset_msk_get(pin_cfg_array)),
-	p_bb_idr_read		(this->bb_p_idr_read_get(pin_cfg_array)),
+	cfg								(pin_cfg_array),
+	count							(1),
+	p_port						(p_base_port_address_get	(pin_cfg_array->port)),
+	p_bb_key_looking	(bb_p_port_look_key_get	(pin_cfg_array->port)),
+	p_odr							(this->p_odr_get(pin_cfg_array)),
+	p_bb_odr_read			(this->odr_bit_read_bb_p_get(pin_cfg_array)),
+	set_msk						(this->set_msk_get(pin_cfg_array)),
+	reset_msk					(this->reset_msk_get(pin_cfg_array)),
+	p_bb_idr_read			(this->bb_p_idr_read_get(pin_cfg_array)),
 	p_bb_looking_bit	(this->bb_p_looking_bit_get(pin_cfg_array)) {};
 
 constexpr pin::pin ( const pin_config_t *pin_cfg_array, const uint32_t pin_cout ):
-	CODE_INIT_PARAM {};
+	КОД ИНИЦИАЛИЗАЦИИ ПЕРЕМЕННЫХ КЛАССА {};
 
-/*********************************************************************
- * constexpr func region label.
- *********************************************************************/
+/**********************************************************************
+ * Область constexpr функций.
+ **********************************************************************/
  
 /*
- * constexpr func set_msk_get description...
+ * Краткое описание constexpr функции set_msk_get...
  */
 constexpr uint32_t pin::set_msk_get ( const pin_config_t *const pin_cfg_array ) {
 	CODE;
 }
 
 /*
- * constexpr func reset_msk_get description...
+ * Краткое описание constexpr функции p_base_port_address_get...
  */
-constexpr uint32_t pin::reset_msk_get ( const pin_config_t *const pin_cfg_array ) {
+constexpr uint32_t pin::p_base_port_address_get ( const pin_config_t *const 
+																									pin_cfg_array ) {
 	CODE;
 }
 
@@ -211,12 +213,12 @@ constexpr uint32_t pin::reset_msk_get ( const pin_config_t *const pin_cfg_array 
 \end{enumerate}
 Правила оформления следующие:
 \begin{enumerate}
-	\item перед каждым пунктом размещается комментарий о начале области этого пункта, обернутый в много строчный комментарий с явно прописанными границами, бросающимися в газа.  После чего вставляется пустая строка;
-	\item перед каждым элементом пункта размещается краткое описание элемента, обернутое в много строчный комментарий. После краткого описания пустая строка не ставится;;
+	\item перед каждым пунктом размещается комментарий о начале области этого пункта, обернутое в многострочный комментарий с явно обозначенными границами символами <<*>> в количестве 70 штук;
+	\item перед каждым элементом пункта размещается краткое описание элемента, обернутое в много строчный комментарий. После краткого описания пустая строка не ставится;
 	\item между предыдущим элементом пункта и комментарием следующего элемента этого же пункта вставляется пустая строка.
 	\item между предыдущим элементом пункта и комментария области следующего пункта вставляется пустая строка.
 \end{enumerate}
-\textbf{Пример всего файла:}\begin{lstlisting}[language=C++, frame=tlBR, basicstyle=\fontsize{9}{9}\ttfamily]
+\textbf{Пример всего файла:}\begin{lstlisting}[language=C++, frame=tlBR, basicstyle=\fontsize{10}{10}\ttfamily]
 #ifndef STM32F2_API_PORT_STM32_F20X_F21X_PORT_STRUCT_CLASS_PIN_H_
 #define STM32F2_API_PORT_STM32_F20X_F21X_PORT_STRUCT_CLASS_PIN_H_
 
@@ -224,35 +226,46 @@ constexpr uint32_t pin::reset_msk_get ( const pin_config_t *const pin_cfg_array 
 
 #ifdef MODULE_PORT
 
-/*********************************************************************
- * Struct reg region label.
- *********************************************************************/
+/**********************************************************************
+ * Область упакованных структур.
+ **********************************************************************/
  
 /*
- * Struct description...
+ * Краткое описание упакованной структуры.
  */
 struct __attribute__((packed)) port_registers_struct {
-	VALUE_FIELDS;
+	ПОЛЯ СТРУКТУРЫ;
 };
 
-/*********************************************************************
- * Enum class region label.
- *********************************************************************/
+/**********************************************************************
+ * Область структур.
+ **********************************************************************/
+
+/*
+ * Краткое описание структуры.
+ */
+struct st_struct {
+	ПОЛЯ СТРУКТУРЫ;
+};
+
+/**********************************************************************
+ * Область enum class.
+ **********************************************************************/
  
 /*
- * Enum class description...
+ * Краткое описание num class-а.
  */
 enum class EC_PORT_PIN_NAME {
 	VALUE_FIELDS;
 };
 
 
-/*********************************************************************
-* Macros region label.
-*********************************************************************/
+/**********************************************************************
+ * Область макросов.
+ **********************************************************************/
 
 /*
- * Macros description...
+ * Краткое описание макроса.
  */
 #define M_PIN_CFG_ADC(PORT,PIN)	{
 	VALUE_FIELDS;

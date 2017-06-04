@@ -37,8 +37,7 @@
 	В качестве примера рассмотрим дерево папки port библиотеки stm32\_f20x\_f21x (название библиотеки выступает в качестве префикса).
 	
 	stm32\_f20x\_f21x\_port.h содержит 2 класса (global\_port и pin). У них есть общие структуры, enum class-ы и методы. Однако есть и личные (используемые только ими) структуры, enum class-ы и constexpr методы. При этом у них нет общих static методов.
-	\begin{lstlisting}[language=C++,
-	frame=tlBR]
+	\begin{lstlisting}[language=C++, frame=tlBR, basicstyle=\fontsize{10}{10}\ttfamily]
 stm32_f20x_f21x_port_class_global_port.cpp
 stm32_f20x_f21x_port_class_pin.cpp 
 stm32_f20x_f21x_port_constexpr_func_class_global_port.h

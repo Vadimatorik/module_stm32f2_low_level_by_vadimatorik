@@ -31,7 +31,7 @@
 	\item Между последним символом имени класса и открывающейся фигурной скобкой ставится один (1) пробел.
 	\item Сначала идет public, а за ним private область.
 	\item <<\}>> (скобка закрывающая тело класса) должна находится на новой строке.
-\end{itemize}\begin{lstlisting}[language=C++,frame=tlBR]
+\end{itemize}\begin{lstlisting}[language=C++, frame=tlBR, basicstyle=\fontsize{10}{10}\ttfamily]
 class name_class {
 public:
 private:
@@ -52,7 +52,7 @@ private:
 	\item Аргументы конструктора(-ов) в скобках должны быть разделены <<, >> (запятая + пробел).
 	\item Внутри скобок перечисления аргументов конструктора должен быть отступ в 1 пробел с каждой стороны.\\\textbf{Пример: } <<( uint32\_t a, uint8\_t b )>>.
 \end{itemize}
-\textbf{Пример:}\begin{lstlisting}[language=C++, frame=tlBR, basicstyle=\fontsize{8}{8}\ttfamily]
+\textbf{Пример:}\begin{lstlisting}[language=C++, frame=tlBR, basicstyle=\fontsize{10}{10}\ttfamily]
 	constexpr pin ( const pin_config_t *pin_cfg_array, const uint32_t pin_cout );
 	constexpr pin ( const pin_config_t *pin_cfg_array );
 \end{lstlisting}
@@ -68,11 +68,11 @@ private:
 	\item Внутри скобок перечисления аргументов метода должен быть отступ в один (1) пробел с каждой стороны.\\\textbf{Пример: } <<( uint32\_t a, uint8\_t b )>>.
 	\item В случае, если метод не изменяет данные класса, после параметров в скобках следует поставить один (1) пробел, после чего слово <<const;>>. <<;>> закрывает заголовок функции.
 \end{itemize}
-\textbf{Пример:}\begin{lstlisting}[language=C++, frame=tlBR, basicstyle=\fontsize{8}{8}\ttfamily]
-	void	set		( void ) const;
+\textbf{Пример:}\begin{lstlisting}[language=C++, frame=tlBR, basicstyle=\fontsize{10}{10}\ttfamily]
+	void	set			( void ) const;
 	void	reset		( void ) const;
-	void	invert		( void ) const;
-	int	read		( void ) const;
+	void	invert	( void ) const;
+	int		read		( void ) const;
 \end{lstlisting}
 
 \subsection{Доступные пользователю нестатические методы класса, выполняющиеся в реальном времени и возвращающие значение нестандартного типа или указатель на нестандартный тип данных}\label{dp:n:n}
@@ -84,7 +84,7 @@ private:
 	\item Аргументы методов в скобках должны быть разделены <<, >> (запятая + пробел).
 	\item Внутри скобок перечисления аргументов метода должен быть отступ в 1 пробел с каждой стороны.\\\textbf{Пример: } <<( uint32\_t a, uint8\_t b )>>.
 \end{itemize}
-\textbf{Пример:}\begin{lstlisting}[language=C++, frame=tlBR, basicstyle=\fontsize{8}{8}\ttfamily]
+\textbf{Пример:}\begin{lstlisting}[language=C++, frame=tlBR, basicstyle=\fontsize{10}{10}\ttfamily]
 	E_ANSWER_GP	met_g	( void );
 \end{lstlisting}
 
@@ -97,9 +97,9 @@ private:
 	\item Так как предполагается, что данный метод будет работать с объектом(-ами) класса, в котором(-ых) описан его заголовок, то первым аргументом метода должен быть указатель на void, который внутри класса будет разыменован в указатель на объект класса, в котором был объявлен.\\Используется указатель на void, а не на объект класса с целью совместимости с FreeRTOS, написанной на C.
 	\item Первый аргумент метода следует называть <<void *obj>>.
 \end{itemize}
-\textbf{Пример:}\begin{lstlisting}[language=C++, frame=tlBR, basicstyle=\fontsize{8}{8}\ttfamily]
+\textbf{Пример:}\begin{lstlisting}[language=C++, frame=tlBR, basicstyle=\fontsize{10}{10}\ttfamily]
 	static void	task_1	( void *obj );
-	static int	m_1	( void *obj );
+	static int	m_1			( void *obj );
 \end{lstlisting}
 
 \subsection{Доступные пользователю статические (static) методы класса, выполняющиеся в реальном времени и возвращающие значение нестандартного типа или указатель на нестандартный тип}\label{dp:s:n}
@@ -114,7 +114,7 @@ private:
 	\item Так как предполагается, что данный метод будет работать с объектом(-ами) класса, в котором(-ых) описан его заголовок, то первым аргументом метода должен быть указатель на void, который внутри класса будет разыменован в указатель на объект класса, в котором был объявлен.\\Используется указатель на void, а не на объект класса с целью совместимости с FreeRTOS, написанной на C.
 	\item Первый аргумент метода следует называть <<void *obj>>.
 \end{itemize}
-\textbf{Пример:}\begin{lstlisting}[language=C++, frame=tlBR, basicstyle=\fontsize{8}{8}\ttfamily]
+\textbf{Пример:}\begin{lstlisting}[language=C++, frame=tlBR, basicstyle=\fontsize{10}{10}\ttfamily]
 	static E_ANSWER_GP	met_a	( void *obj );
 \end{lstlisting}
 
@@ -130,7 +130,7 @@ private:
 	\item Аргументы методов в скобках должны быть разделены <<, >> (запятая + пробел).
 	\item Внутри скобок перечисления аргументов метода должен быть отступ в 1 пробел с каждой стороны.\\\textbf{Пример: } <<( uint32\_t a, uint8\_t b )>>.
 \end{itemize}
-\textbf{Пример:}\begin{lstlisting}[language=C++, frame=tlBR, basicstyle=\fontsize{8}{8}\ttfamily]
+\textbf{Пример:}\begin{lstlisting}[language=C++, frame=tlBR, basicstyle=\fontsize{10}{10}\ttfamily]
 	constexpr uint32_t	moder_reg_reset_init_msk_get	( EC_PORT_NAME port_name );
 \end{lstlisting}
 
@@ -144,7 +144,7 @@ private:
 	\item Имена методов должны быть выравнены с помощью tab с остальными методами этого типа. Выравнивание методов других типов производится по иной сетке.
 	\item Аргументы методов в скобках должны быть разделены <<, >> (запятая + пробел).
 	\item Внутри скобок перечисления аргументов метода должен быть отступ в 1 пробел с каждой стороны.\\\textbf{Пример: } <<( uint32\_t a, uint8\_t b )>>.
-\end{itemize}\begin{lstlisting}[language=C++, frame=tlBR, basicstyle=\fontsize{8}{8}\ttfamily]
+\end{itemize}\begin{lstlisting}[language=C++, frame=tlBR, basicstyle=\fontsize{10}{10}\ttfamily]
 	constexpr EC_PORT_NAME	port_name_get	( uint32_t value_reg );
 \end{lstlisting}
 
@@ -165,12 +165,12 @@ private:
 	\item На одной строке допустимо объявлять лишь одну константу.
 	\item Перед зарезервированным словом <<const>> должен быть поставлен один (1) tab.
 	\item Имена констант должны быть выравнены с помощью tab с остальными константами этого типа. Выравнивание констант других типов производится по иной сетке.
-\end{itemize}\begin{lstlisting}[language=C++, frame=tlBR, basicstyle=\fontsize{8}{8}\ttfamily]
+\end{itemize}\begin{lstlisting}[language=C++, frame=tlBR, basicstyle=\fontsize{10}{10}\ttfamily]
 	const uint32_t	count;
 \end{lstlisting}
 
 \subsection{Закрытые константы класса нестандартных типов}\label{zp:const:n}
-Оформляются так же, как и закрытые константы класса стандартных типов (подраздел~\ref{zp:const:s})\begin{lstlisting}[language=C++, frame=tlBR, basicstyle=\fontsize{8}{8}\ttfamily]
+Оформляются так же, как и закрытые константы класса стандартных типов (подраздел~\ref{zp:const:s})\begin{lstlisting}[language=C++, frame=tlBR, basicstyle=\fontsize{10}{10}\ttfamily]
 	const global_port_msk_reg_struct	gb_msk_struct;
 \end{lstlisting}
 
@@ -179,11 +179,11 @@ private:
 	\item На одной строке допустимо объявлять лишь одну переменную.
 	\item Перед типом должен быть поставлен один (1) tab.
 	\item Имена переменных должны быть выравнены с помощью tab с остальными переменными этого типа. Выравнивание переменных других типов производится по иной сетке.
-\end{itemize}\begin{lstlisting}[language=C++, frame=tlBR, basicstyle=\fontsize{8}{8}\ttfamily]
+\end{itemize}\begin{lstlisting}[language=C++, frame=tlBR, basicstyle=\fontsize{10}{10}\ttfamily]
 	uint32_t	flag;
 \end{lstlisting}
 
 \subsection{Закрытые переменные класса нестандартных типов}\label{zp:pp:n}
-Оформляются так же, как и закрытые переменные класса стандартных типов (подраздел~\ref{zp:pp:s})\begin{lstlisting}[language=C++, frame=tlBR, basicstyle=\fontsize{8}{8}\ttfamily]
+Оформляются так же, как и закрытые переменные класса стандартных типов (подраздел~\ref{zp:pp:s})\begin{lstlisting}[language=C++, frame=tlBR, basicstyle=\fontsize{10}{10}\ttfamily]
 	EC_FL	mb_msk_struct;
 \end{lstlisting}
