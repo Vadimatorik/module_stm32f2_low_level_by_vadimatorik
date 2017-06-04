@@ -1,5 +1,5 @@
 \documentclass[a4paper, 12pt]{report}		% Документ является статьей на несколько глав.
-\usepackage[left=25mm, top=20mm, right=10mm, bottom=25mm, nohead, nofoot]{geometry}
+\usepackage[left=15mm, top=10mm, right=5mm, bottom=15mm, nohead, nofoot]{geometry}
 \usepackage [warn]{mathtext}				% Чтобы можно было использовать русские буквы в формулах, 
 											% но в случае использования предупреждать об этом
 \usepackage{placeins}
@@ -13,14 +13,18 @@
 \usepackage {indentfirst}					% Красная строка в начале абзаца.
 \usepackage {listings}
 \lstdefinestyle{C++}{language=C++, style=numbers}
+\usepackage{ucs}							% Для поддержки русских символов в lstlisting.
 \lstset {
-	language		= C++,			% Выбираем язык по умолчанию.
-	extendedchars	= true,			% Включаем не латиницу.
-	escapechar		= |,			% |«выпадаем» в LATEX|.
-	frame			= tb,			% Рамка сверху и снизу.
-	commentstyle	= \itshape,		% Шрифт для комментариев.
-	stringstyle		= \bfseries		% Шрифт для строк.
-} 
+	language		= C++,					% Выбираем язык по умолчанию.
+	extendedchars	= \true,				% Включаем не латиницу.
+	keepspaces		= true,					% Чтобы не съедались пробелы.
+	escapechar		= |,					% |«выпадаем» в LATEX|.
+	frame			= tb,					% Рамка сверху и снизу.
+	commentstyle	= \itshape,				% Шрифт для комментариев.
+	stringstyle		= \bfseries,			% Шрифт для строк.
+	tabsize			= 2						% Размер tab.
+}
+
 
 %Настраиваем гиппер-ссылки.
 \usepackage[pdfpagelayout=OneColumn, 		% pdf отображается как сплошная полоса из A4.
