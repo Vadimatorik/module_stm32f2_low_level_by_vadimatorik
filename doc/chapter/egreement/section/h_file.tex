@@ -5,7 +5,8 @@
 #ifndef STM32F2_API_STM32_F20X_F21X_PORT_H_
 #define STM32F2_API_STM32_F20X_F21X_PORT_H_
 	
-#endif\end{lstlisting}
+#endif
+ \end{lstlisting}
 	
 	\item После \textit{define} строки защиты следует пустая строка, за которой располагается \textit{include} на файл конфигурации библиотеки, имеющий имя \textbf{perfix\_conf.h} (название библиотеки выступает в качестве префикса).\\\textbf{Пример:}\begin{lstlisting}[language=C++, frame=tlBR, basicstyle=\fontsize{10}{10}\ttfamily]
 #define STM32F2_API_STM32_F20X_F21X_PORT_H_
@@ -23,7 +24,8 @@
 CODE
 	
 #endif
-#endif\end{lstlisting}
+#endif
+ \end{lstlisting}
 	\item Внутри всех необходимых обёрток, описанных выше (на месте слова <<CODE>> примера из предыдущего пункта), располагается основное содержимое, уникальное для каждого типа .h файла:\begin{itemize}
 		\item \textit{perfix\_moduleName.h} (дел~\ref{p:modul:h});
 		\item \textit{perfix\_moduleName\_constexpr\_func.h} (подраздел~\ref{p:conf:h});
@@ -39,7 +41,7 @@ CODE
 	\item краткое описание всего модуля, включающее в себя описание всех классов модуля, обернутое в многострочный комментарий с явно обозначенными границами символами <<*>> в количестве 70 штук.
 	\item пустая строка;
 	\item краткое описание класса, обернутое в много строчный комментарий;
-	\item пустая строка ;
+	\item пустая строка;
 	\item include \textit{perfix\_moduleName\_struct\_class\_className.h}, если имеется;
 	\item пустая строка;
 	\item тело класса;
@@ -96,7 +98,8 @@ private:
 #include "stm32_f20x_f21x_port_constexpr_func_class_global_port.h"
 
 #endif
-#endif\end{lstlisting}
+#endif
+ \end{lstlisting}
 
 \subsection{Содержимое perfix\-\_module\-Name\-\_const\-expr\-\_func.h файла}\label{p:conf:h}
 \begin{enumerate}
@@ -134,7 +137,7 @@ constexpr uint32_t bb_p_port_look_key_get ( EC_PORT_NAME port_name ) {
 
 #endif
 #endif
-\end{lstlisting}
+ \end{lstlisting}
 
 \subsection{Содержимое perfix\-\_moduleName\-\_constexpr\-\_func\-\_class\-\_class-\\\-Name.h файла}\label{p:conf:ch}
 \begin{enumerate}
@@ -201,7 +204,8 @@ constexpr uint32_t pin::p_base_port_address_get ( const pin_config_t *const
 }
 
 #endif
-#endif\end{lstlisting}
+#endif
+ \end{lstlisting}
 
 \subsection{Содержимое perfix\_moduleName\_struct.h и\\erfix\_moduleName\_struct\_class\_className.h файлов}\label{p:struc:h}
 В файлах располагаются следующие конструкции (сверху вниз):
@@ -272,4 +276,5 @@ enum class EC_PORT_PIN_NAME {
 }
 
 #endif
-#endif\end{lstlisting}
+#endif
+ \end{lstlisting}
