@@ -43,17 +43,17 @@
 
 class pin {
 public:
-	constexpr pin ( const pin_config_t *pin_cfg_array, const uint32_t pin_cout );
-	constexpr pin ( const pin_config_t *pin_cfg_array );
+	constexpr pin ( const pin_config_t* const pin_cfg_array );
 
-	void	set		( void ) const;		// Устанавливает "1" на выходе (для случая, когда вывод настроен как выход).
-	void	reset	( void ) const;		// Устанавливает "0" на выходе (для случая, когда вывод настроен как выход).
-	void	invert	( void ) const;		// Логическое "не" состояния на выходе вывода
-										// (для случая, когда вывод настроен как выход).
-	int		read	( void ) const;		// Считывает состояние вывода (для случая, когда вывод настроен как вход).
+	void	set		( void ) const;
+	void	reset	( void ) const;
+	void	set		( uint8_t state ) const;
+	void	set		( bool state ) const;
+	void	set		( int state ) const;
+	void	invert	( void ) const;
+	int		read	( void ) const;
 
-	EC_ANSWER_PIN_REINIT	reinit	(uint32_t number_config) const;	// Переинициализирует вывод в ходе
-																	// выполнения программы в выбранную конфигурацию.
+	EC_ANSWER_PIN_REINIT	reinit	(uint8_t number_config) const;
 
 private:
 	constexpr uint32_t	set_msk_get				( const pin_config_t *const pin_cfg_array );

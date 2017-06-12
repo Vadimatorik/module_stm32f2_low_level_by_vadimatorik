@@ -10,13 +10,40 @@
  * В данном файле содержатся только исполняемые в реальном времени контроллером функции.
  */
 // Устанавливаем бит.
-void pin::set() const {
+void pin::set ( void ) const {
 	*M_U32_TO_P(p_odr) = set_msk;
 }
 
 // Сбрасываем бит.
-void pin::reset() const {
+void pin::reset ( void ) const {
 	*M_U32_TO_P(p_odr) = reset_msk;
+}
+
+/*
+ * Выставляем заданное состояние.
+ */
+void pin::set ( uint8_t state ) const {
+	if (state) {
+		this->set();
+	} else {
+		this->reset();
+	}
+}
+
+void pin::set ( bool state ) const {
+	if (state) {
+		this->set();
+	} else {
+		this->reset();
+	}
+}
+
+void pin::set ( int state ) const {
+	if (state) {
+		this->set();
+	} else {
+		this->reset();
+	}
 }
 
 // Инавертируем бит.
@@ -34,7 +61,7 @@ int pin::read() const {
 }
 
 // Переинициализируем вывод выбранной конфигурацией.
-EC_ANSWER_PIN_REINIT pin::reinit (uint32_t number_config) const{
+EC_ANSWER_PIN_REINIT pin::reinit (uint8_t number_config) const{
 	if (number_config >= count) return EC_ANSWER_PIN_REINIT::CFG_NUMBER_ERROR;		// Защита от попытки инициализации вывода несуществующей конфигурацией.
 	if (*M_U32_TO_P_CONST(p_bb_key_looking)										// Если порт, к кторому относится вывод был заблокирован.
 			&& *M_U32_TO_P_CONST(p_bb_looking_bit))								// И сам вывод так же был заблокирован.
