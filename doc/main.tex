@@ -12,6 +12,8 @@
 \usepackage {xcolor}
 \usepackage {indentfirst}					% Красная строка в начале абзаца.
 \usepackage {listings}
+\usepackage	{import}
+
 \lstdefinestyle{C++}{language=C++, style=numbers}
 \usepackage{ucs}							% Для поддержки русских символов в lstlisting.
 \lstset {
@@ -51,8 +53,9 @@
 
 \tableofcontents						% Оглавление.
 \clearpage								% Первая глава должна идти начиная со следущей страницы.
-	
-\input{chapter/philosophy/main.tex}		% Знакомство с библиотекой.
-\input{chapter/egreement/main.tex}		% Соглашение о написании и оформлении библиотеки.
-\input{chapter/module/main.tex}
+
+\subimport* {chapter/philosophy/}	{main}		% Знакомство с библиотекой.
+%\subimport* {chapter/egreement/}	{main}		% Соглашение о написании и оформлении библиотеки.
+%\subimport* {chapter/module/}		{main}
+
 \end{document}
