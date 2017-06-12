@@ -11,12 +11,12 @@
  */
 // Устанавливаем бит.
 void pin::set ( void ) const {
-	*M_U32_TO_P(p_odr) = set_msk;
+	*M_U32_TO_P(p_odr) = odr_set_msk;
 }
 
 // Сбрасываем бит.
 void pin::reset ( void ) const {
-	*M_U32_TO_P(p_odr) = reset_msk;
+	*M_U32_TO_P(p_odr) = odr_reset_msk;
 }
 
 /*
@@ -49,9 +49,9 @@ void pin::set ( int state ) const {
 // Инавертируем бит.
 void pin::invert() const {
 	if (*M_U32_TO_P_CONST(p_bb_odr_read)) {			// Если был 1, то выставляем 0.
-		*M_U32_TO_P(p_odr) = reset_msk;
+		*M_U32_TO_P(p_odr) = odr_reset_msk;
 	} else {
-		*M_U32_TO_P(p_odr) = set_msk;
+		*M_U32_TO_P(p_odr) = odr_set_msk;
 	}
 }
 
@@ -62,7 +62,7 @@ int pin::read() const {
 
 // Переинициализируем вывод выбранной конфигурацией.
 EC_ANSWER_PIN_REINIT pin::reinit (uint8_t number_config) const{
-	if (number_config >= count) return EC_ANSWER_PIN_REINIT::CFG_NUMBER_ERROR;		// Защита от попытки инициализации вывода несуществующей конфигурацией.
+	if (number_config >= cfg_count) return EC_ANSWER_PIN_REINIT::CFG_NUMBER_ERROR;		// Защита от попытки инициализации вывода несуществующей конфигурацией.
 	if (*M_U32_TO_P_CONST(p_bb_key_looking)										// Если порт, к кторому относится вывод был заблокирован.
 			&& *M_U32_TO_P_CONST(p_bb_looking_bit))								// И сам вывод так же был заблокирован.
 		return EC_ANSWER_PIN_REINIT::LOCKED;										// Выходим с ошибкой.

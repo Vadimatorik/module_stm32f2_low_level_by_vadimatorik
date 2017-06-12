@@ -35,8 +35,8 @@
 			linkcolor=blue					% Используем черный цвет для обозначения 
 											% гиппер ссылок в оглавлении.					
 ]{hyperref}									% Запускаем работу с гиппер ссылками.
-\setcounter{chapter}{1}						% Счет идет с 1, а не с 0 в оглавлении.
-
+%\setcounter{chapter}{1}	
+				
 \begin{document}
 	\title {ВВЕДЕНИЕ В БИБЛИОТЕКУ STM32F2\_API}			% Титульный лист.
 	\author {Автор: Дерябкин Вадим (Vadimatorik)}
@@ -54,8 +54,8 @@
 \tableofcontents						% Оглавление.
 \clearpage								% Первая глава должна идти начиная со следущей страницы.
 
-\subimport* {chapter/philosophy/}	{main}		% Знакомство с библиотекой.
-\subimport* {chapter/egreement/}	{main}		% Соглашение о написании и оформлении библиотеки.
-\subimport* {chapter/module/}		{main}
+\subimport* {part/philosophy/}	{main}		% Знакомство с библиотекой.
+\subimport* {part/egreement/}	{main}		% Соглашение о написании и оформлении библиотеки.
+\subimport* {part/module/}		{main}
 
 \end{document}

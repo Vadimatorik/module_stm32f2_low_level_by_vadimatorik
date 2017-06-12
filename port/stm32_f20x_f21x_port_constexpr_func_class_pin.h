@@ -12,15 +12,15 @@
 /****************************************************************************************************
  * Конструктры класса pin.
  ****************************************************************************************************/
-constexpr pin::pin ( const pin_config_t* const pin_cfg_array ):
+constexpr pin::pin ( const pin_config_t* const pin_cfg_array, uint8_t size ):
 	cfg					(pin_cfg_array),
-	count				(sizeof(*pin_cfg_array)/sizeof(pin_config_t)),
+	cfg_count			(size),
 	p_port				(p_base_port_address_get(pin_cfg_array->port)),
 	p_bb_key_looking	(bb_p_port_look_key_get(pin_cfg_array->port)),
 	p_odr				(this->p_odr_get(pin_cfg_array)),
 	p_bb_odr_read		(this->odr_bit_read_bb_p_get(pin_cfg_array)),
-	set_msk				(this->set_msk_get(pin_cfg_array)),
-	reset_msk			(this->reset_msk_get(pin_cfg_array)),
+	odr_set_msk				(this->set_msk_get(pin_cfg_array)),
+	odr_reset_msk			(this->reset_msk_get(pin_cfg_array)),
 	p_bb_idr_read		(this->bb_p_idr_read_get(pin_cfg_array)),
 	p_bb_looking_bit	(this->bb_p_looking_bit_get(pin_cfg_array)) {};
 /*

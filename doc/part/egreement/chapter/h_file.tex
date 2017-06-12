@@ -1,5 +1,5 @@
-\section{Оформление .h файлов библиотеки}\label{file:h}
-\subsection{Общее оформление}
+\chapter{Оформление .h файлов библиотеки}\label{file:h}
+\section{Общее оформление}
 \begin{enumerate}
 	\item Файл должен включать в себя защиту от повторного включения в процесс компиляции по типу \textit{ifndef-define-endif}, оканчивающуюся пустой строкой.\\\textbf{Пример:}\begin{lstlisting}[language=C++, frame=tlBR, basicstyle=\fontsize{10}{10}\ttfamily]
 #ifndef STM32F2_API_STM32_F20X_F21X_PORT_H_
@@ -34,7 +34,7 @@ CODE
 	\end{itemize}
 \end{enumerate}
 
-\subsection{Содержимое perfix\_moduleName.h файла}\label{p:modul:h}
+\section{Содержимое perfix\_moduleName.h файла}\label{p:modul:h}
 \begin{enumerate}
 	\item include \textit{perfix\_moduleName\_struct.h} и \textit{perfix\_moduleName\_constexpr\_func.h}  файлов, если таковые имеются;
 	\item пустая строка;
@@ -101,7 +101,7 @@ private:
 #endif
  \end{lstlisting}
 
-\subsection{Содержимое perfix\-\_module\-Name\-\_const\-expr\-\_func.h файла}\label{p:conf:h}
+\section{Содержимое perfix\-\_module\-Name\-\_const\-expr\-\_func.h файла}\label{p:conf:h}
 \begin{enumerate}
 	\item include \textit{perfix\-\_moduleName\-\_struct.h} файла, если таковой имеются;
 	\item пустая строка;
@@ -139,7 +139,7 @@ constexpr uint32_t bb_p_port_look_key_get ( EC_PORT_NAME port_name ) {
 #endif
  \end{lstlisting}
 
-\subsection{Содержимое perfix\-\_moduleName\-\_constexpr\-\_func\-\_class\-\_class-\\\-Name.h файла}\label{p:conf:ch}
+\section{Содержимое perfix\-\_moduleName\-\_constexpr\-\_func\-\_class\-\_class-\\\-Name.h файла}\label{p:conf:ch}
 \begin{enumerate}
 	\item include \textit{perfix\_moduleName\_struct.h} и \textit{perfix\_moduleName\_struct\_class\_className.h} файлов, если таковые имеются;
 	\item пустая строка;
@@ -195,7 +195,7 @@ constexpr uint32_t pin::p_base_port_address_get ( const pin_config_t* const
 #endif
  \end{lstlisting}
 
-\subsection{Содержимое perfix\_moduleName\_struct.h и\\erfix\_moduleName\_struct\_class\_className.h файлов}\label{p:struc:h}
+\section{Содержимое perfix\_moduleName\_struct.h и\\erfix\_moduleName\_struct\_class\_className.h файлов}\label{p:struc:h}
 В файлах располагаются следующие конструкции (сверху вниз):
 \begin{enumerate}
 	\item packed структуры;

@@ -5,8 +5,8 @@
 
 #ifdef MODULE_PORT
 
-#include "stm32_f20x_f21x_port_struct.h"							// Используемые структуры enum-ы.
-#include "stm32_f20x_f21x_port_constexpr_func.h"					// Общие для обоих классов constexpr функции.
+#include "stm32_f20x_f21x_port_struct.h"
+#include "stm32_f20x_f21x_port_constexpr_func.h"
 
 /*
  * В данном файле содержатся классы объектов для полноценной работы с портами ввода-вывода.
@@ -43,7 +43,7 @@
 
 class pin {
 public:
-	constexpr pin ( const pin_config_t* const pin_cfg_array );
+	constexpr pin ( const pin_config_t* const pin_cfg_array,  uint8_t size = 1 );
 
 	void	set		( void ) const;
 	void	reset	( void ) const;
@@ -63,19 +63,18 @@ private:
 	constexpr uint32_t	odr_bit_read_bb_p_get	( const pin_config_t *const pin_cfg_array );
 	constexpr uint32_t	bb_p_looking_bit_get	( const pin_config_t *const pin_cfg_array );
 
-	const uint32_t	count;				// Колличество объектов конфигурации.
-	const uint32_t	p_odr;				// Указатель на ODR регистр порта, к которому относится вывод.
-	const uint32_t	p_port;				// Указатель на структуру регистров порта в памяти периферии мк.
-	const uint32_t	p_bb_odr_read;		// Для быстрого чтения выставленного в ODR (пользователем)
-										// состояния вывода (нужно для invert метода).
-	const uint32_t	set_msk;			// По этой маске устанавливается бит в ODR.
-	const uint32_t	reset_msk;			// Соответственно, сбрасывается бит в ODR.
-	const uint32_t	p_bb_idr_read;		// Для быстрого чтения состояния вывода.
-	const uint32_t	p_bb_key_looking;	// Указатель на ключ блокировки порта, к которому относится вывод.
-	const uint32_t	p_bb_looking_bit;	// Указатель на бит блокировки конкретного вывода в порту,
-										// к которому относится вывод.
+	const uint32_t	cfg_count;
+	const uint32_t	p_odr;
+	const uint32_t	p_port;
+	const uint32_t	p_bb_odr_read;
 
-	const pin_config_t	*cfg;			// Указатель на конфигурации, используемые выводом.
+	const uint32_t	odr_set_msk;
+	const uint32_t	odr_reset_msk;
+	const uint32_t	p_bb_idr_read;
+	const uint32_t	p_bb_key_looking;
+	const uint32_t	p_bb_looking_bit;
+
+	const pin_config_t	*cfg;
 };
 
 #include "stm32_f20x_f21x_port_constexpr_func_class_pin.h"
