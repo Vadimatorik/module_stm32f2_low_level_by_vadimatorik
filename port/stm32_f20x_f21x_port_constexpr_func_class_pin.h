@@ -14,7 +14,7 @@
  ****************************************************************************************************/
 constexpr pin::pin ( const pin_config_t* const pin_cfg_array ):
 	cfg					(pin_cfg_array),
-	count				(sizeof(pin_cfg_array)/sizeof(pin_config_t)),
+	count				(sizeof(*pin_cfg_array)/sizeof(pin_config_t)),
 	p_port				(p_base_port_address_get(pin_cfg_array->port)),
 	p_bb_key_looking	(bb_p_port_look_key_get(pin_cfg_array->port)),
 	p_odr				(this->p_odr_get(pin_cfg_array)),
