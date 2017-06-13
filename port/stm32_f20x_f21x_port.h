@@ -102,7 +102,7 @@ private:
 	constexpr	uint32_t					reg_lck_init_msk				( const pin_config_t* const pin_cfg_array, const uint32_t pin_count, const EC_PORT_NAME port_name );
 	constexpr	uint32_t					reg_afl_init_msk				( const pin_config_t* const pin_cfg_array, const uint32_t pin_count, const EC_PORT_NAME port_name );
 	constexpr	uint32_t					reg_afh_msk_init_get			( const pin_config_t* const pin_cfg_array, const uint32_t pin_count, const EC_PORT_NAME port_name );
-	constexpr	uint32_t					reg_od_msk_init_get			( const pin_config_t* const pin_cfg_array, const uint32_t pin_count, const EC_PORT_NAME port_name );
+	constexpr	uint32_t					reg_od_msk_init_get				( const pin_config_t* const pin_cfg_array, const uint32_t pin_count, const EC_PORT_NAME port_name );
 	constexpr 	global_port_msk_reg_struct	fill_out_mas_struct				( const pin_config_t* const pin_cfg_array, const uint32_t pin_count );
 	constexpr	port_registers_flash_copy_struct fill_out_one_port_struct( EC_PORT_NAME p_name, const pin_config_t* const pin_cfg_array, const uint32_t pin_count );
 };
