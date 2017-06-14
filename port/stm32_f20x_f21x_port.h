@@ -8,67 +8,46 @@
 #include "stm32_f20x_f21x_port_struct.h"
 #include "stm32_f20x_f21x_port_constexpr_func.h"
 
-/*
- * В данном файле содержатся классы объектов для полноценной работы с портами ввода-вывода.
- * Краткое описание:
- *
- * Примечание: Для инициализации объекта используются массив структур pin_config.
- * 1. В случае, если не была передана структура какого-либо вывода (структура, описывающая режим работы вывода),
- * то он настроен в состояние по умолчанию (за исключением некоторых выводов, предназначенных для отладки,
- * это "вход без подтяжки").
- * 2. На каждый вывод порта должна быть одна структура. В случае, если на один вывод будет передано несколько
- * структур - вывод будет переинициализирован именно по последней указанной (чей индекс в массиве старше).
- * 3. Объект не предполагает работу с конкретными выводами. Наименьшая единица, которой может упровлять объект -
- * - порт.
- * 4. Массив объектов pin_config (объявленных как constexpr const), не должен быть помещен во flash память
- * (линкер автоматически выкинет их из .elf или любого другого конечного файла прошивки). Т.к. объект использует
- * constexpr методы, которые анализируют все переданные в объект структуры и выдают на выходе готовые маски портов.
- * С помощью которых можно значительно ускорить процесс инициализации портов.
- */
+/**********************************************************************
+ * В данном файле содержатся классы, экземпляры которых нацелены
+ * на работу с физическими линиями ввода-вывода портов
+ * выбранного микроконтроллера.
+ **********************************************************************/
 
 /*
- * Класс для создания объекта линии ввода-вывода.
- * Прототип (объект) данного класса следует создавать в том случае, когда вывод точно будет использоваться
- * в ручном (управляется пользователем) режиме. Помимо этого разрешено использование и других конфигураций этой же
- * линии порта ввода-вывода, которые можно менять в процессе работы. Подробнее в примерах.
+ * Класс объекта линии ввода-вывода.
  */
 
 #include "stm32_f20x_f21x_port_struct_class_pin.h"
 
 class pin {
 public:
-	constexpr pin ( const pin_config_t* const pin_cfg_array,  uint8_t size = 1 );
+    constexpr pin ( const pin_config_t* const pin_cfg_array,  uint8_t size = 1 );
 
-	void	set		( void ) const;
-	void	reset	( void ) const;
-	void	set		( uint8_t state ) const;
-	void	set		( bool state ) const;
-	void	set		( int state ) const;
-	void	invert	( void ) const;
-	int		read	( void ) const;
+    void    set     ( void ) const;
+    void    reset   ( void ) const;
+    void    set     ( uint8_t state ) const;
+    void    set     ( bool state ) const;
+    void    set     ( int state ) const;
+    void    invert  ( void ) const;
+    int     read    ( void ) const;
 
-	EC_ANSWER_PIN_REINIT	reinit	(uint8_t number_config) const;
+    EC_ANSWER_PIN_REINIT    reinit  (uint8_t number_config) const;
 
 private:
-	constexpr uint32_t	set_msk_get				( const pin_config_t* const pin_cfg_array );
-	constexpr uint32_t	reset_msk_get			( const pin_config_t* const pin_cfg_array );
-	constexpr uint32_t	bb_p_idr_read_get		( const pin_config_t* const pin_cfg_array );
-	constexpr uint32_t	p_odr_get				( const pin_config_t* const pin_cfg_array );
-	constexpr uint32_t	odr_bit_read_bb_p_get	( const pin_config_t* const pin_cfg_array );
-	constexpr uint32_t	bb_p_looking_bit_get	( const pin_config_t* const pin_cfg_array );
+    constexpr uint32_t  set_msk_get              ( const pin_config_t* const pin_cfg_array );
+    constexpr uint32_t  reset_msk_get            ( const pin_config_t* const pin_cfg_array );
+    constexpr uint32_t  bb_p_idr_read_get        ( const pin_config_t* const pin_cfg_array );
+    constexpr uint32_t  p_odr_get                ( const pin_config_t* const pin_cfg_array );
+    constexpr uint32_t  odr_bit_read_bb_p_get    ( const pin_config_t* const pin_cfg_array );
+    constexpr uint32_t  bb_p_looking_bit_get     ( const pin_config_t* const pin_cfg_array );
 
-	const uint32_t	cfg_count;
-	const uint32_t	p_odr;
-	const uint32_t	p_port;
-	const uint32_t	p_bb_odr_read;
+    const uint32_t  cfg_count;
+    const uint32_t  p_odr, p_port;
+    const uint32_t  p_bb_odr_read, p_bb_idr_read, p_bb_key_looking, p_bb_looking_bit;
+    const uint32_t  odr_set_msk, odr_reset_msk;
 
-	const uint32_t	odr_set_msk;
-	const uint32_t	odr_reset_msk;
-	const uint32_t	p_bb_idr_read;
-	const uint32_t	p_bb_key_looking;
-	const uint32_t	p_bb_looking_bit;
-
-	const pin_config_t	*cfg;
+    const pin_config_t  *cfg;
 };
 
 #include "stm32_f20x_f21x_port_constexpr_func_class_pin.h"
