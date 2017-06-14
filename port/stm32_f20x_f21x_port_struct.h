@@ -16,11 +16,11 @@
 #if defined(STM32F205RB)|defined(STM32F205RC)|defined(STM32F205RE) \
 	|defined(STM32F205RF)|defined(STM32F205RG)
 enum class EC_PORT_NAME {
-	A	=	0,
-	B	=	1,
-	C	=	2,
-	D	=	3,
-	H	=	4
+    A   = 0,
+    B   = 1,
+    C   = 2,
+    D   = 3,
+    H   = 4
 };
 
 #endif
