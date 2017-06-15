@@ -1,0 +1,30 @@
+\chapter{Объявление constexpr функций}\label{const:func}
+\section{Оформление заголовка constexpr функций}
+В случае, если constexpr функция относится к какому-либо классу, ее заголовок должен быть объявлен в этом классе. Если же функция не относится к какому-либо классу, разрешается не объявлять ее заголовка (в случае, если можно построить сборку проекта таким образом, что дополнительное объявление заголовка нет требуется). В случае, если заголовок все-таки требуется объявить, это следует сделать по тому же стандарту, что и внутри класса (раздел~\ref{class:0}).
+
+\section{Оформление тела constexpr функции}
+Сам по себе заголовок функции непосредственно перед телом оформляется иначе, еже ли как отдельный заголовок или в составе класса.
+\begin{enumerate}
+	\item ключевое слово <<\textbf{constexpr}>>;
+	\item один (1) пробел;
+	\item тип возвращаемого значения;
+	\item один (1) пробел;
+	\item имя функции в соответствии с правилами оформления имен constexpr методов;
+	\item открывающаяся скобка аргументов метода (без пробела) <<(>>;
+	\item один (1) пробел;
+	\item аргументы метода через <<, >> (запятая + пробел);
+	\item один (1) пробел;
+	\item закрывающаяся скобка <<)>>;
+	\item один (1) пробел;
+	\item открывающая тело метода скобка <<\{>>
+\end{enumerate}
+\textbf{Пример:}\begin{lstlisting}[language=C++, frame=tlBR, basicstyle=\fontsize{10}{10}\ttfamily]
+constexpr uint32_t p_base_port_address_get( EC_PORT_NAME port_name ) {\end{lstlisting}
+Содержимое тела constexpr метода оформляется так же, как и у обычного метода.\\По окончании кода метода на новой строке следует <<\}>> и одна пустая строка.
+\\\textbf{Пример:}\begin{lstlisting}[language=C++, frame=tlBR, basicstyle=\fontsize{10}{10}\ttfamily]
+constexpr uint32_t bb_p_port_look_key_get( EC_PORT_NAME port_name ) {
+	uint32_t port_point = p_base_port_address_get( port_name ); 
+	port_point += 0x1C;                                         
+	return M_GET_BB_P_PER( port_point, 16 );                    
+}
+ \end{lstlisting}
