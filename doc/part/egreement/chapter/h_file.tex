@@ -102,6 +102,9 @@ private:
  \end{lstlisting}
 
 \section{Содержимое perfix\-\_module\-Name\-\_const\-expr\-\_func.h файла}\label{p:conf:h}
+\textbf{Замечание: }в случае, если модуль не имеет \textit{perfix\-\_moduleName\-\_constexpr\-\_func\-\_class\-\_class\-Name.h} файлов (файл \textit{perfix\_moduleName.h} имеет только один класс), то данный файл (\textit{perfix\-\_module\-Name\-\_const\-expr\-\_func.h}) оформляется в стиле \textit{perfix\-\_moduleName\-\_constexpr\-\_func\-\_class\-\_class\-Name.h} файла.
+
+В случае, если файлы \textit{perfix\-\_moduleName\-\_constexpr\-\_func\-\_class\-\_class\-Name.h} в папке модуля имеются, то оформления этого файла (\textit{perfix\-\_module\-Name\-\_const\-expr\-\_func.h}) производится так, как описано ниже.
 \begin{enumerate}
 	\item include \textit{perfix\-\_moduleName\-\_struct.h} файла, если таковой имеются;
 	\item пустая строка;
@@ -137,6 +140,7 @@ constexpr uint32_t bb_p_port_look_key_get ( EC_PORT_NAME port_name ) {
 #endif
 #endif
  \end{lstlisting}
+Как можно было заметить, файл не содержит constexpr конструкторов классов. Т.к. невозможно, чтобы один конструктор относился к двум (2) и более разным классам. В случае же, если в файле \textit{perfix\_moduleName.h} только один класс, то оформление происходит иным способом (об этом написано в замечании выше).
 
 \section{Содержимое perfix\-\_moduleName\-\_constexpr\-\_func\-\_class\-\_class-\\\-Name.h файла}\label{p:conf:ch}
 \begin{enumerate}
