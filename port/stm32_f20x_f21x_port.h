@@ -85,7 +85,7 @@ private:
     constexpr global_port_msk_reg_struct        fill_out_mas_struct         ( const pin_config_t* const pin_cfg_array, const uint32_t pin_count );
     constexpr port_registers_flash_copy_struct  fill_out_one_port_struct    ( EC_PORT_NAME p_name, const pin_config_t* const pin_cfg_array, const uint32_t pin_count );
 
-    void    write_image_port_in_registrs    ( uint32_t number ) const;
+    void    write_image_port_in_registrs    ( uint8_t number ) const;
 
     const global_port_msk_reg_struct    gb_msk_struct;
 };
