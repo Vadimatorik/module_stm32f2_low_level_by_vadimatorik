@@ -224,7 +224,7 @@ constexpr global_port_msk_reg_struct global_port::fill_out_mas_struct( const pin
 #ifdef PORTI
                     this->fill_out_one_port_struct( EC_PORT_NAME::I, pin_cfg_array, pin_count )
 #endif
-        }
+        },
     };
     return p_st;
 }
