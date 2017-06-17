@@ -73,23 +73,74 @@ enum class EC_PIN_PULL {
  * Выбираем альтернативную функцию, если используется.
  */
 enum class EC_PIN_AF {
-    NOT_USE = 0,    // Альтернативная функция не используется.
-    AF_0    = 0,
-    AF_1    = 1,
-    AF_2    = 2,
-    AF_3    = 3,
-    AF_4    = 4,
-    AF_5    = 5,
-    AF_6    = 6,
-    AF_7    = 7,
-    AF_8    = 8,
-    AF_9    = 9,
-    AF_10   = 10,
-    AF_11   = 11,
-    AF_12   = 12,
-    AF_13   = 13,
-    AF_14   = 14,
-    AF_15   = 15
+    AF_0        = 0,
+    NOT_USE     = AF_0,
+    SYS         = AF_0,
+
+    AF_1        = 1,
+    TIM1        = AF_1,
+    TIM2        = AF_1,
+
+    AF_2        = 2,
+    TIM3        = AF_2,
+    TIM4        = AF_2,
+    TIM5        = AF_2,
+
+    AF_3        = 3,
+    TIM8        = AF_3,
+    TIM9        = AF_3,
+    TIM10       = AF_3,
+    TIM11       = AF_3,
+
+    AF_4        = 4,
+    I2C1        = AF_4,
+    I2C2        = AF_4,
+    I2C3        = AF_4,
+
+    AF_5        = 5,
+    SPI1        = AF_5,
+    SPI2        = AF_5,
+    I2S2        = AF_5,
+
+
+    AF_6        = 6,
+    SPI3        = AF_6,
+    I2S3        = AF_6,
+
+    AF_7        = 7,
+    USART1      = AF_7,
+    USART2      = AF_7,
+    USART3      = AF_7,
+
+    AF_8        = 8,
+    UART4       = AF_8,
+    UART5       = AF_8,
+    USART6      = AF_8,
+
+    AF_9        = 9,
+    CAN1        = AF_9,
+    CAN2        = AF_9,
+    TIM12       = AF_9,
+    TIM13       = AF_9,
+    TIM14       = AF_9,
+
+    AF_10       = 10,
+    OTG_FS      = AF_10,
+
+    AF_11       = 11,
+    ETH         = AF_11,
+
+    AF_12       = 12,
+    FSMC        = AF_12,
+    SDIO        = AF_12,
+
+    AF_13       = 13,
+    DCMI        = AF_13,
+
+    AF_14       = 14,
+
+    AF_15       = 15,
+    EVENTOUT    = AF_15
 };
 
 /*
@@ -170,17 +221,18 @@ struct __attribute__((packed)) port_registers_struct {
  * Структура конфигурации вывода.
  */
 struct __attribute__((packed)) pin_config_t {
-    EC_PORT_NAME                port;               // Имя порта ( пример: A ).
-    EC_PORT_PIN_NAME            pin_name;           // Номер вывода ( пример: PIN_0 ).
-    EC_PIN_MODE                 mode;               // Режим вывода ( пример: OUTPUT ).
-    EC_PIN_OUTPUT_CFG           output_config;      // Режим выхода ( пример: NOT_USE ).
-    EC_PIN_SPEED                speed;              // Скорость вывода ( пример: MEDIUM ).
-    EC_PIN_PULL                 pull;               // Подтяжка вывода ( пример: NO ).
-    EC_PIN_AF                   af;                 // Альтернативная функция вывода ( пример: NOT_USE ).
+    EC_PORT_NAME                port;               // Имя порта ( пример: EC_PORT_NAME::A ).
+    EC_PORT_PIN_NAME            pin_name;           // Номер вывода ( пример: EC_PORT_PIN_NAME::PIN_0 ).
+    EC_PIN_MODE                 mode;               // Режим вывода ( пример: EC_PIN_MODE::OUTPUT ).
+    EC_PIN_OUTPUT_CFG           output_config;      // Режим выхода ( пример: EC_PIN_OUTPUT_CFG::NOT_USE ).
+    EC_PIN_SPEED                speed;              // Скорость вывода ( пример: EC_PIN_SPEED::MEDIUM ).
+    EC_PIN_PULL                 pull;               // Подтяжка вывода ( пример: EC_PIN_PULL::NO ).
+    EC_PIN_AF                   af;                 // Альтернативная функция вывода ( пример: EC_PIN_AF::NOT_USE ).
     EC_LOCKED                   locked;             // Заблокировать ли настройку данного
-                                                    // вывода во время инициализации global_port объекта ( пример NOT_LOCKED ).
+                                                    // вывода во время инициализации global_port объекта ( пример EC_LOCKED::NOT_LOCKED ).
     EC_PIN_STATE_AFTER_INIT     state_after_init;   // Состояние на выходе после инициализации
                                                     // ( в случае, если вывод настроен как выход ).
+                                                    // (пример EC_PIN_STATE_AFTER_INIT::NO_USE)
 };
 
 #endif
