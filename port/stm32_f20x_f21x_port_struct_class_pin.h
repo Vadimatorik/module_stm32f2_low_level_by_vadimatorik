@@ -45,7 +45,7 @@ enum class EC_PIN_MODE {
  * Режим выхода.
  */
 enum class EC_PIN_OUTPUT_CFG {
-    NOT_USE     = 0,    // Вывод не используется как вывод.
+    NO_USE      = 0,    // Вывод не используется как вывод.
     PUSH_PULL   = 0,    // "Тянуть-толкать".
     OPEN_DRAIN  = 1     // "Открытый сток".
 };
@@ -64,7 +64,7 @@ enum class EC_PIN_SPEED {
  * Выбор подтяжки
  */
 enum class EC_PIN_PULL {
-    NO      = 0,    // Без подтяжки.
+    NO_USE  = 0,    // Без подтяжки.
     UP      = 1,    // Подтяжка к питанию.
     DOWN    = 2     // Подтяжка к земле.
 };
@@ -74,7 +74,7 @@ enum class EC_PIN_PULL {
  */
 enum class EC_PIN_AF {
     AF_0        = 0,
-    NOT_USE     = AF_0,
+    NO_USE      = AF_0,
     SYS         = AF_0,
 
     AF_1        = 1,
@@ -186,10 +186,10 @@ enum class EC_ANSWER_PIN_REINIT {
     .port               = PORT,                             \
     .pin_name           = PIN,                              \
     .mode               = EC_PIN_MODE::ANALOG,              \
-    .output_config      = EC_PIN_OUTPUT_CFG::NOT_USE,       \
+    .output_config      = EC_PIN_OUTPUT_CFG::NO_USE,        \
     .speed              = EC_PIN_SPEED::LOW,                \
-    .pull               = EC_PIN_PULL::NO,                  \
-    .af                 = EC_PIN_AF::NOT_USE,               \
+    .pull               = EC_PIN_PULL::NO_USE,              \
+    .af                 = EC_PIN_AF::NO_USE,                \
     .locked             = EC_LOCKED::LOCKED,                \
     .state_after_init   = EC_PIN_STATE_AFTER_INIT::NO_USE   \
 }
