@@ -42,6 +42,10 @@ constexpr const pll_cfg* rcc::pll_main_configuration_check ( const pll_cfg* cons
                 ( cfg[loop].p == EC_RCC_PLL_P::DIV_6 ) || ( cfg[loop].p == EC_RCC_PLL_P::DIV_8 ) )
         )   throw("Structure has an invalid parameter P! N [DIV_2, DIV_5, DIV_6, DIV_8]");
 
+        // Ошибка в одной из структур pll_cfg, параметр N.
+        if ( ( cfg[loop].q < 2 ) || ( cfg[loop].q > 15 ) )
+            throw("Structure has an invalid parameter Q! Q >= 2 and Q <= 15!");
+
         // Далее получаем входную частоту, на основе которой будем проверять, проходят ли делители.
         uint32_t clock = 0;
         if ( cfg->s == EC_RCC_PLL_SOURCE::HSI ) {
@@ -64,7 +68,10 @@ constexpr const pll_cfg* rcc::pll_main_configuration_check ( const pll_cfg* cons
         uint8_t dev_p = static_cast<uint8_t>(std::pow(2, static_cast<uint8_t>(cfg[loop].p) + 1));
         if ( clock / dev_p > 120000000 )
             throw("The coefficient P in the pll_cfg structure is incorrect!");
-        clock *= cfg[loop].n;
+
+        // Делитель Q подобран неверно.
+        if ( clock / cfg[loop].q > 48000000 )
+            throw("The coefficient Q in the pll_cfg structure is incorrect!");
     }
     return cfg;
 }
