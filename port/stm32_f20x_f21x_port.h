@@ -40,7 +40,7 @@ private:
     constexpr uint32_t  p_odr_get                ( const pin_config_t* const pin_cfg_array );
     constexpr uint32_t  odr_bit_read_bb_p_get    ( const pin_config_t* const pin_cfg_array );
 
-    const uint32_t  p_odr, p_port;
+    const uint32_t  p_odr;
     const uint32_t  p_bb_odr_read, p_bb_idr_read;
     const uint32_t  odr_set_msk, odr_reset_msk;
 };
@@ -62,6 +62,7 @@ public:
 private:
     constexpr uint32_t  bb_p_looking_bit_get     ( const pin_config_t* const pin_cfg_array );
 
+    const uint32_t  p_port;
     const uint32_t  cfg_count;
     const uint32_t  p_bb_key_looking, p_bb_looking_bit;
 

@@ -13,7 +13,6 @@
  **********************************************************************/
 
 constexpr pin::pin ( const pin_config_t* const pin_cfg_array ):
-    p_port              ( p_base_port_address_get( pin_cfg_array->port ) ),
     p_odr               ( this->p_odr_get( pin_cfg_array ) ),
     p_bb_odr_read       ( this->odr_bit_read_bb_p_get( pin_cfg_array ) ),
     odr_set_msk         ( this->set_msk_get( pin_cfg_array ) ),
