@@ -15,14 +15,15 @@
  **********************************************************************/
 
 /*
- * Класс объекта линии ввода-вывода.
+ * Класс объекта выхода порта (вывод уже должен быть настроен
+ * как линия выхода в global_port).
  */
 
 #include "stm32_f20x_f21x_port_struct_class_pin.h"
 
 class pin {
 public:
-    constexpr pin ( const pin_config_t* const pin_cfg_array,  uint8_t size = 1 );
+    constexpr pin ( const pin_config_t* const pin_cfg_array/*,  uint8_t size = 1*/ );
 
     void    set     ( void ) const;
     void    reset   ( void ) const;
@@ -32,7 +33,7 @@ public:
     void    invert  ( void ) const;
     int     read    ( void ) const;
 
-    EC_ANSWER_PIN_REINIT    reinit  (uint8_t number_config) const;
+    //EC_ANSWER_PIN_REINIT    reinit  (uint8_t number_config) const;
 
 private:
     constexpr uint32_t  set_msk_get              ( const pin_config_t* const pin_cfg_array );
@@ -40,15 +41,23 @@ private:
     constexpr uint32_t  bb_p_idr_read_get        ( const pin_config_t* const pin_cfg_array );
     constexpr uint32_t  p_odr_get                ( const pin_config_t* const pin_cfg_array );
     constexpr uint32_t  odr_bit_read_bb_p_get    ( const pin_config_t* const pin_cfg_array );
-    constexpr uint32_t  bb_p_looking_bit_get     ( const pin_config_t* const pin_cfg_array );
+    //constexpr uint32_t  bb_p_looking_bit_get     ( const pin_config_t* const pin_cfg_array );
 
-    const uint32_t  cfg_count;
+    //const uint32_t  cfg_count;
     const uint32_t  p_odr, p_port;
-    const uint32_t  p_bb_odr_read, p_bb_idr_read, p_bb_key_looking, p_bb_looking_bit;
+    const uint32_t  p_bb_odr_read, p_bb_idr_read/*, p_bb_key_looking, p_bb_looking_bit*/;
     const uint32_t  odr_set_msk, odr_reset_msk;
 
-    const pin_config_t  *cfg;
+    //const pin_config_t  *cfg;
 };
+
+/*
+class many_configurations_pin {
+public:
+    constexpr many_configurations_pin ()
+private:
+
+};*/
 
 #include "stm32_f20x_f21x_port_constexpr_func_class_pin.h"
 

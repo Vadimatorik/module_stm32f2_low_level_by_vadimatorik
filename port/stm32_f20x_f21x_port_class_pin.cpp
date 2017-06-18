@@ -62,7 +62,7 @@ int pin::read() const {
 /*
  * Метод производит переинициализацию вывода
  * выбранной структурой.
- */
+ *//*
 EC_ANSWER_PIN_REINIT pin::reinit ( uint8_t number_config ) const{
     if (number_config >= cfg_count) return EC_ANSWER_PIN_REINIT::CFG_NUMBER_ERROR;      // Защита от попытки инициализации вывода несуществующей конфигурацией.
     if (*M_U32_TO_P_CONST(p_bb_key_looking)                                             // Если порт, к кторому относится вывод был заблокирован.
@@ -94,6 +94,6 @@ EC_ANSWER_PIN_REINIT pin::reinit ( uint8_t number_config ) const{
                   M_EC_TO_U8(cfg[number_config].pin_name) * 2;  // Выставляем тот режим, который указан в конфигурации.
 
     return EC_ANSWER_PIN_REINIT::OK;
-}
+}*/
 
 #endif

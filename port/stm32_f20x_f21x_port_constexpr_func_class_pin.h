@@ -12,18 +12,18 @@
  * Область constexpr конструкторов.
  **********************************************************************/
 
-constexpr pin::pin ( const pin_config_t* const pin_cfg_array, uint8_t size ):
-    cfg                 (pin_cfg_array),
-    cfg_count           (size),
+constexpr pin::pin ( const pin_config_t* const pin_cfg_array/*, uint8_t size*/ ):
+    //cfg                 (pin_cfg_array),
+    //cfg_count           (size),
     p_port              (p_base_port_address_get(pin_cfg_array->port)),
-    p_bb_key_looking    (bb_p_port_look_key_get(pin_cfg_array->port)),
+    //p_bb_key_looking    (bb_p_port_look_key_get(pin_cfg_array->port)),
     p_odr               (this->p_odr_get(pin_cfg_array)),
     p_bb_odr_read       (this->odr_bit_read_bb_p_get(pin_cfg_array)),
     odr_set_msk         (this->set_msk_get(pin_cfg_array)),
     odr_reset_msk       (this->reset_msk_get(pin_cfg_array)),
-    p_bb_idr_read       (this->bb_p_idr_read_get(pin_cfg_array)),
-    p_bb_looking_bit    (this->bb_p_looking_bit_get(pin_cfg_array)) {};
-
+    p_bb_idr_read       (this->bb_p_idr_read_get(pin_cfg_array))
+    //p_bb_looking_bit    (this->bb_p_looking_bit_get(pin_cfg_array)) {};
+    {};
 /**********************************************************************
  * Область constexpr функций.
  **********************************************************************/
@@ -74,12 +74,12 @@ constexpr uint32_t pin::odr_bit_read_bb_p_get ( const pin_config_t* const pin_cf
 /*
  * Метод возвращает указатель на bit banding область
  * памяти бита блокировки конфигурации конкретного вывода.
- */
+ *//*
 constexpr uint32_t pin::bb_p_looking_bit_get ( const pin_config_t* const pin_cfg_array ) {
     uint32_t p_port	= p_base_port_address_get(pin_cfg_array->port);             // Получаем физический адрес порта вывода.
     uint32_t p_looking_bit = p_port + 0x1C;                                     // Прибавляем смещение к LCKR регистру.
     return M_GET_BB_P_PER(p_looking_bit, M_EC_TO_U8(pin_cfg_array->pin_name));  // Получаем адрес конкретного бита регистра LCKR.
-}
+}*/
 
 #endif
 #endif
