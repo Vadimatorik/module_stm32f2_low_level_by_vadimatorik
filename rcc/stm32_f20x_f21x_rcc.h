@@ -5,42 +5,30 @@
 
 #ifdef MODULE_RCC
 
-/*
- * В этом файле находится классы, предназначенные для работы
- * с RCC модулем stm32f2 (настройке частот и включения/выключения тактирования).
- */
-#include "stm32_f20x_f21x_rcc_struct.h"			// Необходимые структуры.
+#include "stm32_f20x_f21x_rcc_struct.h"
+
+/**********************************************************************
+ * В данном файле содержится класс, экземпляром которого можно
+ * управлять системой тактирования всего микроконтроллера.
+ **********************************************************************/
 
 /*
- * Объект конфигурации основного PLL.
- * Этот объект (или массив этих объектов) используется классом
- * rcc.
- */
-class main_pll {
-public:
-	constexpr				main_pll					(const pll_cfg *const cfg):
-		cfgr_msk(reg_cfgr_msk_get(cfg))
-	{}
-
-private:
-	constexpr	uint32_t	reg_cfgr_msk_get			(const pll_cfg *const cfg);
-
-	const		uint32_t	cfgr_msk;
-};
-
-/*
- * Через этот объект производятся все манипуляции с частотами.
+ * По средствам объекта данного класса производятся все манипуляции
+ * с частотами микркоконтроллера.
  */
 class rcc {
 public:
-	constexpr rcc(const rcc_cfg	*const cfg) {};
+    constexpr rcc( const rcc_cfg* const cfg );
 
 private:
-	constexpr int get_array ( void );
+    constexpr const pll_cfg*      pll_main_configuration_check ( const pll_cfg* const cfg, uint8_t count );
 
-	//const  uint8_t a[aaa];
+
+    const pll_cfg*          const p_pll_main_cfg;
+    uint8_t                 pll_main_cfg_count;
 };
-#include "stm32_f20x_f21x_rcc_func.h"			// Функции constexpr.
+
+#include "stm32_f20x_f21x_rcc_func.h"
 
 #endif
 #endif

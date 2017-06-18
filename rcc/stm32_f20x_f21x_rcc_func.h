@@ -4,10 +4,28 @@
 #include "stm32_f20x_f21x_conf.h"
 
 #ifdef MODULE_RCC
-	constexpr uint32_t	main_pll::reg_cfgr_msk_get (const pll_cfg *const cfg) {
-		uint32_t reg = 0;
-		return reg;
-	}
+
+#include "stm32_f20x_f21x_rcc.h"
+
+/**********************************************************************
+ * Область constexpr конструкторов.
+ **********************************************************************/
+
+constexpr rcc::rcc( const rcc_cfg* const cfg ):
+    p_pll_main_cfg( this->pll_main_configuration_check( cfg->pll, cfg->pll_count ) ),
+    pll_main_cfg_count( cfg->pll_count ) {};
+
+
+/**********************************************************************
+ * Область constexpr функций.
+ **********************************************************************/
+
+/*
+ * Метод проверяет правильность введенных параметров структуры pll_cfg.
+ */
+constexpr const pll_cfg* rcc::pll_main_configuration_check ( const pll_cfg* const cfg, uint8_t count ) {
+    return cfg;
+}
 
 
 #endif
