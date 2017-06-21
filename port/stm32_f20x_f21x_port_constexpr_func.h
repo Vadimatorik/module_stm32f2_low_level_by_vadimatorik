@@ -40,13 +40,6 @@ constexpr uint32_t p_base_port_address_get( EC_PORT_NAME port_name ) {
 #ifdef PORTI
     case EC_PORT_NAME::I:   return 0x40022000;
 #endif
-    default:
-    /*
-     * В случае, если вы попали сюда, то в структуре описания
-     * порта pin_config_t в пункте port был указан несуществующий порт.
-     */
-        throw("The specified port does not exist!");
-        return 0xFFFFFFFF;
     }
 }
 

@@ -132,7 +132,7 @@ constexpr uint32_t global_port::reg_afl_init_msk( const pin_config_t* const pin_
         if ( pin_cfg_array[loop_pin].port != port_name ) { continue; };
         if ( pin_cfg_array[loop_pin].pin_name < EC_PORT_PIN_NAME::PIN_8 ) {
             reg_afrl &= ~(0b1111 << M_EC_TO_U8(pin_cfg_array[loop_pin].pin_name) * 4);
-            reg_afrl |= M_EC_TO_U8(pin_cfg_array[loop_pin].locked) <<
+            reg_afrl |= M_EC_TO_U8(pin_cfg_array[loop_pin].af) <<
                         M_EC_TO_U8(pin_cfg_array[loop_pin].pin_name) * 4;
         }
     }
@@ -149,7 +149,7 @@ constexpr uint32_t global_port::reg_afh_msk_init_get( const pin_config_t* const 
         if ( pin_cfg_array[loop_pin].port != port_name ) { continue; };
         if ( pin_cfg_array[loop_pin].pin_name > EC_PORT_PIN_NAME::PIN_7 ) {
             reg_afrh &= ~(0b1111 << (M_EC_TO_U8(pin_cfg_array[loop_pin].pin_name) - 8) * 4);
-            reg_afrh |= M_EC_TO_U8(pin_cfg_array[loop_pin].locked) <<
+            reg_afrh |= M_EC_TO_U8(pin_cfg_array[loop_pin].af) <<
                         (M_EC_TO_U8(pin_cfg_array[loop_pin].pin_name) - 8) * 4;
         }
     }
