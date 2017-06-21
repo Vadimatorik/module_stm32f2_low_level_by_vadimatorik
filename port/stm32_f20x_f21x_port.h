@@ -1,5 +1,4 @@
-#ifndef STM32F2_API_STM32_F20X_F21X_PORT_H_
-#define STM32F2_API_STM32_F20X_F21X_PORT_H_
+#pragma once
 
 #include "stm32_f20x_f21x_conf.h"
 
@@ -111,5 +110,4 @@ private:
 
 #include "stm32_f20x_f21x_port_constexpr_func_class_global_port.h"
 
-#endif
 #endif

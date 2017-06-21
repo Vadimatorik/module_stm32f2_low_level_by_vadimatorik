@@ -1,5 +1,4 @@
-#ifndef STM32F2_API_STM32_F20X_F21X_CONF_H_
-#define STM32F2_API_STM32_F20X_F21X_CONF_H_
+#pragma once
 
 /*
  * В данном файле происходит настройка всех параметров бибилиотеки.
@@ -98,5 +97,4 @@
 #define STM32_F2_PORT_COUNT				5
 #else
 	#error Не выбран микроконтроллер. Выбирете модель микрококнтроллера. Например, STM32F205RC.
-#endif
 #endif

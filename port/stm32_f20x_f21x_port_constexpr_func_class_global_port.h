@@ -1,5 +1,4 @@
-#ifndef STM32F2_API_PORT_STM32_F20X_F21X_PORT_CONSTEXPR_FUNC_CLASS_GLOBAL_PORT_H_
-#define STM32F2_API_PORT_STM32_F20X_F21X_PORT_CONSTEXPR_FUNC_CLASS_GLOBAL_PORT_H_
+#pragma once
 
 #include "stm32_f20x_f21x_conf.h"
 
@@ -229,5 +228,4 @@ constexpr global_port_msk_reg_struct global_port::fill_out_mas_struct( const pin
     return p_st;
 }
 
-#endif
 #endif
