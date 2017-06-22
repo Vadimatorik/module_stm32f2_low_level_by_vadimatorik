@@ -40,7 +40,7 @@ constexpr uint32_t pin::reset_msk_get ( const pin_config_t* const pin_cfg_array 
  * Метод возвращает указатель на bit_banding
  * область памяти, в которой находится бит состояния входа.
  */
-constexpr uint32_t pin::bb_p_idr_read_get (const pin_config_t* const pin_cfg_array ) {
+constexpr uint32_t pin::bb_p_idr_read_get ( const pin_config_t* const pin_cfg_array ) {
     uint32_t p_port = p_base_port_address_get(pin_cfg_array->port);     // Получаем физический адрес порта вывода.
     uint32_t p_idr  = p_port + 0x10;                                    // Прибавляем смещение к IDR регистру.
     return M_GET_BB_P_PER(p_idr, M_EC_TO_U8(pin_cfg_array->pin_name));  // Получаем адрес конкретного бита регистра IDR (состояние на входе).

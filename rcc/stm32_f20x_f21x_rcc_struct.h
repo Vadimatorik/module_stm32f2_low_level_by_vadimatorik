@@ -5,6 +5,7 @@
 #ifdef MODULE_RCC
 
 #include <cmath>
+#include "stm32_f20x_f21x_rcc_struct_class_pll.h"
 
 /**********************************************************************
  * Область enum class-ов.
@@ -81,7 +82,7 @@ struct __attribute__((packed)) rcc_registers_struct {
  * Структура инициализации объекта класса RCC.
  */
 struct rcc_cfg {
-    const uint32_t*                 const main_pll_cfg;         // Режимы основного PLL.
+    const pll_cfg_struct*           const main_pll_cfg;         // Режимы основного PLL.
     const uint8_t                   pll_count;                  // Количество режимов основного PLL.
 };
 

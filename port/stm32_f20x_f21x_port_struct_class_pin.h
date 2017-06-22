@@ -199,7 +199,7 @@ struct __attribute__( ( packed ) ) port_registers_struct {
 /*
  * Структура конфигурации вывода.
  */
-struct __attribute__((packed)) pin_config_t {
+struct __attribute__( ( packed ) ) pin_config_t {
     EC_PORT_NAME                port;               // Имя порта ( пример: EC_PORT_NAME::A ).
     EC_PORT_PIN_NAME            pin_name;           // Номер вывода ( пример: EC_PORT_PIN_NAME::PIN_0 ).
     EC_PIN_MODE                 mode;               // Режим вывода ( пример: EC_PIN_MODE::OUTPUT ).
