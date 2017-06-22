@@ -217,15 +217,15 @@ struct __attribute__((packed)) pin_config_t {
 /**********************************************************************
  * Область template оболочек.
  **********************************************************************/
-template <EC_PORT_NAME              PORT,
-          EC_PORT_PIN_NAME          PIN_NAME,
-          EC_PIN_MODE               MODE,
-          EC_PIN_OUTPUT_CFG         OUTPUT_CONFIG,
-          EC_PIN_SPEED              SPEED,
-          EC_PIN_PULL               PULL,
-          EC_PIN_AF                 AF,
-          EC_LOCKED                 LOCKED,
-          EC_PIN_STATE_AFTER_INIT   STATE_AFTER_INIT>
+template < EC_PORT_NAME              PORT,
+           EC_PORT_PIN_NAME          PIN_NAME,
+           EC_PIN_MODE               MODE,
+           EC_PIN_OUTPUT_CFG         OUTPUT_CONFIG,
+           EC_PIN_SPEED              SPEED,
+           EC_PIN_PULL               PULL,
+           EC_PIN_AF                 AF,
+           EC_LOCKED                 LOCKED,
+           EC_PIN_STATE_AFTER_INIT   STATE_AFTER_INIT >
 class pin_config_check_param : public pin_config_t {
 public:
     constexpr pin_config_check_param(): pin_config_t({
@@ -257,38 +257,18 @@ public:
     };
 };
 
-/**********************************************************************
- * Область макросов.
- **********************************************************************/
-
-/*
- * Сокращенная запись конфигурации вывода как
- * вход, подключенный к ADC.
- */
-#define M_PIN_CFG_ADC(PORT,PIN) {                           \
-    .port               = PORT,                             \
-    .pin_name           = PIN,                              \
-    .mode               = EC_PIN_MODE::ANALOG,              \
-    .output_config      = EC_PIN_OUTPUT_CFG::NO_USE,        \
-    .speed              = EC_PIN_SPEED::LOW,                \
-    .pull               = EC_PIN_PULL::NO_USE,              \
-    .af                 = EC_PIN_AF::NO_USE,                \
-    .locked             = EC_LOCKED::LOCKED,                \
-    .state_after_init   = EC_PIN_STATE_AFTER_INIT::NO_USE   \
-}
-
-/*
- * Сокращенная запись конфигурации const объекта
- * с проверкой параметров внутри template оболочки.
- */
-#define M_OBJ_PIN_CFG_ADC(NAME_OBJ,PORT,PIN)                \
-    const pin_config_check_param<PORT,PIN,                  \
-        EC_PIN_MODE::INPUT,                                 \
-        EC_PIN_OUTPUT_CFG::NO_USE,                          \
-        EC_PIN_SPEED::LOW,                                  \
-        EC_PIN_PULL::UP,                                    \
-        EC_PIN_AF::NO_USE,                                  \
-        EC_LOCKED::LOCKED,                                  \
-        EC_PIN_STATE_AFTER_INIT::NO_USE>NAME_OBJ;           \
+template < EC_PORT_NAME              PORT,
+           EC_PORT_PIN_NAME          PIN_NAME >
+class pin_config_adc_check_param : public pin_config_check_param< PORT, PIN_NAME,
+                                                                  EC_PIN_MODE::INPUT,
+                                                                  EC_PIN_OUTPUT_CFG::NO_USE,
+                                                                  EC_PIN_SPEED::LOW,
+                                                                  EC_PIN_PULL::UP,
+                                                                  EC_PIN_AF::NO_USE,
+                                                                  EC_LOCKED::LOCKED,
+                                                                  EC_PIN_STATE_AFTER_INIT::NO_USE> {
+public:
+    constexpr pin_config_adc_check_param() {};
+};
 
 #endif
