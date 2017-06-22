@@ -48,6 +48,33 @@ class rcc {
 public:
     constexpr rcc( const rcc_cfg* const cfg );
 
+    /*
+     * Действия производятся без каких-либо проверок.
+     */
+    void    pll_main_on                     ( void );
+    void    pll_main_off                    ( void );
+    int     pll_main_status_get             ( void );
+    int     pll_main_clock_ready_flag_get   ( void );
+
+    void    pll_i2s_on                      ( void );
+    void    pll_i2s_off                     ( void );
+    int     pll_i2s_status_get              ( void );
+    int     pll_i2s_clock_ready_flag_get    ( void );
+
+    void    hse_clock_on                    ( void );
+    void    hse_clock_off                   ( void );
+    int     hse_clock_status_get            ( void );
+    int     hse_clock_ready_flag_get        ( void );
+
+    void    hsi_clock_on                    ( void );
+    void    hsi_clock_off                   ( void );
+    int     hsi_clock_status_get            ( void );
+    int     hsi_clock_ready_flag_get        ( void );
+
+    /*
+     * Отключает PLL, обновляет значение, включает PLL
+     */
+    int     pll_cfg_update  ( uint8_t number_cfg );
 private:
     const rcc_cfg*  const cfg;
 };
