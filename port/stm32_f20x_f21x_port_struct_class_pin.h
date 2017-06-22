@@ -180,7 +180,7 @@ enum class EC_ANSWER_PIN_REINIT {
 /*
  * Перечень регистров физического порта ввода-вывода.
  */
-struct __attribute__((packed)) port_registers_struct {
+struct __attribute__( ( packed ) ) port_registers_struct {
     volatile uint32_t   mode;       // Регистр выбора режима работы выводов.
     volatile uint32_t   otype;      // Регистр выбора режима выхода
                                     // ( в случае, если вывод настроен как выход ).
@@ -228,7 +228,7 @@ template < EC_PORT_NAME              PORT,
            EC_PIN_STATE_AFTER_INIT   STATE_AFTER_INIT >
 class pin_config_check_param : public pin_config_t {
 public:
-    constexpr pin_config_check_param(): pin_config_t({
+    constexpr pin_config_check_param(): pin_config_t( {
         .port               = PORT,
         .pin_name           = PIN_NAME,
         .mode               = MODE,
@@ -238,7 +238,7 @@ public:
         .af                 = AF,
         .locked             = LOCKED,
         .state_after_init   = STATE_AFTER_INIT
-    }) {
+    } ) {
 /*
  * Проверяем введенные пользователем данные в структуру инициализации.
  */
@@ -266,7 +266,7 @@ class pin_config_adc_check_param : public pin_config_check_param< PORT, PIN_NAME
                                                                   EC_PIN_PULL::UP,
                                                                   EC_PIN_AF::NO_USE,
                                                                   EC_LOCKED::LOCKED,
-                                                                  EC_PIN_STATE_AFTER_INIT::NO_USE> {
+                                                                  EC_PIN_STATE_AFTER_INIT::NO_USE > {
 public:
     constexpr pin_config_adc_check_param() {};
 };
