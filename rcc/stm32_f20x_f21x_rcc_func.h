@@ -1,5 +1,4 @@
-#ifndef STM32F2_API_RCC_STM32_F20X_F21X_RCC_FUNC_H_
-#define STM32F2_API_RCC_STM32_F20X_F21X_RCC_FUNC_H_
+#pragma once
 
 #include "stm32_f20x_f21x_conf.h"
 
@@ -20,8 +19,4 @@ constexpr rcc::rcc( const rcc_cfg* const cfg ):
 /**********************************************************************
  * Область constexpr функций.
  **********************************************************************/
-
-
-
-#endif
 #endif
