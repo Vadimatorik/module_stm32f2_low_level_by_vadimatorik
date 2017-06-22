@@ -1,5 +1,4 @@
-#ifndef STM32F2_API_PORT_STM32_F20X_F21X_PORT_CONSTEXPR_FUNC_CLASS_PIN_H_
-#define STM32F2_API_PORT_STM32_F20X_F21X_PORT_CONSTEXPR_FUNC_CLASS_PIN_H_
+#pragma once
 
 #include "stm32_f20x_f21x_conf.h"
 
@@ -66,5 +65,4 @@ constexpr uint32_t pin::odr_bit_read_bb_p_get ( const pin_config_t* const pin_cf
                                                                                 // регистра ODR (состояние на входе).
 }
 
-#endif
 #endif

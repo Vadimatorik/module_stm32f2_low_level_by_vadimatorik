@@ -1,5 +1,4 @@
-#ifndef STM32F2_API_PORT_STM32_F20X_F21X_PORT_CONSTEXPR_FUNC_H_
-#define STM32F2_API_PORT_STM32_F20X_F21X_PORT_CONSTEXPR_FUNC_H_
+#pragma once
 
 #include "stm32_f20x_f21x_conf.h"
 
@@ -52,5 +51,4 @@ constexpr uint32_t bb_p_port_look_key_get( EC_PORT_NAME port_name ) {
     return M_GET_BB_P_PER( port_point, 16 );                    // Получаем адрес конкретного бита регистра IDR (состояние на входе).
 }
 
-#endif
 #endif

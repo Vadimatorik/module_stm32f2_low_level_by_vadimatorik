@@ -12,8 +12,7 @@
  **********************************************************************/
 
 constexpr rcc::rcc( const rcc_cfg* const cfg ):
-    p_pll_main_cfg( cfg->pll ),
-    pll_main_cfg_count( cfg->pll_count ) {};
+    cfg( cfg ) {};
 
 
 /**********************************************************************
