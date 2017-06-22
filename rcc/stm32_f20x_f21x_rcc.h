@@ -51,25 +51,31 @@ public:
     /*
      * Действия производятся без каких-либо проверок.
      */
-    void    pll_main_on                     ( void );
-    void    pll_main_off                    ( void );
-    int     pll_main_status_get             ( void );
-    int     pll_main_clock_ready_flag_get   ( void );
 
-    void    pll_i2s_on                      ( void );
-    void    pll_i2s_off                     ( void );
-    int     pll_i2s_status_get              ( void );
-    int     pll_i2s_clock_ready_flag_get    ( void );
+    void    pll_main_on                     ( void ) const;
+    void    pll_main_off                    ( void ) const;
 
-    void    hse_clock_on                    ( void );
-    void    hse_clock_off                   ( void );
-    int     hse_clock_status_get            ( void );
-    int     hse_clock_ready_flag_get        ( void );
+    void    pll_i2s_on                      ( void ) const;
+    void    pll_i2s_off                     ( void ) const;
 
-    void    hsi_clock_on                    ( void );
-    void    hsi_clock_off                   ( void );
-    int     hsi_clock_status_get            ( void );
-    int     hsi_clock_ready_flag_get        ( void );
+
+
+    void    hse_clock_on                    ( void ) const;
+    void    hse_clock_off                   ( void ) const;
+
+
+
+    void    hsi_clock_on                    ( void ) const;
+    void    hsi_clock_off                   ( void ) const;
+
+    EC_ANSWER_PLL_STATUS            pll_i2s_status_get              ( void ) const;
+    EC_ANSWER_PLL_STATUS            pll_main_status_get             ( void ) const;
+    EC_ANSWER_PLL_READY_FLAG        pll_main_clock_ready_flag_get   ( void ) const;
+    EC_ANSWER_PLL_READY_FLAG        pll_i2s_clock_ready_flag_get    ( void ) const;
+    EC_ANSWER_OSCILLATOR_STATUS     hse_clock_status_get            ( void ) const;
+    EC_ANSWER_OSCILLATOR_STATUS     hsi_clock_status_get            ( void ) const;
+    EC_ANSWER_OSCILLATOR_STATE      hse_clock_ready_flag_get        ( void ) const;
+    EC_ANSWER_OSCILLATOR_STATE      hsi_clock_ready_flag_get        ( void ) const;
 
     /*
      * Отключает PLL, обновляет значение, включает PLL

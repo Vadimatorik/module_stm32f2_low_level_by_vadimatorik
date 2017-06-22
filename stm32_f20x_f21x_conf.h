@@ -72,6 +72,10 @@
 // Преобразует enum class в uint8_t.
 #define M_EC_TO_U8(ENUM_VALUE)			((uint8_t)ENUM_VALUE)
 
+// Преобразует enum class в uint32_t.
+#define M_EC_TO_U32(ENUM_VALUE)         ((uint32_t)ENUM_VALUE)
+
+
 // Возвращаем размер массива.
 #define M_SIZE_ARRAY(ARRAY)             (sizeof(ARRAY)/sizeof(ARRAY[0]))
 
