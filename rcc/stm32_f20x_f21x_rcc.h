@@ -21,9 +21,6 @@ public:
     constexpr rcc( const rcc_cfg* const cfg );
 
 private:
-    constexpr const pll_cfg*      pll_main_configuration_check ( const pll_cfg* const cfg, uint8_t count );
-
-
     const pll_cfg*          const p_pll_main_cfg;
     uint8_t                 pll_main_cfg_count;
 };
