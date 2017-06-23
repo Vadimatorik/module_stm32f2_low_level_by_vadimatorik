@@ -76,6 +76,10 @@ enum class EC_ANSWER_OSCILLATOR_STATE {
     READY  = 1
 };
 
+enum class  EC_ANSWER_pll_cfg_update {
+
+};
+
 /*
  *  Доступные источники тактового сигнала для PLL.
  */

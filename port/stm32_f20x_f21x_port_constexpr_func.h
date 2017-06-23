@@ -11,7 +11,7 @@
  * на карте памяти в соответствии с выбранным контроллером.
  */
 constexpr uint32_t p_base_port_address_get( EC_PORT_NAME port_name ) {
-    switch( port_name ){
+    switch( port_name ) {
 #ifdef PORTA
     case EC_PORT_NAME::A:   return 0x40020000;
 #endif

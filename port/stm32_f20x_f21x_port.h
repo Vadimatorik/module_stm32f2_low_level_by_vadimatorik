@@ -33,15 +33,16 @@ public:
     int     read    ( void ) const;
 
 private:
+    constexpr uint32_t  p_bsr_get                ( const pin_config_t* const pin_cfg_array );
     constexpr uint32_t  set_msk_get              ( const pin_config_t* const pin_cfg_array );
     constexpr uint32_t  reset_msk_get            ( const pin_config_t* const pin_cfg_array );
-    constexpr uint32_t  bb_p_idr_read_get        ( const pin_config_t* const pin_cfg_array );
-    constexpr uint32_t  p_odr_get                ( const pin_config_t* const pin_cfg_array );
     constexpr uint32_t  odr_bit_read_bb_p_get    ( const pin_config_t* const pin_cfg_array );
+    constexpr uint32_t  bb_p_idr_read_get        ( const pin_config_t* const pin_cfg_array );
 
-    const uint32_t  p_odr;
+
+    const uint32_t  p_bsr;
+    const uint32_t  bsr_set_msk, bsr_reset_msk;
     const uint32_t  p_bb_odr_read, p_bb_idr_read;
-    const uint32_t  odr_set_msk, odr_reset_msk;
 };
 
 #include "stm32_f20x_f21x_port_constexpr_func_class_pin.h"

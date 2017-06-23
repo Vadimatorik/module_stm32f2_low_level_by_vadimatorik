@@ -61,11 +61,11 @@
 // Получаем адрес бита периферии в Bit Banding области.
 #define M_GET_BB_P_PER(ADDRESS,BIT) ((BIT_BAND_PER_BASE + (ADDRESS - BIT_BAND_PER_REF)*32 + (BIT * 4)))
 
-// Преобразует число в uint32_t переменной в указатель на uint32_t (или void).
+// Преобразует число в uint32_t переменной в указатель на uint32_t.
 // Причем запрещает переписывать то, что по указателю (только чтение).
 #define M_U32_TO_P_CONST(point)		((const uint32_t *const)(point))
 
-// Преобразует число в uint32_t переменной в указатель на uint32_t (или void).
+// Преобразует число в uint32_t переменной в указатель на uint32_t.
 // Данные по указателю можно изменять.
 #define M_U32_TO_P(point)				((uint32_t *)(point))
 

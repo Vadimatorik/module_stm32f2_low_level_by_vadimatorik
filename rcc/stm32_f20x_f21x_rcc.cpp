@@ -64,7 +64,6 @@ EC_ANSWER_OSCILLATOR_STATE rcc::hse_clock_ready_flag_get ( void ) const {
     return ( *M_U32_TO_P(M_GET_BB_P_PER(static_cast< uint32_t >( RCC->C ), M_EC_TO_U8(EC_CR_REG_BIT_MSK::HSERDY))) ) ? EC_ANSWER_OSCILLATOR_STATE::READY : EC_ANSWER_OSCILLATOR_STATE::NOT_READY;
 }
 
-
 EC_ANSWER_OSCILLATOR_STATE rcc::hsi_clock_ready_flag_get ( void ) const {
     return ( *M_U32_TO_P(M_GET_BB_P_PER(static_cast< uint32_t >( RCC->C ), M_EC_TO_U8(EC_CR_REG_BIT_MSK::HSIRDY))) ) ? EC_ANSWER_OSCILLATOR_STATE::READY : EC_ANSWER_OSCILLATOR_STATE::NOT_READY;
 }

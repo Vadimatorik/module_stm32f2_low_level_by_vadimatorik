@@ -58,12 +58,8 @@ public:
     void    pll_i2s_on                      ( void ) const;
     void    pll_i2s_off                     ( void ) const;
 
-
-
     void    hse_clock_on                    ( void ) const;
     void    hse_clock_off                   ( void ) const;
-
-
 
     void    hsi_clock_on                    ( void ) const;
     void    hsi_clock_off                   ( void ) const;

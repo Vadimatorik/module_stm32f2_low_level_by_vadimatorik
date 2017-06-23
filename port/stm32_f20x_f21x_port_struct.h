@@ -1,5 +1,4 @@
-#ifndef STM32F2_API_PORT_STM32_F20X_F21X_PORT_STRUCT_H_
-#define STM32F2_API_PORT_STM32_F20X_F21X_PORT_STRUCT_H_
+#pragma once
 
 #include "stm32_f20x_f21x_conf.h"
 
@@ -25,5 +24,4 @@ enum class EC_PORT_NAME {
 
 #endif
 
-#endif
 #endif
