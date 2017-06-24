@@ -76,7 +76,7 @@ enum class EC_CFG_REG_BIT_FIELD_POS {
 enum class EC_CFG_REG_BIT_MSK {
     SW          = 0b11      << M_EC_TO_U8(EC_CFG_REG_BIT_FIELD_POS::SW),
     SWS         = 0b11      << M_EC_TO_U8(EC_CFG_REG_BIT_FIELD_POS::SWS),
-    HSEON       = 0b1111    << M_EC_TO_U8(EC_CFG_REG_BIT_FIELD_POS::HPRE),
+    HPRE        = 0b1111    << M_EC_TO_U8(EC_CFG_REG_BIT_FIELD_POS::HPRE),
     PPRE1       = 0b111     << M_EC_TO_U8(EC_CFG_REG_BIT_FIELD_POS::PPRE1),
     PPRE2       = 0b111     << M_EC_TO_U8(EC_CFG_REG_BIT_FIELD_POS::PPRE2),
     RTCPRE      = 0b11111   << M_EC_TO_U8(EC_CFG_REG_BIT_FIELD_POS::RTCPRE),
@@ -98,8 +98,8 @@ enum class EC_ANSWER_PLL_STATUS {
 };
 
 enum class EC_ANSWER_PLL_READY_FLAG {
-    PLL_UNLOCKED = 0,
-    PLL_LOCKED  = 1
+    PLL_UNLOCKED    = 0,
+    LOCKED          = 1
 };
 
 enum class EC_ANSWER_OSCILLATOR_STATUS {
@@ -171,9 +171,9 @@ enum class EC_RCC_APB2_DIV {
  * От чего сейчас тактируется ядро?
  */
 enum class EC_ANSWER_RCC_SWS_STATUS {
-    HSI = 0b00,
-    HSE = 0b01,
-    PLL = 0b10
+    HSI = M_EC_TO_U8(EC_CFG_REG_BIT_FIELD_SW_MSK::HSI) << M_EC_TO_U8(EC_CFG_REG_BIT_FIELD_POS::SWS),
+    HSE = M_EC_TO_U8(EC_CFG_REG_BIT_FIELD_SW_MSK::HSE) << M_EC_TO_U8(EC_CFG_REG_BIT_FIELD_POS::SWS),
+    PLL = M_EC_TO_U8(EC_CFG_REG_BIT_FIELD_SW_MSK::PLL) << M_EC_TO_U8(EC_CFG_REG_BIT_FIELD_POS::SWS)
 };
 
 /**********************************************************************

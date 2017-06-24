@@ -81,9 +81,10 @@ public:
      * 6.  Отключает PLL.
      * 7.  Выставляет заданную конфигурацию PLL.
      * 8.  Включает PLL.
-     * 9.  Дожидается стабилизации PLL.
-     * 10. Высталяет заданную конфигурацию делителей шин APB1, APB2, AHB.
+     * 9.  Высталяет заданную конфигурацию делителей шин APB1, APB2, AHB.
+     * 10. Дожидается стабилизации PLL.
      * 11. Переключает тактирование ядра на PLL.
+     * 12. Ждет, пока ядро переключится.
      */
     int     pll_cfg_update  ( uint8_t number_cfg ) const;
 
@@ -109,13 +110,19 @@ private:
     static void    sw_hse_set               ( void );                                         // Переключает ядро на HSE.
     static void    sw_pll_set               ( void );                                         // Переключает ядро на PLL.
 
-    static void    sw_status_get            ( void );                                         // Сообщает, от чего сейчас тактируется ядро.
+    static void    dev1_bus_set             ( void );                                         // Выставляет делители APB1, APB2, AHB в 1.
+           void    dev_bus_set              ( uint8_t &number_cfg ) const;                    // Метод выставляет делители частоты на для шин, рассчитаные на этапе компиляции.
+
+           void    pll_set_cfg              ( uint8_t &number_cfg ) const;                    // Метод выставляет выбранную конфигурацию без провекри в PLL (конфигурация должна существовать,
+                                                                                              // PLL должен быть отключен).
+
+    static EC_ANSWER_RCC_SWS_STATUS        sw_status_get                   ( void );          // Возвращает источние сообщение о том, от какого источника тактируется ядро.
 
     static EC_ANSWER_PLL_STATUS            pll_main_status_get             ( void );          // Проверят, включен ли основной PLL.
     static EC_ANSWER_PLL_STATUS            pll_i2s_status_get              ( void );          // Проверят, включен ли I2S PLL.
 
-    static EC_ANSWER_PLL_READY_FLAG        pll_main_clock_ready_flag_get   ( void );          // Проверяет, заблокирован ли основной PLL.
-    static EC_ANSWER_PLL_READY_FLAG        pll_i2s_clock_ready_flag_get    ( void );          // Проверяет, заблокирован ли I2S PLL.
+    static EC_ANSWER_PLL_READY_FLAG        pll_main_clock_ready_flag_get   ( void );          // Проверяет, стабилизировалась ли частота на основном PLL.
+    static EC_ANSWER_PLL_READY_FLAG        pll_i2s_clock_ready_flag_get    ( void );          // Проверяет, стабилизировалась ли частота на I2S PLL.
 
     static EC_ANSWER_OSCILLATOR_STATUS     hse_clock_status_get            ( void );          // Проверяет, включен ли внешний источник тактового сигнала или нет.
     static EC_ANSWER_OSCILLATOR_STATUS     hsi_clock_status_get            ( void );          // Проверяет, включен ли внутренний источник тактового сигнала или нет.
