@@ -188,37 +188,27 @@ EC_ANSWER_CLOCK_UPDATE rcc::pll_sysclk_src_clock_set(uint8_t number_cfg) const {
     if (number_cfg >= this->cfg->pll_count)
         return EC_ANSWER_CLOCK_UPDATE::STRUCT_NUMBER_IS_WRONG; // Если попросили сконфигурировать несуществующей структурой, говорим, что такой нет.
 
-    if (this->cfg->main_pll_cfg[number_cfg].src) {
-        // Если PLL будет на HSE.
-        this->hse_clock_on(); // Включаем HSE.
-        while (this->hse_clock_ready_flag_get()
-                != EC_ANSWER_OSCILLATOR_STATE::READY) {
-        }; // Ждем стабилизации HSE.
-        this->sw_hse_set(); // Переходим на HSE.
-        while (this->sw_status_get() != EC_ANSWER_RCC_SWS_STATUS::HSE) {
-        }; // Ждем перехода ядра на HSE.
+    if (this->cfg->main_pll_cfg[number_cfg].src) {                                               // Если PLL будет на HSE.
+        this->hse_clock_on();                                                                    // Включаем HSE.
+        while ( this->hse_clock_ready_flag_get() != EC_ANSWER_OSCILLATOR_STATE::READY ) {};      // Ждем стабилизации HSE.
+        this->sw_hse_set();                                                                      // Переходим на HSE.
+        while ( this->sw_status_get() != EC_ANSWER_RCC_SWS_STATUS::HSE ) {};                     // Ждем перехода ядра на HSE.
     } else {
         this->hsi_clock_on();
-        while (this->hsi_clock_ready_flag_get()
-                != EC_ANSWER_OSCILLATOR_STATE::READY) {
-        };
+        while ( this->hsi_clock_ready_flag_get() != EC_ANSWER_OSCILLATOR_STATE::READY ) {};
         this->sw_hsi_set();
-        while (this->sw_status_get() != EC_ANSWER_RCC_SWS_STATUS::HSI) {
-        };
+        while ( this->sw_status_get() != EC_ANSWER_RCC_SWS_STATUS::HSI ) {};
     }
-    this->flash_ac_reset(); // Сбрасываем задержку чтения из flash.
-    this->dev1_bus_set(); // Убираем все делители частоты.
-    this->pll_main_off(); // Отключаем основной PLL.
-    this->pll_set_cfg(number_cfg); // Устанавливаем режим PLL.
-    this->dev_bus_set(number_cfg); // Выставляем делители частоты для конфигурации (обяхательно после dev1_bus_set).
-    this->flash_ac_set(number_cfg); // Включаем предсказатель и делитель из flash.
-    this->pll_main_on(); // Запускаем PLL.
-    while (this->pll_main_clock_ready_flag_get()
-            != EC_ANSWER_PLL_READY_FLAG::LOCKED) {
-    }; // Ждем стабилизации частоты.
-    this->sw_pll_set(); // Переходим на тактирование от PLL.
-    while (this->sw_status_get() != EC_ANSWER_RCC_SWS_STATUS::PLL) {
-    }; // Ждем перехода на PLL.
+    this->flash_ac_reset();                                                                     // Сбрасываем задержку чтения из flash.
+    this->dev1_bus_set();                                                                       // Убираем все делители частоты.
+    this->pll_main_off();                                                                       // Отключаем основной PLL.
+    this->pll_set_cfg(number_cfg);                                                              // Устанавливаем режим PLL.
+    this->dev_bus_set(number_cfg);                                                              // Выставляем делители частоты для конфигурации (обяхательно после dev1_bus_set).
+    this->flash_ac_set(number_cfg);                                                             // Включаем предсказатель и делитель из flash.
+    this->pll_main_on();                                                                        // Запускаем PLL.
+    while ( this->pll_main_clock_ready_flag_get() != EC_ANSWER_PLL_READY_FLAG::LOCKED ) {};     // Ждем стабилизации частоты.
+    this->sw_pll_set();                                                                         // Переходим на тактирование от PLL.
+    while ( this->sw_status_get() != EC_ANSWER_RCC_SWS_STATUS::PLL ) {};                        // Ждем перехода на PLL.
     return EC_ANSWER_CLOCK_UPDATE::SUCCESS;
 }
 
