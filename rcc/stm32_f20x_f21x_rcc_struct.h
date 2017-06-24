@@ -116,7 +116,7 @@ enum class EC_RCC_PLL_P {
  * Делитель SYSCLK для шины AHB.
  */
 enum class EC_RCC_AHB_DIV {
-    NO_USE  = 0,
+    DIV_1   = 0,
     DIV_2   = 0b1000,
     DIV_4   = 0b1001,
     DIV_8   = 0b1010,
@@ -131,7 +131,7 @@ enum class EC_RCC_AHB_DIV {
  * Делитель частоты с AHB для шины APB1.
  */
 enum class EC_RCC_APB1_DIV {
-    NO_USE  = 0,
+    DIV_1   = 0,
     DIV_2   = 0b100,
     DIV_4   = 0b101,
     DIV_8   = 0b110,
@@ -142,7 +142,7 @@ enum class EC_RCC_APB1_DIV {
  * Делитель частоты с AHB для шины APB2.
  */
 enum class EC_RCC_APB2_DIV {
-    NO_USE  = 0,
+    DIV_1   = 0,
     DIV_2   = 0b100,
     DIV_4   = 0b101,
     DIV_8   = 0b110,

@@ -53,8 +53,8 @@ public:
     constexpr pll_cfg();
 
 private:
-    constexpr uint32_t    pllcfg_reg_msk_get         ( void );
-
+    constexpr uint32_t  pllcfg_reg_msk_get              ( void );
+    constexpr uint32_t  dev_bus_msk_get                 ( void );
 };
 
 #include "stm32_f20x_f21x_rcc_constexpr_func_class_pll.h"
@@ -71,13 +71,23 @@ class rcc {
 public:
     constexpr rcc( const rcc_cfg* const cfg );
 
-
-
     /*
-     * Отключает PLL, обновляет значение, включает PLL
+     * 1. Включает HSE или HSI (в зависимости от того, от чего будет тактироваться PLL).
+     * 2. Дожидается стабилизации источника тактирования.
+     * 3. Переключает ядро на выбранный только что стабилизировавшийся источник.
+     * 4. Выставляет делители по-умолчанию для шин APB1, APB2, AHB
+     *    ( т.к. тактирование идет либо от 16 МГц HSI или от <= 25 МГц HSE, деление не нужно).
+     * 5. Отключает PLL.
+     * 6. Выставляет заданную конфигурацию PLL.
+     * 7. Включает PLL.
+     * 8. Дожидается стабилизации PLL.
+     * 8. Высталяет заданную конфигурацию делителей шин APB1, APB2, AHB.
+     * 9. Переключает тактирование ядра на PLL.
      */
-    int     pll_cfg_update  ( uint8_t number_cfg );
+    int     pll_cfg_update  ( uint8_t number_cfg ) const;
+
 private:
+
     /*
      * Действия производятся без каких-либо проверок.
      */

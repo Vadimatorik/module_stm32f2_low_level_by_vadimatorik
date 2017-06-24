@@ -118,5 +118,10 @@ EC_ANSWER_OSCILLATOR_STATE rcc::hsi_clock_ready_flag_get ( void ) const {
     return ( *M_U32_TO_P(M_GET_BB_P_PER(static_cast< uint32_t >( RCC->C ), M_EC_TO_U8(EC_C_REG_BIT_MSK::HSIRDY))) ) ? EC_ANSWER_OSCILLATOR_STATE::READY : EC_ANSWER_OSCILLATOR_STATE::NOT_READY;
 }
 
+int rcc::pll_cfg_update ( uint8_t number_cfg ) const {
+    if ( number_cfg >= this->cfg->pll_count) return -1;                 // Если попросили сконфигурировать несуществующей структурой, говорим, что такой нет.
+
+    return 0;
+}
 
 #endif
