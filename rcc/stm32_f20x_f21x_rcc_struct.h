@@ -94,10 +94,6 @@ enum class EC_ANSWER_OSCILLATOR_STATE {
     READY  = 1
 };
 
-enum class  EC_ANSWER_pll_cfg_update {
-
-};
-
 /*
  *  Доступные источники тактового сигнала для PLL.
  */
@@ -115,6 +111,45 @@ enum class EC_RCC_PLL_P {
     DIV_6  = 2,
     DIV_8  = 3,
 };
+
+/*
+ * Делитель SYSCLK для шины AHB.
+ */
+enum class EC_RCC_AHB_DIV {
+    NO_USE  = 0,
+    DIV_2   = 0b1000,
+    DIV_4   = 0b1001,
+    DIV_8   = 0b1010,
+    DIV_16  = 0b1011,
+    DIV_64  = 0b1100,
+    DIV_128 = 0b1101,
+    DIV_256 = 0b1110,
+    DIV_512 = 0b1111,
+};
+
+/*
+ * Делитель частоты с AHB для шины APB1.
+ */
+enum class EC_RCC_APB1_DIV {
+    NO_USE  = 0,
+    DIV_2   = 0b100,
+    DIV_4   = 0b101,
+    DIV_8   = 0b110,
+    DIV_16  = 0b111,
+};
+
+/*
+ * Делитель частоты с AHB для шины APB2.
+ */
+enum class EC_RCC_APB2_DIV {
+    NO_USE  = 0,
+    DIV_2   = 0b100,
+    DIV_4   = 0b101,
+    DIV_8   = 0b110,
+    DIV_16  = 0b111,
+};
+
+
 
 /**********************************************************************
  * Область упакованных структур.

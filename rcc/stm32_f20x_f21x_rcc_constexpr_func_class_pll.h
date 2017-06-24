@@ -10,8 +10,8 @@
 /**********************************************************************
  * Область constexpr конструкторов.
  **********************************************************************/
-template < EC_RCC_PLL_SOURCE S, uint8_t M, uint16_t N, EC_RCC_PLL_P P, uint8_t Q >
-constexpr pll_cfg< S, M, N, P, Q >::pll_cfg() : pll_cfg_struct( {
+template < EC_RCC_PLL_SOURCE S, uint8_t M, uint16_t N, EC_RCC_PLL_P P, uint8_t Q, EC_RCC_AHB_DIV AHB, EC_RCC_APB1_DIV APB1, EC_RCC_APB2_DIV APB2 >
+constexpr pll_cfg< S, M, N, P, Q, AHB, APB1, APB2 >::pll_cfg() : pll_cfg_struct( {
     .pllcfg_reg_msk = pllcfg_reg_msk_get()
 } ) {
     static_assert( ( M >= 2 ) || ( M <= 63 ), "Invalid parameter M! 2 <=  M <= 63!" );
@@ -37,8 +37,8 @@ constexpr pll_cfg< S, M, N, P, Q >::pll_cfg() : pll_cfg_struct( {
 /**********************************************************************
  * Область constexpr функций.
  **********************************************************************/
-template < EC_RCC_PLL_SOURCE S, uint8_t M, uint16_t N, EC_RCC_PLL_P P, uint8_t Q >
-constexpr uint32_t pll_cfg< S, M, N, P, Q >::pllcfg_reg_msk_get( void ) {
+template < EC_RCC_PLL_SOURCE S, uint8_t M, uint16_t N, EC_RCC_PLL_P P, uint8_t Q, EC_RCC_AHB_DIV AHB, EC_RCC_APB1_DIV APB1, EC_RCC_APB2_DIV APB2 >
+constexpr uint32_t pll_cfg< S, M, N, P, Q, AHB, APB1, APB2 >::pllcfg_reg_msk_get( void ) {
     uint32_t pllcfg_reg_msk = 0;
 
     pllcfg_reg_msk  |= static_cast< uint8_t >( S )    << static_cast< uint8_t >( EC_PLLCFG_REG_BIT_FIELD_POSITION::S );
