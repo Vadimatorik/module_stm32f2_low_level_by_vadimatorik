@@ -94,7 +94,7 @@ public:
      * 11. Переключает тактирование ядра на PLL.
      * 12. Ждет, пока ядро переключится.
      */
-    int     pll_cfg_update  ( uint8_t number_cfg ) const;
+    EC_ANSWER_CLOCK_UPDATE      pll_sysclk_src_clock_set            ( uint8_t number_cfg ) const;
 
 private:
 

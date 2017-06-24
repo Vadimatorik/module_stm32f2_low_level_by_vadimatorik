@@ -86,6 +86,11 @@ enum class EC_CFG_REG_BIT_MSK {
     MCO2        = 0b11      << M_EC_TO_U8(EC_CFG_REG_BIT_FIELD_POS::MCO2),
 };
 
+enum class EC_ANSWER_CLOCK_UPDATE {
+    SUCCESS                     = 0,
+    STRUCT_NUMBER_IS_WRONG      = 1
+};
+
 enum class EC_CFG_REG_BIT_FIELD_SW_MSK {
     HSI = 0b00,
     HSE = 0b01,

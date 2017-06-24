@@ -245,7 +245,7 @@ __initialize_data(uint32_t* from, uint32_t* section_begin, uint32_t* section_end
 	uint32_t *p = section_begin;
 	while ((uint32_t)p < (uint32_t)section_end) {
 		*p++ = *from++;
-		}
+	}
 }
 
 /* Копируем область ".data" из flash в ram. */
