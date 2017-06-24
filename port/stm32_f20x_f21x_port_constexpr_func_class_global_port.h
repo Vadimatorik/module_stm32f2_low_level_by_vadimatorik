@@ -17,7 +17,6 @@ constexpr global_port::global_port( const pin_config_t *const pin_cfg_array, con
 /**********************************************************************
  * Область constexpr функций.
  **********************************************************************/
-
 /*
  * Метод возвращает маску значения регистра moder по умолчанию
  * (значение после сброса).
@@ -171,6 +170,47 @@ constexpr uint32_t global_port::reg_od_msk_init_get( const pin_config_t* const p
 }
 
 /*
+ * Метод проходит по всем пришедшем структурам конфигурации
+ * и создает константу-маску для включения/выключения всех
+ * использующихся портов.
+ */
+constexpr uint32_t global_port::clk_msk_get ( const pin_config_t* const pin_cfg_array, const uint32_t pin_count ) {
+    uint32_t msk = 0;
+    for ( uint32_t l = 0; l < pin_count; l++ ) {
+        switch( pin_cfg_array[l].port ) {
+#ifdef PORTA
+        case EC_PORT_NAME::A:   msk |= 1 << 0; break;
+#endif
+#ifdef PORTB
+        case EC_PORT_NAME::B:   msk |= 1 << 1; break;
+#endif
+#ifdef PORTC
+        case EC_PORT_NAME::C:   msk |= 1 << 2; break;
+#endif
+#ifdef PORTD
+        case EC_PORT_NAME::D:   msk |= 1 << 3; break;
+#endif
+#ifdef PORTE
+        case EC_PORT_NAME::E:   msk |= 1 << 4; break;
+#endif
+#ifdef PORTF
+        case EC_PORT_NAME::F:   msk |= 1 << 5; break;
+#endif
+#ifdef PORTG
+        case EC_PORT_NAME::G:   msk |= 1 << 6; break;
+#endif
+#ifdef PORTH
+        case EC_PORT_NAME::H:   msk |= 1 << 7; break;
+#endif
+#ifdef PORTI
+        case EC_PORT_NAME::I:   msk |= 1 << 8; break;
+#endif
+        }
+    }
+    return msk;
+}
+
+/*
  * Метод заполняет структуру конфигурации одного порта ввода-вывода.
  */
 constexpr port_registers_flash_copy_struct global_port::fill_out_one_port_struct( EC_PORT_NAME p_name, const pin_config_t *const pin_cfg_array, const uint32_t pin_count ) {
@@ -224,6 +264,7 @@ constexpr global_port_msk_reg_struct global_port::fill_out_mas_struct( const pin
                     this->fill_out_one_port_struct( EC_PORT_NAME::I, pin_cfg_array, pin_count )
 #endif
         },
+        .clk_msk = this->clk_msk_get( pin_cfg_array, pin_count )
     };
     return p_st;
 }

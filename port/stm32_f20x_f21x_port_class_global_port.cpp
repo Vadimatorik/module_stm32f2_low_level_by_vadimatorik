@@ -110,4 +110,8 @@ E_ANSWER_PORT_SET_LOCK	global_port::set_locked_keys_all_port() const {
     return answer;
 }
 
+uint32_t global_port::msk_get ( void ) const {
+    return this->gb_msk_struct.clk_msk;
+}
+
 #endif

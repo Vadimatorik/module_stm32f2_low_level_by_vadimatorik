@@ -184,7 +184,7 @@ EC_ANSWER_OSCILLATOR_STATE rcc::hsi_clock_ready_flag_get ( void ) {
     return ( *M_U32_TO_P(M_GET_BB_P_PER( (uint32_t)&RCC->C, M_EC_TO_U8(EC_C_REG_BIT_FIELD_POS::HSIRDY))) ) ? EC_ANSWER_OSCILLATOR_STATE::READY : EC_ANSWER_OSCILLATOR_STATE::NOT_READY;
 }
 
-EC_ANSWER_CLOCK_UPDATE rcc::pll_sysclk_src_clock_set(uint8_t number_cfg) const {
+EC_ANSWER_CLOCK_UPDATE rcc::pll_sysclk_src_clock_set( uint8_t number_cfg ) const {
     if (number_cfg >= this->cfg->pll_count)
         return EC_ANSWER_CLOCK_UPDATE::STRUCT_NUMBER_IS_WRONG; // Если попросили сконфигурировать несуществующей структурой, говорим, что такой нет.
 
@@ -210,6 +210,10 @@ EC_ANSWER_CLOCK_UPDATE rcc::pll_sysclk_src_clock_set(uint8_t number_cfg) const {
     this->sw_pll_set();                                                                         // Переходим на тактирование от PLL.
     while ( this->sw_status_get() != EC_ANSWER_RCC_SWS_STATUS::PLL ) {};                        // Ждем перехода на PLL.
     return EC_ANSWER_CLOCK_UPDATE::SUCCESS;
+}
+
+void rcc::global_port_clk_en ( void ) const {
+    RCC->AHB_1_EN |= this->cfg->gb->msk_get();
 }
 
 #endif

@@ -69,7 +69,13 @@ struct __attribute__((packed)) port_registers_flash_copy_struct {
  * выборе конкретного контроллера в stm32_f20x_f21x_conf.h
  */
 struct __attribute__((packed)) global_port_msk_reg_struct {
-    port_registers_flash_copy_struct    port[STM32_F2_PORT_COUNT];
+    const port_registers_flash_copy_struct    port[STM32_F2_PORT_COUNT];
+
+    /*
+     * Для включения/отключения тактирования портов.
+     * Может быть использовано модулем RCC.
+     */
+    const uint32_t    clk_msk;
 };
 
 #endif

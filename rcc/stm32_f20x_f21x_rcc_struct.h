@@ -6,6 +6,7 @@
 
 #include <cmath>
 #include "stm32_f20x_f21x_rcc_struct_class_pll.h"
+#include "stm32_f20x_f21x_port.h"
 
 /**********************************************************************
  * Область enum class-ов.
@@ -203,6 +204,53 @@ enum class EC_FLASH_AC_REG_BIT_MSK {
     DCRST   = 1     << M_EC_TO_U8(EC_FLASH_AC_REG_BIT_FIELD_POS::DCRST),
 };
 
+/*
+ * Позиции битовых полей внутри регистра AHB1EN модуля RCC.
+ */
+enum class EC_AHB1EN_REG_BIT_FIELD_POS {
+    GPIOA         = 0,
+    GPIOB         = 1,
+    GPIOC         = 2,
+    GPIOD         = 3,
+    GPIOE         = 4,
+    GPIOF         = 5,
+    GPIOG         = 6,
+    GPIOH         = 7,
+    GPIOI         = 8,
+    CRC           = 12,
+    BKPSRAM       = 18,
+    DMA1          = 21,
+    DMA2          = 22,
+    ETHMAC        = 25,
+    ETHMACTX      = 26,
+    ETHMAXRX      = 27,
+    ETHMACPTP     = 28,
+    OTGHS         = 29,
+    OTGHSULPI     = 30
+};
+
+enum class EC_AHB1EN_REG_BIT_MSK {
+    GPIOA         = 1   << M_EC_TO_U8(EC_AHB1EN_REG_BIT_FIELD_POS::GPIOA),
+    GPIOB         = 1   << M_EC_TO_U8(EC_AHB1EN_REG_BIT_FIELD_POS::GPIOB),
+    GPIOC         = 1   << M_EC_TO_U8(EC_AHB1EN_REG_BIT_FIELD_POS::GPIOC),
+    GPIOD         = 1   << M_EC_TO_U8(EC_AHB1EN_REG_BIT_FIELD_POS::GPIOD),
+    GPIOE         = 1   << M_EC_TO_U8(EC_AHB1EN_REG_BIT_FIELD_POS::GPIOE),
+    GPIOF         = 1   << M_EC_TO_U8(EC_AHB1EN_REG_BIT_FIELD_POS::GPIOF),
+    GPIOG         = 1   << M_EC_TO_U8(EC_AHB1EN_REG_BIT_FIELD_POS::GPIOG),
+    GPIOH         = 1   << M_EC_TO_U8(EC_AHB1EN_REG_BIT_FIELD_POS::GPIOH),
+    GPIOI         = 1   << M_EC_TO_U8(EC_AHB1EN_REG_BIT_FIELD_POS::GPIOI),
+    CRC           = 1   << M_EC_TO_U8(EC_AHB1EN_REG_BIT_FIELD_POS::CRC),
+    BKPSRAM       = 1   << M_EC_TO_U8(EC_AHB1EN_REG_BIT_FIELD_POS::BKPSRAM),
+    DMA1          = 1   << M_EC_TO_U8(EC_AHB1EN_REG_BIT_FIELD_POS::DMA1),
+    DMA2          = 1   << M_EC_TO_U8(EC_AHB1EN_REG_BIT_FIELD_POS::DMA2),
+    ETHMAC        = 1   << M_EC_TO_U8(EC_AHB1EN_REG_BIT_FIELD_POS::ETHMAC),
+    ETHMACTX      = 1   << M_EC_TO_U8(EC_AHB1EN_REG_BIT_FIELD_POS::ETHMACTX),
+    ETHMAXRX      = 1   << M_EC_TO_U8(EC_AHB1EN_REG_BIT_FIELD_POS::ETHMAXRX),
+    ETHMACPTP     = 1   << M_EC_TO_U8(EC_AHB1EN_REG_BIT_FIELD_POS::ETHMACPTP),
+    OTGHS         = 1   << M_EC_TO_U8(EC_AHB1EN_REG_BIT_FIELD_POS::OTGHS),
+    OTGHSULPI     = 1   << M_EC_TO_U8(EC_AHB1EN_REG_BIT_FIELD_POS::OTGHSULPI)
+};
+
 
 /**********************************************************************
  * Область упакованных структур.
@@ -275,6 +323,7 @@ struct __attribute__( ( packed ) ) flash_registers_struct {
 struct rcc_cfg {
     const pll_cfg_struct*           const main_pll_cfg;         // Режимы основного PLL.
     const uint8_t                   pll_count;                  // Количество режимов основного PLL.
+    const global_port*              const gb;                   // Для включения тактирования.
 };
 
 #endif

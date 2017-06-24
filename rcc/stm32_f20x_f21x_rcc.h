@@ -96,8 +96,14 @@ public:
      */
     EC_ANSWER_CLOCK_UPDATE      pll_sysclk_src_clock_set            ( uint8_t number_cfg ) const;
 
-private:
+    /*
+     * Метод включает тактирование всех портов, в которых
+     * есть хотя бы один вывод, структура которого была передана в
+     * global_port конструктор.
+     */
+    void    global_port_clk_en              ( void ) const;
 
+private:
     /*
      * Действия производятся без каких-либо проверок.
      */
