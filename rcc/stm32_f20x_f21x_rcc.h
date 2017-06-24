@@ -7,6 +7,7 @@
 #include "stm32_f20x_f21x_rcc_struct.h"
 
 #include "stm32_f20x_f21x_rcc_struct_class_pll.h"
+
 /**********************************************************************
  * Область template оболочек.
  **********************************************************************/
@@ -37,9 +38,11 @@ private:
 };
 
 #include "stm32_f20x_f21x_rcc_constexpr_func_class_pll.h"
+
 /**********************************************************************
  * Область class-ов.
  **********************************************************************/
+
 /*
  * По средствам объекта данного класса производятся все манипуляции
  * с частотами микркоконтроллера.
@@ -52,26 +55,29 @@ public:
      * Действия производятся без каких-либо проверок.
      */
 
-    void    pll_main_on                     ( void ) const;
-    void    pll_main_off                    ( void ) const;
+    void    pll_main_on                     ( void ) const;                                         // Включет основной PLL (конфигурация должна быть заданна заранее).
+    void    pll_main_off                    ( void ) const;                                         // Отключает основной PLL (ядро должно тактироваться от другого источника).
 
-    void    pll_i2s_on                      ( void ) const;
-    void    pll_i2s_off                     ( void ) const;
+    void    pll_i2s_on                      ( void ) const;                                         // Включает I2S PLL (конфигурация должна быть заданна заранее).
+    void    pll_i2s_off                     ( void ) const;                                         // Отключает I2S PLL.
 
-    void    hse_clock_on                    ( void ) const;
-    void    hse_clock_off                   ( void ) const;
+    void    hse_clock_on                    ( void ) const;                                         // Включает внешний источник тактового сигнала.
+    void    hse_clock_off                   ( void ) const;                                         // Отключает внешний источник.
 
-    void    hsi_clock_on                    ( void ) const;
-    void    hsi_clock_off                   ( void ) const;
+    void    hsi_clock_on                    ( void ) const;                                         // Запускает внутренний источник тактового сигнала.
+    void    hsi_clock_off                   ( void ) const;                                         // Отключает внутренний источник тактового сигнала.
 
-    EC_ANSWER_PLL_STATUS            pll_i2s_status_get              ( void ) const;
-    EC_ANSWER_PLL_STATUS            pll_main_status_get             ( void ) const;
-    EC_ANSWER_PLL_READY_FLAG        pll_main_clock_ready_flag_get   ( void ) const;
-    EC_ANSWER_PLL_READY_FLAG        pll_i2s_clock_ready_flag_get    ( void ) const;
-    EC_ANSWER_OSCILLATOR_STATUS     hse_clock_status_get            ( void ) const;
-    EC_ANSWER_OSCILLATOR_STATUS     hsi_clock_status_get            ( void ) const;
-    EC_ANSWER_OSCILLATOR_STATE      hse_clock_ready_flag_get        ( void ) const;
-    EC_ANSWER_OSCILLATOR_STATE      hsi_clock_ready_flag_get        ( void ) const;
+    EC_ANSWER_PLL_STATUS            pll_main_status_get             ( void ) const;                 // Проверят, включен ли основной PLL.
+    EC_ANSWER_PLL_STATUS            pll_i2s_status_get              ( void ) const;                 // Проверят, включен ли I2S PLL.
+
+    EC_ANSWER_PLL_READY_FLAG        pll_main_clock_ready_flag_get   ( void ) const;                 // Проверяет, заблокирован ли основной PLL.
+    EC_ANSWER_PLL_READY_FLAG        pll_i2s_clock_ready_flag_get    ( void ) const;                 // Проверяет, заблокирован ли I2S PLL.
+
+    EC_ANSWER_OSCILLATOR_STATUS     hse_clock_status_get            ( void ) const;                 // Проверяет, включен ли внешний источник тактового сигнала или нет.
+    EC_ANSWER_OSCILLATOR_STATUS     hsi_clock_status_get            ( void ) const;                 // Проверяет, включен ли внутренний источник тактового сигнала или нет.
+
+    EC_ANSWER_OSCILLATOR_STATE      hse_clock_ready_flag_get        ( void ) const;                 // Проверяет, готов ли внешний источник тактового сигнала стать источникм тактирования.
+    EC_ANSWER_OSCILLATOR_STATE      hsi_clock_ready_flag_get        ( void ) const;                 // Проверяет, готов ли внутренний источник тактирования сигнала стать источникм тактирования.
 
     /*
      * Отключает PLL, обновляет значение, включает PLL
