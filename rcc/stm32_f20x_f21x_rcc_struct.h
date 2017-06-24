@@ -25,7 +25,7 @@ enum class EC_PLLCFG_REG_BIT_FIELD_POSITION {
 /*
  * Позиции битовых полей внутрирегистра pllcfg модуля RCC.
  */
-enum class EC_CR_REG_BIT_FIELD_POSITION {
+enum class EC_C_REG_BIT_FIELD_POS {
     HSION       = 0,
     HSIRDY      = 1,
     HSITRIM     = 3,        // [7:3].
@@ -43,18 +43,36 @@ enum class EC_CR_REG_BIT_FIELD_POSITION {
 /*
  * Маски бит регистра pllcfg модуля RCC.
  */
-enum class EC_CR_REG_BIT_MSK {
-    HSION       = 1 << M_EC_TO_U8( EC_CR_REG_BIT_FIELD_POSITION::HSION ),
-    HSIRDY      = 1 << M_EC_TO_U8( EC_CR_REG_BIT_FIELD_POSITION::HSIRDY ),
-    HSEON       = 1 << M_EC_TO_U8( EC_CR_REG_BIT_FIELD_POSITION::HSEON ),
-    HSERDY      = 1 << M_EC_TO_U8( EC_CR_REG_BIT_FIELD_POSITION::HSERDY ),
-    HSEBYP      = 1 << M_EC_TO_U8( EC_CR_REG_BIT_FIELD_POSITION::HSEBYP ),
-    CSSON       = 1 << M_EC_TO_U8( EC_CR_REG_BIT_FIELD_POSITION::CSSON ),
-    PLLON       = 1 << M_EC_TO_U8( EC_CR_REG_BIT_FIELD_POSITION::PLLON ),
-    PLLRDY      = 1 << M_EC_TO_U8( EC_CR_REG_BIT_FIELD_POSITION::PLLRDY ),
-    PLLI2SON    = 1 << M_EC_TO_U8( EC_CR_REG_BIT_FIELD_POSITION::PLLI2SON ),
-    PLLI2SRDY   = 1 << M_EC_TO_U8( EC_CR_REG_BIT_FIELD_POSITION::PLLI2SRDY )
+enum class EC_C_REG_BIT_MSK {
+    HSION       = 1 << M_EC_TO_U8(EC_C_REG_BIT_FIELD_POS::HSION),
+    HSIRDY      = 1 << M_EC_TO_U8(EC_C_REG_BIT_FIELD_POS::HSIRDY),
+    HSEON       = 1 << M_EC_TO_U8(EC_C_REG_BIT_FIELD_POS::HSEON),
+    HSERDY      = 1 << M_EC_TO_U8(EC_C_REG_BIT_FIELD_POS::HSERDY),
+    HSEBYP      = 1 << M_EC_TO_U8(EC_C_REG_BIT_FIELD_POS::HSEBYP),
+    CSSON       = 1 << M_EC_TO_U8(EC_C_REG_BIT_FIELD_POS::CSSON),
+    PLLON       = 1 << M_EC_TO_U8(EC_C_REG_BIT_FIELD_POS::PLLON),
+    PLLRDY      = 1 << M_EC_TO_U8(EC_C_REG_BIT_FIELD_POS::PLLRDY),
+    PLLI2SON    = 1 << M_EC_TO_U8(EC_C_REG_BIT_FIELD_POS::PLLI2SON),
+    PLLI2SRDY   = 1 << M_EC_TO_U8(EC_C_REG_BIT_FIELD_POS::PLLI2SRDY)
 };
+
+/*
+ * Позиции битовых полей внутрирегистра pllcfg модуля RCC.
+ */
+enum class EC_CFG_REG_BIT_FIELD_POS {
+    SW          = 0,        // [0:1].
+    SWS         = 2,        // [3:2].
+    HPRE        = 4,        // [7:4].
+    PPRE1       = 10,       // [12:10].
+    PPRE2       = 13,       // [15:13].
+    RTCPRE      = 16,       // [20:16].
+    MCO1        = 21,       // [22:21].
+    I2SSRC      = 23,
+    MCO1PRE     = 24,       // [26:24].
+    MCO2PRE     = 27,       // [29:27].
+    MCO2        = 30,       // [31:30].
+};
+
 
 enum class EC_ANSWER_PLL_STATUS {
     PLL_OFF = 0,
