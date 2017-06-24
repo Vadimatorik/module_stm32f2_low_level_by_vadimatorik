@@ -73,6 +73,24 @@ enum class EC_CFG_REG_BIT_FIELD_POS {
     MCO2        = 30,       // [31:30].
 };
 
+enum class EC_CFG_REG_BIT_MSK {
+    SW          = 0b11      << M_EC_TO_U8(EC_CFG_REG_BIT_FIELD_POS::SW),
+    SWS         = 0b11      << M_EC_TO_U8(EC_CFG_REG_BIT_FIELD_POS::SWS),
+    HSEON       = 0b1111    << M_EC_TO_U8(EC_CFG_REG_BIT_FIELD_POS::HPRE),
+    PPRE1       = 0b111     << M_EC_TO_U8(EC_CFG_REG_BIT_FIELD_POS::PPRE1),
+    PPRE2       = 0b111     << M_EC_TO_U8(EC_CFG_REG_BIT_FIELD_POS::PPRE2),
+    RTCPRE      = 0b11111   << M_EC_TO_U8(EC_CFG_REG_BIT_FIELD_POS::RTCPRE),
+    I2SSRC      = 1         << M_EC_TO_U8(EC_CFG_REG_BIT_FIELD_POS::I2SSRC),
+    MCO1PRE     = 0b111     << M_EC_TO_U8(EC_CFG_REG_BIT_FIELD_POS::MCO1PRE),
+    MCO2PRE     = 0b111     << M_EC_TO_U8(EC_CFG_REG_BIT_FIELD_POS::MCO2PRE),
+    MCO2        = 0b11      << M_EC_TO_U8(EC_CFG_REG_BIT_FIELD_POS::MCO2),
+};
+
+enum class EC_CFG_REG_BIT_FIELD_SW_MSK {
+    HSI = 0b00,
+    HSE = 0b01,
+    PLL = 0b10
+};
 
 enum class EC_ANSWER_PLL_STATUS {
     PLL_OFF = 0,
@@ -149,7 +167,14 @@ enum class EC_RCC_APB2_DIV {
     DIV_16  = 0b111,
 };
 
-
+/*
+ * От чего сейчас тактируется ядро?
+ */
+enum class EC_ANSWER_RCC_SWS_STATUS {
+    HSI = 0b00,
+    HSE = 0b01,
+    PLL = 0b10
+};
 
 /**********************************************************************
  * Область упакованных структур.

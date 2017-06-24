@@ -11,9 +11,10 @@
 /*
  * Перечень регистров физического порта ввода-вывода.
  */
-struct __attribute__( ( packed ) ) pll_cfg_struct {
-    const uint32_t  pllcfg_reg_msk;
-    const uint32_t  dev_bus_msk;
+struct pll_cfg_struct {
+    const uint32_t              pllcfg_reg_msk;
+    const uint32_t              dev_bus_msk;
+    const bool                  src;                    // true = HSE, false = HSI
 };
 
 #endif

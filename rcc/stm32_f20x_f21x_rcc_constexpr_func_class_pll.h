@@ -62,8 +62,11 @@ constexpr uint8_t apb2_dev_ec_to_uint8_t_value( EC_RCC_APB2_DIV APB2 ) {
 template < EC_RCC_PLL_SOURCE S, uint8_t M, uint16_t N, EC_RCC_PLL_P P, uint8_t Q, EC_RCC_AHB_DIV AHB, EC_RCC_APB1_DIV APB1, EC_RCC_APB2_DIV APB2 >
 constexpr pll_cfg< S, M, N, P, Q, AHB, APB1, APB2 >::pll_cfg() : pll_cfg_struct( {
     .pllcfg_reg_msk = pllcfg_reg_msk_get(),
-    .dev_bus_msk    = dev_bus_msk_get()
+    .dev_bus_msk    = dev_bus_msk_get(),
+    .src            = (S == EC_RCC_PLL_SOURCE::HSE) ? true : false
 } ) {
+    static_assert( ( S == EC_RCC_PLL_SOURCE::HSE ) || ( S == EC_RCC_PLL_SOURCE::HSI ), "Wrong source selected ( Param S )! Source may be HSE or HSI!" );
+
     /*
      * Проверяем, не выходят ли коэффициенты за пределы.
      */

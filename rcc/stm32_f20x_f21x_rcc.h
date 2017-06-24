@@ -72,17 +72,18 @@ public:
     constexpr rcc( const rcc_cfg* const cfg );
 
     /*
-     * 1. Включает HSE или HSI (в зависимости от того, от чего будет тактироваться PLL).
-     * 2. Дожидается стабилизации источника тактирования.
-     * 3. Переключает ядро на выбранный только что стабилизировавшийся источник.
-     * 4. Выставляет делители по-умолчанию для шин APB1, APB2, AHB
-     *    ( т.к. тактирование идет либо от 16 МГц HSI или от <= 25 МГц HSE, деление не нужно).
-     * 5. Отключает PLL.
-     * 6. Выставляет заданную конфигурацию PLL.
-     * 7. Включает PLL.
-     * 8. Дожидается стабилизации PLL.
-     * 8. Высталяет заданную конфигурацию делителей шин APB1, APB2, AHB.
-     * 9. Переключает тактирование ядра на PLL.
+     * 1.  Включает HSE или HSI (в зависимости от того, от чего будет тактироваться PLL).
+     * 2.  Дожидается стабилизации источника тактирования.
+     * 3.  Переключает ядро на выбранный только что стабилизировавшийся источник.
+     * 4.  Ждет, пока произойдет переключение.
+     * 5.  Выставляет делители по-умолчанию для шин APB1, APB2, AHB
+     *     ( т.к. тактирование идет либо от 16 МГц HSI или от <= 25 МГц HSE, деление не нужно).
+     * 6.  Отключает PLL.
+     * 7.  Выставляет заданную конфигурацию PLL.
+     * 8.  Включает PLL.
+     * 9.  Дожидается стабилизации PLL.
+     * 10. Высталяет заданную конфигурацию делителей шин APB1, APB2, AHB.
+     * 11. Переключает тактирование ядра на PLL.
      */
     int     pll_cfg_update  ( uint8_t number_cfg ) const;
 
@@ -92,29 +93,35 @@ private:
      * Действия производятся без каких-либо проверок.
      */
 
-    void    pll_main_on                     ( void ) const;                                         // Включет основной PLL (конфигурация должна быть заданна заранее).
-    void    pll_main_off                    ( void ) const;                                         // Отключает основной PLL (ядро должно тактироваться от другого источника).
+    static void    pll_main_on              ( void );                                         // Включет основной PLL (конфигурация должна быть заданна заранее).
+    static void    pll_main_off             ( void );                                         // Отключает основной PLL (ядро должно тактироваться от другого источника).
 
-    void    pll_i2s_on                      ( void ) const;                                         // Включает I2S PLL (конфигурация должна быть заданна заранее).
-    void    pll_i2s_off                     ( void ) const;                                         // Отключает I2S PLL.
+    static void    pll_i2s_on               ( void );                                         // Включает I2S PLL (конфигурация должна быть заданна заранее).
+    static void    pll_i2s_off              ( void );                                         // Отключает I2S PLL.
 
-    void    hse_clock_on                    ( void ) const;                                         // Включает внешний источник тактового сигнала.
-    void    hse_clock_off                   ( void ) const;                                         // Отключает внешний источник.
+    static void    hse_clock_on             ( void );                                         // Включает внешний источник тактового сигнала.
+    static void    hse_clock_off            ( void );                                         // Отключает внешний источник.
 
-    void    hsi_clock_on                    ( void ) const;                                         // Запускает внутренний источник тактового сигнала.
-    void    hsi_clock_off                   ( void ) const;                                         // Отключает внутренний источник тактового сигнала.
+    static void    hsi_clock_on             ( void );                                         // Запускает внутренний источник тактового сигнала.
+    static void    hsi_clock_off            ( void );                                         // Отключает внутренний источник тактового сигнала.
 
-    EC_ANSWER_PLL_STATUS            pll_main_status_get             ( void ) const;                 // Проверят, включен ли основной PLL.
-    EC_ANSWER_PLL_STATUS            pll_i2s_status_get              ( void ) const;                 // Проверят, включен ли I2S PLL.
+    static void    sw_hsi_set               ( void );                                         // Переключает ядро на HSI.
+    static void    sw_hse_set               ( void );                                         // Переключает ядро на HSE.
+    static void    sw_pll_set               ( void );                                         // Переключает ядро на PLL.
 
-    EC_ANSWER_PLL_READY_FLAG        pll_main_clock_ready_flag_get   ( void ) const;                 // Проверяет, заблокирован ли основной PLL.
-    EC_ANSWER_PLL_READY_FLAG        pll_i2s_clock_ready_flag_get    ( void ) const;                 // Проверяет, заблокирован ли I2S PLL.
+    static void    sw_status_get            ( void );                                         // Сообщает, от чего сейчас тактируется ядро.
 
-    EC_ANSWER_OSCILLATOR_STATUS     hse_clock_status_get            ( void ) const;                 // Проверяет, включен ли внешний источник тактового сигнала или нет.
-    EC_ANSWER_OSCILLATOR_STATUS     hsi_clock_status_get            ( void ) const;                 // Проверяет, включен ли внутренний источник тактового сигнала или нет.
+    static EC_ANSWER_PLL_STATUS            pll_main_status_get             ( void );          // Проверят, включен ли основной PLL.
+    static EC_ANSWER_PLL_STATUS            pll_i2s_status_get              ( void );          // Проверят, включен ли I2S PLL.
 
-    EC_ANSWER_OSCILLATOR_STATE      hse_clock_ready_flag_get        ( void ) const;                 // Проверяет, готов ли внешний источник тактового сигнала стать источникм тактирования.
-    EC_ANSWER_OSCILLATOR_STATE      hsi_clock_ready_flag_get        ( void ) const;                 // Проверяет, готов ли внутренний источник тактирования сигнала стать источникм тактирования.
+    static EC_ANSWER_PLL_READY_FLAG        pll_main_clock_ready_flag_get   ( void );          // Проверяет, заблокирован ли основной PLL.
+    static EC_ANSWER_PLL_READY_FLAG        pll_i2s_clock_ready_flag_get    ( void );          // Проверяет, заблокирован ли I2S PLL.
+
+    static EC_ANSWER_OSCILLATOR_STATUS     hse_clock_status_get            ( void );          // Проверяет, включен ли внешний источник тактового сигнала или нет.
+    static EC_ANSWER_OSCILLATOR_STATUS     hsi_clock_status_get            ( void );          // Проверяет, включен ли внутренний источник тактового сигнала или нет.
+
+    static EC_ANSWER_OSCILLATOR_STATE      hse_clock_ready_flag_get        ( void );          // Проверяет, готов ли внешний источник тактового сигнала стать источникм тактирования.
+    static EC_ANSWER_OSCILLATOR_STATE      hsi_clock_ready_flag_get        ( void );          // Проверяет, готов ли внутренний источник тактирования сигнала стать источникм тактирования.
 
     const rcc_cfg*  const cfg;
 };
