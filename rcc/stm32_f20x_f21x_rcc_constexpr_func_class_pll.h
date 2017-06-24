@@ -59,12 +59,21 @@ constexpr uint8_t apb2_dev_ec_to_uint8_t_value( EC_RCC_APB2_DIV APB2 ) {
 /**********************************************************************
  * Область constexpr конструкторов.
  **********************************************************************/
-template < EC_RCC_PLL_SOURCE S, uint8_t M, uint16_t N, EC_RCC_PLL_P P, uint8_t Q, EC_RCC_AHB_DIV AHB, EC_RCC_APB1_DIV APB1, EC_RCC_APB2_DIV APB2 >
-constexpr pll_cfg< S, M, N, P, Q, AHB, APB1, APB2 >::pll_cfg() : pll_cfg_struct( {
+template < EC_RCC_PLL_SOURCE S, uint8_t M, uint16_t N, EC_RCC_PLL_P P, uint8_t Q, EC_RCC_AHB_DIV AHB, EC_RCC_APB1_DIV APB1, EC_RCC_APB2_DIV APB2, uint32_t VOLTAGE_MV >
+constexpr pll_cfg< S, M, N, P, Q, AHB, APB1, APB2, VOLTAGE_MV >::pll_cfg() : pll_cfg_struct( {
     .pllcfg_reg_msk = pllcfg_reg_msk_get(),
     .dev_bus_msk    = dev_bus_msk_get(),
+    .flash_acr_msk  = flash_acr_msk_get(),
     .src            = (S == EC_RCC_PLL_SOURCE::HSE) ? true : false
 } ) {
+    /*
+     * Проверяем диапазон напряжений питания микроконтроллера.
+     */
+    static_assert( ( VOLTAGE_MV <= 3600 ) && ( VOLTAGE_MV >= 1650 ), "Wrong voltage value. The voltage should range from 1650 mV to 3600 mV." );
+
+    /*
+     * Источник тактового сигнала.
+     */
     static_assert( ( S == EC_RCC_PLL_SOURCE::HSE ) || ( S == EC_RCC_PLL_SOURCE::HSI ), "Wrong source selected ( Param S )! Source may be HSE or HSI!" );
 
     /*
@@ -110,32 +119,98 @@ constexpr pll_cfg< S, M, N, P, Q, AHB, APB1, APB2 >::pll_cfg() : pll_cfg_struct(
 /**********************************************************************
  * Область constexpr функций.
  **********************************************************************/
-template < EC_RCC_PLL_SOURCE S, uint8_t M, uint16_t N, EC_RCC_PLL_P P, uint8_t Q, EC_RCC_AHB_DIV AHB, EC_RCC_APB1_DIV APB1, EC_RCC_APB2_DIV APB2 >
-constexpr uint32_t pll_cfg< S, M, N, P, Q, AHB, APB1, APB2 >::pllcfg_reg_msk_get( void ) {
-    uint32_t pllcfg_reg_msk = 0;
+template < EC_RCC_PLL_SOURCE S, uint8_t M, uint16_t N, EC_RCC_PLL_P P, uint8_t Q, EC_RCC_AHB_DIV AHB, EC_RCC_APB1_DIV APB1, EC_RCC_APB2_DIV APB2, uint32_t VOLTAGE_MV >
+constexpr uint32_t pll_cfg< S, M, N, P, Q, AHB, APB1, APB2, VOLTAGE_MV >::pllcfg_reg_msk_get( void ) {
+    uint32_t msk = 0;
 
-    pllcfg_reg_msk  |= static_cast< uint8_t >( S )    << static_cast< uint8_t >( EC_PLLCFG_REG_BIT_FIELD_POSITION::S );
-    pllcfg_reg_msk  |= static_cast< uint8_t >( M )    << static_cast< uint8_t >( EC_PLLCFG_REG_BIT_FIELD_POSITION::M );
-    pllcfg_reg_msk  |= static_cast< uint8_t >( P )    << static_cast< uint8_t >( EC_PLLCFG_REG_BIT_FIELD_POSITION::P );
-    pllcfg_reg_msk  |= static_cast< uint8_t >( Q )    << static_cast< uint8_t >( EC_PLLCFG_REG_BIT_FIELD_POSITION::Q );
-    pllcfg_reg_msk  |= static_cast< uint16_t >( N )   << static_cast< uint16_t >( EC_PLLCFG_REG_BIT_FIELD_POSITION::N );
+    msk  |= static_cast< uint8_t >( S )    << static_cast< uint8_t >( EC_PLLCFG_REG_BIT_FIELD_POSITION::S );
+    msk  |= static_cast< uint8_t >( M )    << static_cast< uint8_t >( EC_PLLCFG_REG_BIT_FIELD_POSITION::M );
+    msk  |= static_cast< uint8_t >( P )    << static_cast< uint8_t >( EC_PLLCFG_REG_BIT_FIELD_POSITION::P );
+    msk  |= static_cast< uint8_t >( Q )    << static_cast< uint8_t >( EC_PLLCFG_REG_BIT_FIELD_POSITION::Q );
+    msk  |= static_cast< uint16_t >( N )   << static_cast< uint16_t >( EC_PLLCFG_REG_BIT_FIELD_POSITION::N );
 
-    return pllcfg_reg_msk;
+    return msk;
 }
 
 /*
  * Метод возвращает маску для задания делителей на шине.
  */
-template < EC_RCC_PLL_SOURCE S, uint8_t M, uint16_t N, EC_RCC_PLL_P P, uint8_t Q, EC_RCC_AHB_DIV AHB, EC_RCC_APB1_DIV APB1, EC_RCC_APB2_DIV APB2 >
-constexpr uint32_t pll_cfg< S, M, N, P, Q, AHB, APB1, APB2 >::dev_bus_msk_get( void ) {
-    uint32_t dev_bus_msk = 0;
+template < EC_RCC_PLL_SOURCE S, uint8_t M, uint16_t N, EC_RCC_PLL_P P, uint8_t Q, EC_RCC_AHB_DIV AHB, EC_RCC_APB1_DIV APB1, EC_RCC_APB2_DIV APB2, uint32_t VOLTAGE_MV >
+constexpr uint32_t pll_cfg< S, M, N, P, Q, AHB, APB1, APB2, VOLTAGE_MV >::dev_bus_msk_get( void ) {
+    uint32_t msk = 0;
 
-    dev_bus_msk  |= static_cast< uint8_t >( AHB )   << static_cast< uint8_t >( EC_CFG_REG_BIT_FIELD_POS::HPRE );
-    dev_bus_msk  |= static_cast< uint8_t >( APB1 )  << static_cast< uint8_t >( EC_CFG_REG_BIT_FIELD_POS::PPRE1 );
-    dev_bus_msk  |= static_cast< uint8_t >( APB2 )  << static_cast< uint8_t >( EC_CFG_REG_BIT_FIELD_POS::PPRE2 );
+    msk  |= static_cast< uint8_t >( AHB )   << static_cast< uint8_t >( EC_CFG_REG_BIT_FIELD_POS::HPRE );
+    msk  |= static_cast< uint8_t >( APB1 )  << static_cast< uint8_t >( EC_CFG_REG_BIT_FIELD_POS::PPRE1 );
+    msk  |= static_cast< uint8_t >( APB2 )  << static_cast< uint8_t >( EC_CFG_REG_BIT_FIELD_POS::PPRE2 );
 
-    return dev_bus_msk;
+    return msk;
+}
+
+/*
+ * Достаем частоту тактирования SYSCLK.
+ */
+template < EC_RCC_PLL_SOURCE S, uint8_t M, uint16_t N, EC_RCC_PLL_P P, uint8_t Q, EC_RCC_AHB_DIV AHB, EC_RCC_APB1_DIV APB1, EC_RCC_APB2_DIV APB2, uint32_t VOLTAGE_MV >
+constexpr uint32_t pll_cfg< S, M, N, P, Q, AHB, APB1, APB2, VOLTAGE_MV >::hclk_get( void ) {
+    const uint32_t clock = ( S == EC_RCC_PLL_SOURCE::HSI ) ? 16000000 : HSE_VALUE;
+    const uint8_t dev_p = static_cast< uint8_t >( pow( 2, static_cast< uint8_t >( P ) + 1 ) );
+    const uint32_t hclk = clock * ( N / M ) / dev_p;
+    return hclk;
+}
+
+/*
+ * Метод возвращает маску для задания задержки считывания данных из
+ * flash + включения предсказателя.
+ */
+template < EC_RCC_PLL_SOURCE S, uint8_t M, uint16_t N, EC_RCC_PLL_P P, uint8_t Q, EC_RCC_AHB_DIV AHB, EC_RCC_APB1_DIV APB1, EC_RCC_APB2_DIV APB2, uint32_t VOLTAGE_MV >
+constexpr uint32_t pll_cfg< S, M, N, P, Q, AHB, APB1, APB2, VOLTAGE_MV >::flash_acr_msk_get ( void ) {
+    uint8_t wait = 0;
+    const uint32_t hclk = this->hclk_get();
+    uint32_t msk = 0;
+    /*
+     * Подбираем задержку относительно напряжения питания.
+     */
+    if ( ( VOLTAGE_MV >= 1650 ) && ( VOLTAGE_MV < 2100 ) ) {
+        if ( ( hclk > 0 ) && ( hclk <= 16000000 ) )                wait = 0;
+        if ( ( hclk > 16000000 )    && ( hclk <= 32000000 ) )      wait = 1;
+        if ( ( hclk > 32000000 )    && ( hclk <= 48000000 ) )      wait = 2;
+        if ( ( hclk > 48000000 )    && ( hclk <= 64000000 ) )      wait = 3;
+        if ( ( hclk > 64000000 )    && ( hclk <= 80000000 ) )      wait = 4;
+        if ( ( hclk > 80000000 )    && ( hclk <= 96000000 ) )      wait = 5;
+        if ( ( hclk > 96000000 )    && ( hclk <= 112000000 ) )     wait = 6;
+        if ( ( hclk > 112000000 )   && ( hclk <= 120000000 ) )     wait = 7;
+    }
+
+    if ( ( VOLTAGE_MV >= 2100 ) && ( VOLTAGE_MV < 2400 ) ) {
+        if ( ( hclk > 0 )           && ( hclk <= 18000000 ) )      wait = 0;
+        if ( ( hclk > 18000000 )    && ( hclk <= 36000000 ) )      wait = 1;
+        if ( ( hclk > 36000000 )    && ( hclk <= 54000000 ) )      wait = 2;
+        if ( ( hclk > 54000000 )    && ( hclk <= 72000000 ) )      wait = 3;
+        if ( ( hclk > 72000000 )    && ( hclk <= 90000000 ) )      wait = 4;
+        if ( ( hclk > 90000000 )    && ( hclk <= 108000000 ) )     wait = 5;
+        if ( ( hclk > 108000000 )   && ( hclk <= 120000000 ) )     wait = 6;
+    }
+
+    if ( ( VOLTAGE_MV >= 2400 ) && ( VOLTAGE_MV < 2700 ) ) {
+        if ( ( hclk > 0 )           && ( hclk <= 24000000 ) )      wait = 0;
+        if ( ( hclk > 24000000 )    && ( hclk <= 48000000 ) )      wait = 1;
+        if ( ( hclk > 48000000 )    && ( hclk <= 72000000 ) )      wait = 2;
+        if ( ( hclk > 72000000 )    && ( hclk <= 96000000 ) )      wait = 3;
+        if ( ( hclk > 96000000 )    && ( hclk <= 120000000 ) )     wait = 4;
+    }
+
+    if ( ( VOLTAGE_MV >= 2700 ) && ( VOLTAGE_MV < 3600 ) ) {
+        if ( ( hclk > 0 )           && ( hclk <= 30000000 ) )      wait = 0;
+        if ( ( hclk > 30000000 )    && ( hclk <= 60000000 ) )      wait = 1;
+        if ( ( hclk > 60000000 )    && ( hclk <= 90000000 ) )      wait = 2;
+        if ( ( hclk > 90000000 )    && ( hclk <= 120000000 ) )     wait = 3;
+    }
+
+    msk  |= wait << M_EC_TO_U8(EC_FLASH_AC_REG_BIT_FIELD_POS::LATENCY);   // Задержка Flash.
+    msk  |= M_EC_TO_U32(EC_FLASH_AC_REG_BIT_MSK::PRFTEN) |                // Предсказатель.
+            M_EC_TO_U32(EC_FLASH_AC_REG_BIT_MSK::ICEN) |                  // Кэш.
+            M_EC_TO_U32(EC_FLASH_AC_REG_BIT_MSK::DCEN);
+
+    return msk;
 }
 
 #endif
-

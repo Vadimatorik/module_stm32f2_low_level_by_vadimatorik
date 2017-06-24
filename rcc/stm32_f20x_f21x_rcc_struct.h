@@ -176,6 +176,29 @@ enum class EC_ANSWER_RCC_SWS_STATUS {
     PLL = M_EC_TO_U8(EC_CFG_REG_BIT_FIELD_SW_MSK::PLL) << M_EC_TO_U8(EC_CFG_REG_BIT_FIELD_POS::SWS)
 };
 
+
+/*
+ * Позиции битовых полей внутрирегистра pllcfg модуля RCC.
+ */
+enum class EC_FLASH_AC_REG_BIT_FIELD_POS {
+    LATENCY     = 0,        // [2:0].
+    PRFTEN      = 8,
+    ICEN        = 9,
+    DCEN        = 10,
+    ICRST       = 11,
+    DCRST       = 12
+};
+
+enum class EC_FLASH_AC_REG_BIT_MSK {
+    LATENCY = 0b111 << M_EC_TO_U8(EC_FLASH_AC_REG_BIT_FIELD_POS::LATENCY),
+    PRFTEN  = 1     << M_EC_TO_U8(EC_FLASH_AC_REG_BIT_FIELD_POS::PRFTEN),
+    ICEN    = 1     << M_EC_TO_U8(EC_FLASH_AC_REG_BIT_FIELD_POS::ICEN),
+    DCEN    = 1     << M_EC_TO_U8(EC_FLASH_AC_REG_BIT_FIELD_POS::DCEN),
+    ICRST   = 1     << M_EC_TO_U8(EC_FLASH_AC_REG_BIT_FIELD_POS::ICRST),
+    DCRST   = 1     << M_EC_TO_U8(EC_FLASH_AC_REG_BIT_FIELD_POS::DCRST),
+};
+
+
 /**********************************************************************
  * Область упакованных структур.
  **********************************************************************/
@@ -221,7 +244,21 @@ struct __attribute__((packed)) rcc_registers_struct {
     volatile uint32_t   PLLI2SCFG;
 };
 
-#define RCC             (( rcc_registers_struct* )(0x40023800))
+#define RCC         ( ( rcc_registers_struct* ) ( 0x40023800 ) )
+
+/*
+ * Регистры физического модуля FLASH.
+ */
+struct __attribute__( ( packed ) ) flash_registers_struct {
+    volatile uint32_t   ACR;
+    volatile uint32_t   KEYR;
+    volatile uint32_t   OPTKEYR;
+    volatile uint32_t   SR;
+    volatile uint32_t   CR;
+    volatile uint32_t   OPTCR;
+};
+
+#define FLASH         ( ( flash_registers_struct* ) ( 0x40023C00 ) )
 
 /**********************************************************************
  * Область структур.
