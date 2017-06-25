@@ -94,6 +94,7 @@ enum class EC_SPI_CFG_CS {
  * Использовать ли аппаратный CS или нет?
  */
 enum class EC_SPI_CFG_CS_MODE {
+    NO_USE       = -1,
     CS_IGNORED_0 = 0,
     CS_IGNORED_1 = M_EC_TO_U32(EC_C1_REG_BIT_MSK::SSI)
 };
@@ -144,3 +145,5 @@ struct spi_cfg_struct {
     volatile uint32_t           s1_msk;
     volatile uint32_t           s2_msk;
 };
+
+#endif

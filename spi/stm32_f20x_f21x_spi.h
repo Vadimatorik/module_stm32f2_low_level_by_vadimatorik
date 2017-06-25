@@ -41,7 +41,7 @@ public:
 
 private:
     constexpr uint32_t  c1_reg_msk_get              ( void );
-    constexpr uint32_t  с2_msk_get                  ( void );
+    constexpr uint32_t  c2_reg_msk_get              ( void );
 };
 
 
@@ -56,4 +56,6 @@ public:
     constexpr spi( const spi_cfg_struct* const cfg );
 private:
     const spi_cfg_struct* const cfg;
-}
+};
+
+#endif
