@@ -22,6 +22,9 @@ struct pll_cfg_struct {
     const bool                  src;                    // true = HSE, false = HSI
 };
 
+struct src_dev_cfg_struct {
+    const uint32_t    dev_msk;
+};
 /**********************************************************************
  * Область enum class-ов.
  **********************************************************************/
@@ -427,7 +430,9 @@ struct __attribute__( ( packed ) ) flash_registers_struct {
  */
 struct rcc_cfg {
     const pll_cfg_struct*           const main_pll_cfg;         // Режимы основного PLL.
-    const uint8_t                   pll_count;                  // Количество режимов основного PLL.
+    const uint8_t                   pll_cfg_count;              // Количество режимов основного PLL.
+    const src_dev_cfg_struct*       const dev_cfg;              // Для режима без PLL.
+    const uint8_t                   src_cfg_count;              // Количество режимов основного PLL.
     const global_port*              const gb;                   // Для включения тактирования.
 };
 

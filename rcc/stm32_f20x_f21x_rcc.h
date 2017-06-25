@@ -64,6 +64,19 @@ private:
     constexpr uint32_t  flash_acr_msk_get               ( void );
 };
 
+/**********************************************************************
+ * Область template оболочек.
+ **********************************************************************/
+template < EC_RCC_AHB_DIV   AHB, EC_RCC_APB1_DIV    APB1, EC_RCC_APB2_DIV   APB2 >
+class src_dev_cfg : public src_dev_cfg_struct {
+public:
+    constexpr src_dev_cfg();
+
+private:
+    constexpr uint32_t  dev_msk_get              ( void );
+};
+
+
 #include "stm32_f20x_f21x_rcc_constexpr_func_class_pll.h"
 
 /**********************************************************************
@@ -93,7 +106,12 @@ public:
      * 11. Переключает тактирование ядра на PLL.
      * 12. Ждет, пока ядро переключится.
      */
-    EC_ANSWER_CLOCK_UPDATE      pll_sysclk_src_clock_set            ( uint8_t number_cfg ) const;
+    EC_ANSWER_CLOCK_UPDATE      pll_sysclk_src_clock_set            ( uint8_t number_cfg = 0 ) const;
+
+    EC_ANSWER_CLOCK_UPDATE      hse_set            ( void ) const;                                         // Делители после HSI/HSE будут 0.
+    EC_ANSWER_CLOCK_UPDATE      hsi_set            ( void ) const;
+    EC_ANSWER_CLOCK_UPDATE      hse_sysclk_src_clock_set            (  uint8_t number_dev_cfg = 0  ) const;
+    EC_ANSWER_CLOCK_UPDATE      hsi_sysclk_src_clock_set            (  uint8_t number_dev_cfg = 0  ) const;
 
     /*
      * Метод включает тактирование всех портов, в которых
@@ -134,10 +152,11 @@ private:
     static void    sw_pll_set               ( void );                                         // Переключает ядро на PLL.
 
     static void    dev1_bus_set             ( void );                                         // Выставляет делители APB1, APB2, AHB в 1.
-           void    dev_bus_set              ( uint8_t &number_cfg ) const;                    // Метод выставляет делители частоты на для шин, рассчитаные на этапе компиляции.
+           void    dev_after_pll_bus_set    ( uint8_t &number_cfg ) const;                    // Метод выставляет делители частоты на для шин, рассчитаные на этапе компиляции.
 
            void    pll_set_cfg              ( uint8_t &number_cfg ) const;                    // Метод выставляет выбранную конфигурацию без провекри в PLL (конфигурация должна существовать,
                                                                                               // PLL должен быть отключен).
+           void    dev_after_hsi_or_hse_bus_set ( uint8_t &number_cfg ) const;
 
     static void    flash_ac_reset           ( void );                                         // Сбрасываем предсказатель и кэш в начальное состояние.
            void    flash_ac_set             ( uint8_t &number_cfg ) const;                    // Устанавливаем предсказатель и кэш по заданной конфигурации.

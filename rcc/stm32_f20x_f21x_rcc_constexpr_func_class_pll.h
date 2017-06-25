@@ -213,4 +213,23 @@ constexpr uint32_t pll_cfg< S, M, N, P, Q, AHB, APB1, APB2, VOLTAGE_MV >::flash_
     return msk;
 }
 
+
+template < EC_RCC_AHB_DIV   AHB, EC_RCC_APB1_DIV    APB1, EC_RCC_APB2_DIV   APB2 >
+constexpr src_dev_cfg< AHB, APB1, APB2 >::src_dev_cfg ( void ) : src_dev_cfg_struct( {
+        .dev_msk = this->dev_msk_get()
+}) {
+
+}
+
+template < EC_RCC_AHB_DIV   AHB, EC_RCC_APB1_DIV    APB1, EC_RCC_APB2_DIV   APB2 >
+constexpr uint32_t src_dev_cfg< AHB, APB1, APB2 >::dev_msk_get ( void ) {
+    uint32_t msk = 0;
+
+    msk  |= M_EC_TO_U8(AHB)  << M_EC_TO_U8(EC_CFG_REG_BIT_FIELD_POS::HPRE);
+    msk  |= M_EC_TO_U8(APB1) << M_EC_TO_U8(EC_CFG_REG_BIT_FIELD_POS::PPRE1);
+    msk  |= M_EC_TO_U8(APB2) << M_EC_TO_U8(EC_CFG_REG_BIT_FIELD_POS::PPRE2);
+
+    return msk;
+}
+
 #endif
