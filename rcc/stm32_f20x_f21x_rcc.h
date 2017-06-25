@@ -64,6 +64,7 @@ private:
     constexpr uint32_t  flash_acr_msk_get               ( void );
 };
 
+#include "stm32_f20x_f21x_rcc_constexpr_func_class_pll.h"
 
 /**********************************************************************
  * Область class-ов.

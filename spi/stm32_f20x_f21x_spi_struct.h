@@ -180,7 +180,7 @@ enum class EC_SPI_CFG_DMA_RX_BUF {
  * Режим для работы в режиме одной линии.
  */
 enum class EC_SPI_CFG_ONE_LINE_MODE {
-    USE_2_LINE      = -1,
+    USE_2_LINE      = 0xFF,
     RECEIVE_ONLY    = 0,
     TRANSMIT_ONLY   = M_EC_TO_U32(EC_C1_REG_BIT_MSK::BIDIOE)
 };
@@ -213,7 +213,7 @@ enum class EC_SPI_CFG_SSM {
  * Использовать ли аппаратный CS или нет?
  */
 enum class EC_SPI_CFG_SSM_MODE {
-    NO_USE       = -1,
+    NO_USE       = 0xFF,
     CS_IGNORED_0 = 0,
     CS_IGNORED_1 = M_EC_TO_U32(EC_C1_REG_BIT_MSK::SSI)
 };
@@ -253,8 +253,8 @@ struct __attribute__((packed)) spi_registers_struct {
  * Структура конфигурации SPI.
  */
 struct spi_cfg_struct {
-    volatile uint32_t           c1_msk;
-    volatile uint32_t           c2_msk;
+    const uint32_t           c1_msk;
+    const uint32_t           c2_msk;
 };
 
 #endif
