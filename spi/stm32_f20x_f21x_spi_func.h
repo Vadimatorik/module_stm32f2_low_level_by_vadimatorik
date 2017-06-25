@@ -4,8 +4,6 @@
 
 #ifdef MODULE_SPI
 
-#include "stm32_f20x_f21x_spi.h"
-
 #include <cstdio>
 
 /**********************************************************************
@@ -17,8 +15,8 @@ template < EC_SPI_CFG_MODE MODE, EC_SPI_CFG_CLK_POLARITY POLAR, EC_SPI_CFG_CLK_P
            EC_SPI_CFG_INTERRUPT_RX I_RX, EC_SPI_CFG_INTERRUPT_ERROR I_ER, EC_SPI_CFG_DMA_TX_BUF DMATX, EC_SPI_CFG_DMA_RX_BUF DMARX, EC_SPI_CFG_SS CS, EC_SPI_CFG_SSM SSM, EC_SPI_CFG_SSM_MODE SSM_MODE >
 constexpr spi_cfg< MODE, POLAR, PHASE, NUM_LINE, ONE_LINE_MODE, FRAME, R_MODE, FORMAT,
                    BR_DEV, I_TX, I_RX, I_ER, DMATX, DMARX, CS, SSM, SSM_MODE >::spi_cfg() : spi_cfg_struct( {
-    .s1_msk = c1_reg_msk_get(),
-    .s2_msk = c1_reg_msk_get()
+    .c1_msk = this->c1_reg_msk_get(),
+    .c2_msk = this->c2_reg_msk_get()
 } ) {
         /*
          * Параметры ниже указываются при любых режимах.
@@ -136,9 +134,28 @@ constexpr uint32_t spi_cfg< MODE, POLAR, PHASE, NUM_LINE, ONE_LINE_MODE, FRAME, 
         msk |= M_EC_TO_U32(CS);
     }
 
+    return msk;
+}
+
+template < EC_SPI_NAME SPIx >
+constexpr spi< SPIx >::spi( const spi_cfg_struct* const cfg, uint8_t number ) :
+    cfg( cfg ),
+    number( number ) {
+    static_assert( ( SPIx == EC_SPI_NAME::SPI1 ) ||
+                   ( SPIx == EC_SPI_NAME::SPI2 ) ||
+                   ( SPIx == EC_SPI_NAME::SPI3 ),
+                    "Invalid template parameter!The SPIx can be SPI1, SPI2 or SPI3!" );
+};
+
+template < EC_SPI_NAME SPIx >
+int spi< SPIx >::spi_reinit ( uint8_t number_cfg ) const {
+    if ( number_cfg >= this->number ) return -1;
+    spi_registers_struct*   s = ( spi_registers_struct* )M_EC_TO_U32(SPIx);
+    s->C1 = 0;                                                      // Отключаем SPI.
+    s->S = 0;                                                       // Сбрасываем все флаги.
+    s->C1 = cfg->c1_msk;    s->C2 = cfg->c2_msk;                    // Конфигурируем SPI.
+    s->C1 |= M_EC_TO_U32(EC_C1_REG_BIT_MSK::SPE);                   // Запскаем SPI.
     return 0;
 }
 
-constexpr spi::spi( const spi_cfg_struct* const cfg, uint8_t number ) :
-    cfg(cfg), number(number) {};
 #endif

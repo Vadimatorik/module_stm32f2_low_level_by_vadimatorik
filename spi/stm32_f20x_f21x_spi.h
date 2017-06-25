@@ -83,10 +83,14 @@ private:
 /**********************************************************************
  * Область class-ов.
  **********************************************************************/
-
+template < EC_SPI_NAME SPIx >
 class spi {
 public:
     constexpr spi( const spi_cfg_struct* const cfg, uint8_t number = 1 );
+
+    int    spi_reinit              ( uint8_t number_cfg = 0 ) const;
+
+
 private:
     const spi_cfg_struct* const cfg;
     const uint8_t   number;

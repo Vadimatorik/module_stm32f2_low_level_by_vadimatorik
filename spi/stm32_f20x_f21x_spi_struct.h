@@ -218,6 +218,12 @@ enum class EC_SPI_CFG_SSM_MODE {
     CS_IGNORED_1 = M_EC_TO_U32(EC_C1_REG_BIT_MSK::SSI)
 };
 
+enum class EC_SPI_NAME {
+    SPI1 = 0x40013000,
+    SPI2 = 0x40003800,
+    SPI3 = 0x40003C00
+};
+
 
 /**********************************************************************
  * Область упакованных структур.
@@ -239,10 +245,6 @@ struct __attribute__((packed)) spi_registers_struct {
     volatile uint32_t   I2SPR;
 };
 
-#define SPI1         ( ( spi_registers_struct* ) ( 0x40013000 ) )
-#define SPI2         ( ( spi_registers_struct* ) ( 0x40003800 ) )
-#define SPI3         ( ( spi_registers_struct* ) ( 0x40003C00 ) )
-
 /**********************************************************************
  * Область структур.
  **********************************************************************/
@@ -251,8 +253,8 @@ struct __attribute__((packed)) spi_registers_struct {
  * Структура конфигурации SPI.
  */
 struct spi_cfg_struct {
-    volatile uint32_t           s1_msk;
-    volatile uint32_t           s2_msk;
+    volatile uint32_t           c1_msk;
+    volatile uint32_t           c2_msk;
 };
 
 #endif
