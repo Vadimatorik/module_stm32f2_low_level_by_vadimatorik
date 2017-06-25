@@ -166,7 +166,7 @@ enum class EC_SPI_CFG_NUMBER_LINE {
  * Режим для работы в режиме одной линии.
  */
 enum class EC_SPI_CFG_ONE_LINE_MODE {
-    USE_2_LINE      = 0,
+    USE_2_LINE      = -1,
     RECEIVE_ONLY    = 0,
     TRANSMIT_ONLY   = M_EC_TO_U32(EC_C1_REG_BIT_MSK::BIDIOE)
 };
