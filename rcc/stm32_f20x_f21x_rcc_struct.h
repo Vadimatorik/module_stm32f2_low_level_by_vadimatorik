@@ -24,7 +24,7 @@ enum class EC_PLLCFG_REG_BIT_FIELD_POSITION {
 };
 
 /*
- * Позиции битовых полей внутрирегистра pllcfg модуля RCC.
+ * Позиции битовых полей внутри регистра pllcfg модуля RCC.
  */
 enum class EC_C_REG_BIT_FIELD_POS {
     HSION       = 0,
