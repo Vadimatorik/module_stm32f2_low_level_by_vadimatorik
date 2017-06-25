@@ -10,10 +10,19 @@
  * Область template оболочек.
  **********************************************************************/
 template < EC_SPI_CFG_MODE              MODE,           /*
+                                                         * Мастер/ведомый.
+                                                         */
+           EC_SPI_CFG_CLK_POLARITY      POLAR,          /*
+                                                         * Поляность сигнала.
+                                                         */
+           EC_SPI_CFG_CLK_PHASE         PHASE,          /*
+                                                         * Фаза.
+                                                         */
+           EC_SPI_CFG_NUMBER_LINE       NUM_LINE,       /*
                                                          * SPI будет использовать 1 или 2
                                                          * линии.
                                                          */
-           EC_SPI_CFG_ONE_LINE_MODE     LINE_MODE,      /*
+           EC_SPI_CFG_ONE_LINE_MODE     ONE_LINE_MODE,  /*
                                                          * Задает режим работы для одной линии
                                                          * ( используется только в случае, если
                                                          * выбран режим работы для одной линии ).
@@ -25,16 +34,40 @@ template < EC_SPI_CFG_MODE              MODE,           /*
                                                          * Использовать полый дуплекс
                                                          * или только прием.
                                                          */
-           EC_SPI_CFG_CS                CS,             /*
-                                                         * Использовать ли аппаратный CS или нет.
+           EC_SPI_CFG_FRAME_FORMAT      FORMAT,         /*
+                                                         * Формат посылок.
                                                          */
-           EC_SPI_CFG_CS_MODE           CS_M,           /*
-                                                         * Если аппаратный CS используется, то
-                                                         * в режиме простоя будет это состояние.
-                                                         */
-           EC_SPI_CFG_BAUD_RATE_DEV     BR_DEV >        /*
+
+           EC_SPI_CFG_BAUD_RATE_DEV     BR_DEV,         /*
                                                          * Определяет делитель частоты передачи.
                                                          */
+           EC_SPI_CFG_INTERRUPT_TX      I_TX,           /*
+                                                         * Вызывать ли прерывания, когда пустой буфер
+                                                         * для передачи?
+                                                         */
+           EC_SPI_CFG_INTERRUPT_RX      I_RX,           /*
+                                                         * Прерывание, когда буффер на прием не пуст.
+                                                         */
+           EC_SPI_CFG_INTERRUPT_ERROR   I_ER,           /*
+                                                         * Прерывание при возникнавении ошибки.
+                                                         */
+
+           /* Если у нас мастер */
+           EC_SPI_CFG_SS                CS,             /*
+                                                         * Использовать ли аппаратный CS в режиме мастера?
+                                                         */
+
+           /* Если SLAVE */
+           EC_SPI_CFG_SSM               SSM,            /*
+                                                         * Программное отслеживание CS в режиме ведомого.
+                                                         */
+           EC_SPI_CFG_SSM_MODE          SSM_MODE >      /*
+                                                         * Параметр для отслеживания CS в режиме
+                                                         * ведомого устройства (какой уровень считается
+                                                         * игнорированием устройтсва).
+                                                         */
+
+
 class spi_cfg : public spi_cfg_struct {
 public:
     constexpr spi_cfg();

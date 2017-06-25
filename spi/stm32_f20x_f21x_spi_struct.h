@@ -47,12 +47,117 @@ enum class EC_C1_REG_BIT_MSK {
     BIDIMODE    = 1     << M_EC_TO_U8(EC_C1_REG_BIT_FIELD_POS::BIDIMODE)
 };
 
+/*
+ * Позиции битовых полей внутри регистра C2 модуля SPI.
+ */
+enum class EC_C2_REG_BIT_FIELD_POS {
+    RXDMAEN     = 0,
+    TXDMAEN     = 1,
+    SSOE        = 2,
+    FRF         = 4,
+    ERRIE       = 5,
+    RXNEIE      = 6,
+    TXEIE       = 7
+};
+
+enum class EC_C2_REG_BIT_MSK {
+    RXDMAEN     = 1  << M_EC_TO_U8(EC_C2_REG_BIT_FIELD_POS::RXDMAEN),
+    TXDMAEN     = 1  << M_EC_TO_U8(EC_C2_REG_BIT_FIELD_POS::TXDMAEN),
+    SSOE        = 1  << M_EC_TO_U8(EC_C2_REG_BIT_FIELD_POS::SSOE),
+    FRF         = 1  << M_EC_TO_U8(EC_C2_REG_BIT_FIELD_POS::FRF),
+    ERRIE       = 1  << M_EC_TO_U8(EC_C2_REG_BIT_FIELD_POS::ERRIE),
+    RXNEIE      = 1  << M_EC_TO_U8(EC_C2_REG_BIT_FIELD_POS::RXNEIE),
+    TXEIE       = 1  << M_EC_TO_U8(EC_C2_REG_BIT_FIELD_POS::TXEIE)
+};
+
+/*
+ * Мастер/ведомый.
+ */
+enum class EC_SPI_CFG_MODE {
+    MASTER  = M_EC_TO_U32(EC_C1_REG_BIT_MSK::MSTR),
+    SLAVE   = 0
+};
+
+/*
+ * Полярность тактового сигнала (
+ * какое состояние у CLK, когда передача
+ * не идет).
+ */
+enum class EC_SPI_CFG_CLK_POLARITY {
+    IDLE_0  = 0,
+    IDLE_1  = M_EC_TO_U32(EC_C1_REG_BIT_MSK::CPOL),
+};
+
+
+/*
+ * Фаза.
+ */
+enum class EC_SPI_CFG_CLK_PHASE {
+    FIRST   = 0,
+    SECOND  = M_EC_TO_U32(EC_C1_REG_BIT_MSK::CPHA),
+};
+
+/*
+ * Разрешение прерывания по опусташению буффера отправки.
+ */
+enum class EC_SPI_CFG_INTERRUPT_TX {
+    ON  = M_EC_TO_U32(EC_C2_REG_BIT_MSK::TXEIE),
+    OFF = 0
+};
+
+/*
+ * Вызов прерывания когда буффер по входу не пустой.
+ */
+enum class EC_SPI_CFG_INTERRUPT_RX {
+    ON  = M_EC_TO_U32(EC_C2_REG_BIT_MSK::RXNEIE),
+    OFF = 0
+};
+
+/*
+ * При возникновении ошибки.
+ */
+enum class EC_SPI_CFG_INTERRUPT_ERROR {
+    ON  = M_EC_TO_U32(EC_C2_REG_BIT_MSK::ERRIE),
+    OFF = 0
+};
+
+/*
+ * При возникновении ошибки.
+ */
+enum class EC_SPI_CFG_FRAME_FORMAT {
+    MOTOROLA    = 0,
+    TI          = M_EC_TO_U32(EC_C2_REG_BIT_MSK::FRF)
+};
+
+/*
+ * SS выход
+ */
+enum class EC_SPI_CFG_SS {
+    DISABLED   = 0,
+    ENABLED    = M_EC_TO_U32(EC_C2_REG_BIT_MSK::SSOE)
+};
+
+/*
+ * Буффер DMA TX.
+ */
+enum class EC_SPI_CFG_DMA_TX_BUF {
+    DISABLED   = 0,
+    ENABLED    = M_EC_TO_U32(EC_C2_REG_BIT_MSK::TXDMAEN)
+};
+
+/*
+ * Буффер DMA RX.
+ */
+enum class EC_SPI_CFG_DMA_RX_BUF {
+    DISABLED   = 0,
+    ENABLED    = M_EC_TO_U32(EC_C2_REG_BIT_MSK::RXDMAEN)
+};
 
 
 /*
  * Делитель частоты с AHB для шины APB1.
  */
-enum class EC_SPI_CFG_MODE {
+enum class EC_SPI_CFG_NUMBER_LINE {
     LINE_1  = M_EC_TO_U32(EC_C1_REG_BIT_MSK::BIDIMODE),
     LINE_2  = 0
 };
@@ -83,17 +188,17 @@ enum class EC_SPI_CFG_RECEIVE_MODE {
 };
 
 /*
- * Использовать ли аппаратный CS или нет?
+ * Программное отслеживание CS в режиме ведомого.
  */
-enum class EC_SPI_CFG_CS {
-    CS_OFF  = 0,
-    CS_ON   = M_EC_TO_U32(EC_C1_REG_BIT_MSK::SSM)
+enum class EC_SPI_CFG_SSM {
+    SSM_OFF  = 0,
+    SSM_ON   = M_EC_TO_U32(EC_C1_REG_BIT_MSK::SSM)
 };
 
 /*
  * Использовать ли аппаратный CS или нет?
  */
-enum class EC_SPI_CFG_CS_MODE {
+enum class EC_SPI_CFG_SSM_MODE {
     NO_USE       = -1,
     CS_IGNORED_0 = 0,
     CS_IGNORED_1 = M_EC_TO_U32(EC_C1_REG_BIT_MSK::SSI)
