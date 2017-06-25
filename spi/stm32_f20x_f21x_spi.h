@@ -51,6 +51,8 @@ template < EC_SPI_CFG_MODE              MODE,           /*
            EC_SPI_CFG_INTERRUPT_ERROR   I_ER,           /*
                                                          * Прерывание при возникнавении ошибки.
                                                          */
+           EC_SPI_CFG_DMA_TX_BUF        DMATX,          /* Буффер между DMA и SPI_D. */
+           EC_SPI_CFG_DMA_RX_BUF        DMARX,
 
            /* Если у нас мастер */
            EC_SPI_CFG_SS                CS,             /*
