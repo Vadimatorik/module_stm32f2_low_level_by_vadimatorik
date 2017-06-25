@@ -151,23 +151,47 @@ constexpr spi< SPIx >::spi( const spi_cfg_struct* const cfg, uint8_t number ) :
 template < EC_SPI_NAME SPIx >
 int spi< SPIx >::spi_reinit ( uint8_t number_cfg ) const {
     if ( number_cfg >= this->number ) return -1;
-    spi_registers_struct*   s = ( spi_registers_struct* )M_EC_TO_U32(SPIx);
-    s->C1 = 0;                                                      // Отключаем SPI.
-    s->S = 0;                                                       // Сбрасываем все флаги.
-    s->C1 = cfg->c1_msk;    s->C2 = cfg->c2_msk;                    // Конфигурируем SPI.
+    spi_registers_struct*   S = ( spi_registers_struct* )M_EC_TO_U32(SPIx);
+    S->C1 = 0;                                                      // Отключаем SPI.
+    S->S = 0;                                                       // Сбрасываем все флаги.
+    S->C1 = cfg->c1_msk;    S->C2 = cfg->c2_msk;                    // Конфигурируем SPI.
     return 0;
 }
 
 template < EC_SPI_NAME SPIx >
 void spi< SPIx >::spi_on ( void ) const {
-    spi_registers_struct*   s = ( spi_registers_struct* )M_EC_TO_U32(SPIx);
-    s->C1 |= M_EC_TO_U32(EC_C1_REG_BIT_MSK::SPE);                   // Запскаем SPI.
+    spi_registers_struct*   S = ( spi_registers_struct* )M_EC_TO_U32(SPIx);
+    S->C1 |= M_EC_TO_U32(EC_C1_REG_BIT_MSK::SPE);                   // Запскаем SPI.
 }
 
 template < EC_SPI_NAME SPIx >
 void spi< SPIx >::spi_off ( void ) const {
-    spi_registers_struct*   s = ( spi_registers_struct* )M_EC_TO_U32(SPIx);
-    s->C1 &= ~M_EC_TO_U32(EC_C1_REG_BIT_MSK::SPE);                  // Запскаем SPI.
+    spi_registers_struct*   S = ( spi_registers_struct* )M_EC_TO_U32(SPIx);
+    S->C1 &= ~M_EC_TO_U32(EC_C1_REG_BIT_MSK::SPE);                  // Запскаем SPI.
+}
+
+template < EC_SPI_NAME SPIx >
+void spi< SPIx >::tx       ( uint16_t& data ) const {
+    spi_registers_struct*   S = ( spi_registers_struct* )M_EC_TO_U32(SPIx);
+    S->D = data;
+}
+
+template < EC_SPI_NAME SPIx >
+void spi< SPIx >::tx       ( uint8_t& data ) const {
+    spi_registers_struct*   S = ( spi_registers_struct* )M_EC_TO_U32(SPIx);
+    S->D = data;
+}
+
+template < EC_SPI_NAME SPIx >
+void spi< SPIx >::rx ( uint16_t& data ) const {
+    spi_registers_struct*   S = ( spi_registers_struct* )M_EC_TO_U32(SPIx);
+    data = S->D;
+}
+
+template < EC_SPI_NAME SPIx >
+void spi< SPIx >::rx ( uint8_t& data ) const {
+    spi_registers_struct*   S = ( spi_registers_struct* )M_EC_TO_U32(SPIx);
+    data = S->D;
 }
 
 #endif

@@ -89,9 +89,14 @@ public:
     constexpr spi( const spi_cfg_struct* const cfg, uint8_t number = 1 );
 
     int    spi_reinit              ( uint8_t number_cfg = 0 ) const;
+
     void   spi_on   ( void ) const;
     void   spi_off  ( void ) const;
 
+    void   tx       ( uint16_t& data ) const;
+    void   tx       ( uint8_t& data ) const;
+    void   rx       ( uint16_t& data ) const;
+    void   rx       ( uint8_t& data ) const;
 private:
     const spi_cfg_struct* const cfg;
     const uint8_t   number;
