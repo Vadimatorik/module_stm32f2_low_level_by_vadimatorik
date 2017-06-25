@@ -37,7 +37,6 @@ template < EC_SPI_CFG_MODE              MODE,           /*
            EC_SPI_CFG_FRAME_FORMAT      FORMAT,         /*
                                                          * Формат посылок.
                                                          */
-
            EC_SPI_CFG_BAUD_RATE_DEV     BR_DEV,         /*
                                                          * Определяет делитель частоты передачи.
                                                          */
@@ -69,7 +68,6 @@ template < EC_SPI_CFG_MODE              MODE,           /*
                                                          * игнорированием устройтсва).
                                                          */
 
-
 class spi_cfg : public spi_cfg_struct {
 public:
     constexpr spi_cfg();
@@ -88,9 +86,12 @@ private:
 
 class spi {
 public:
-    constexpr spi( const spi_cfg_struct* const cfg );
+    constexpr spi( const spi_cfg_struct* const cfg, uint8_t number = 1 );
 private:
     const spi_cfg_struct* const cfg;
+    const uint8_t   number;
 };
+
+#include "stm32_f20x_f21x_spi_func.h"
 
 #endif

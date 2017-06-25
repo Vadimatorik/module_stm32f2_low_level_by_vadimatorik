@@ -47,6 +47,18 @@ enum class EC_C1_REG_BIT_MSK {
     BIDIMODE    = 1     << M_EC_TO_U8(EC_C1_REG_BIT_FIELD_POS::BIDIMODE)
 };
 
+enum class EC_SPI_CFG_BAUD_RATE_DEV {
+    DEV_2       = 0,
+    DEV_4       = 1,
+    DEV_8       = 2,
+    DEV_16      = 3,
+    DEV_32      = 4,
+    DEV_64      = 5,
+    DEV_128     = 6,
+    DEV_256     = 7
+};
+
+
 /*
  * Позиции битовых полей внутри регистра C2 модуля SPI.
  */
@@ -85,7 +97,7 @@ enum class EC_SPI_CFG_MODE {
  */
 enum class EC_SPI_CFG_CLK_POLARITY {
     IDLE_0  = 0,
-    IDLE_1  = M_EC_TO_U32(EC_C1_REG_BIT_MSK::CPOL),
+    IDLE_1  = M_EC_TO_U32(EC_C1_REG_BIT_MSK::CPOL)
 };
 
 
@@ -94,7 +106,15 @@ enum class EC_SPI_CFG_CLK_POLARITY {
  */
 enum class EC_SPI_CFG_CLK_PHASE {
     FIRST   = 0,
-    SECOND  = M_EC_TO_U32(EC_C1_REG_BIT_MSK::CPHA),
+    SECOND  = M_EC_TO_U32(EC_C1_REG_BIT_MSK::CPHA)
+};
+
+/*
+ * Делитель частоты с AHB для шины APB1.
+ */
+enum class EC_SPI_CFG_NUMBER_LINE {
+    LINE_1  = M_EC_TO_U32(EC_C1_REG_BIT_MSK::BIDIMODE),
+    LINE_2  = 0
 };
 
 /*
@@ -154,13 +174,7 @@ enum class EC_SPI_CFG_DMA_RX_BUF {
 };
 
 
-/*
- * Делитель частоты с AHB для шины APB1.
- */
-enum class EC_SPI_CFG_NUMBER_LINE {
-    LINE_1  = M_EC_TO_U32(EC_C1_REG_BIT_MSK::BIDIMODE),
-    LINE_2  = 0
-};
+
 
 /*
  * Режим для работы в режиме одной линии.
@@ -204,16 +218,6 @@ enum class EC_SPI_CFG_SSM_MODE {
     CS_IGNORED_1 = M_EC_TO_U32(EC_C1_REG_BIT_MSK::SSI)
 };
 
-enum class EC_SPI_CFG_BAUD_RATE_DEV {
-    DEV_2       = 0,
-    DEV_4       = 1,
-    DEV_8       = 2,
-    DEV_16      = 3,
-    DEV_32      = 4,
-    DEV_64      = 5,
-    DEV_128     = 6,
-    DEV_256     = 7,
-};
 
 /**********************************************************************
  * Область упакованных структур.

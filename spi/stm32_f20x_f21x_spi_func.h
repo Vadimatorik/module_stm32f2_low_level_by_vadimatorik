@@ -6,6 +6,7 @@
 
 #include "stm32_f20x_f21x_spi.h"
 
+#include <cstdio>
 
 /**********************************************************************
  * Область constexpr конструкторов.
@@ -77,33 +78,32 @@ constexpr spi_cfg< MODE, POLAR, PHASE, NUM_LINE, ONE_LINE_MODE, FRAME, R_MODE, F
         static_assert( ( CS == EC_SPI_CFG_SS::DISABLED ) ||
                        ( CS == EC_SPI_CFG_SS::ENABLED ),
                 "Invalid template parameter!The CS can be DISABLED or ENABLED!" );
+
         /*
          * В случае, если используется только одна линия.
          */
-        if ( NUM_LINE == EC_SPI_CFG_NUMBER_LINE::LINE_1 ) {
-            static_assert( ( ONE_LINE_MODE == EC_SPI_CFG_ONE_LINE_MODE::RECEIVE_ONLY ) ||
-                           ( ONE_LINE_MODE == EC_SPI_CFG_ONE_LINE_MODE::TRANSMIT_ONLY ),
+        static_assert( !( ( NUM_LINE == EC_SPI_CFG_NUMBER_LINE::LINE_1 ) &&
+                          ( ( ONE_LINE_MODE == EC_SPI_CFG_ONE_LINE_MODE::RECEIVE_ONLY ) ||
+                            ( ONE_LINE_MODE == EC_SPI_CFG_ONE_LINE_MODE::TRANSMIT_ONLY ) ) ),
                 "Invalid template parameter!"
                 "NUM_LINE is selected as LINE_1"
                 "The ONE_LINE_MODE can be RECEIVE_ONLY or TRANSMIT_ONLY!" );
-        } else {
-            static_assert( ( ONE_LINE_MODE == EC_SPI_CFG_ONE_LINE_MODE::USE_2_LINE ),
+
+            static_assert( ( NUM_LINE != EC_SPI_CFG_NUMBER_LINE::LINE_1 ) &&
+                           ( ONE_LINE_MODE == EC_SPI_CFG_ONE_LINE_MODE::USE_2_LINE ),
                 "Invalid template parameter!"
                 "NUM_LINE is selected as LINE_2"
                 "The ONE_LINE_MODE can be USE_2_LINE!" );
-        }
 
         /*
          * Если SPI сконфигурирован как мастер.
          */
-        if ( MODE == EC_SPI_CFG_MODE::SLAVE ) {
-            if ( SSM == EC_SPI_CFG_SSM::SSM_ON ) {
-                static_assert( ( SSM_MODE != EC_SPI_CFG_SSM_MODE::NO_USE ),
-                    "Invalid template parameter!"                   // Если выбран режим отслеживания во время
-                    "SSM is selected as SSM_ON"                     // slave режима, то нужно укзаать, какой именно.
-                    "The SSM_MODE not can be NO_USE!" );
-            }
-        };
+        static_assert( !( ( MODE == EC_SPI_CFG_MODE::SLAVE )  &&
+                          ( SSM == EC_SPI_CFG_SSM::SSM_ON ) &&
+                          ( SSM_MODE != EC_SPI_CFG_SSM_MODE::NO_USE ) ),
+                "Invalid template parameter!"                   // Если выбран режим отслеживания во время
+                "SSM is selected as SSM_ON"                     // slave режима, то нужно укзаать, какой именно.
+                "The SSM_MODE not can be NO_USE!" );
  };
 
 template < EC_SPI_CFG_MODE MODE, EC_SPI_CFG_CLK_POLARITY POLAR, EC_SPI_CFG_CLK_PHASE PHASE, EC_SPI_CFG_NUMBER_LINE NUM_LINE, EC_SPI_CFG_ONE_LINE_MODE ONE_LINE_MODE,
@@ -139,5 +139,6 @@ constexpr uint32_t spi_cfg< MODE, POLAR, PHASE, NUM_LINE, ONE_LINE_MODE, FRAME, 
     return 0;
 }
 
-
+constexpr spi::spi( const spi_cfg_struct* const cfg, uint8_t number ) :
+    cfg(cfg), number(number) {};
 #endif
