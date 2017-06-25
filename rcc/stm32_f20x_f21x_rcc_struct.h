@@ -101,6 +101,97 @@ enum class EC_CFG_REG_BIT_MSK {
     MCO2        = 0b11      << M_EC_TO_U8(EC_CFG_REG_BIT_FIELD_POS::MCO2),
 };
 
+/*
+ * APB2EN.
+ */
+enum class EC_APB2_EN_REG_BIT_FIELD_POS {
+    TIM1        = 0,
+    TIM8        = 1,
+    USART1      = 4,
+    USART6      = 5,
+    ADC1        = 8,
+    ADC2        = 9,
+    ADC3        = 10,
+    SDIO        = 11,
+    SPI1        = 12,
+    SYSCFG      = 14,
+    TIM9        = 16,
+    TIM10       = 17,
+    TIM11       = 18
+};
+
+enum class EC_APB2_EN_REG_BIT_MSK {
+    TIM1        = 1 << M_EC_TO_U8(EC_APB2_EN_REG_BIT_FIELD_POS::TIM1),
+    TIM8        = 1 << M_EC_TO_U8(EC_APB2_EN_REG_BIT_FIELD_POS::TIM8),
+    USART1      = 1 << M_EC_TO_U8(EC_APB2_EN_REG_BIT_FIELD_POS::USART1),
+    USART6      = 1 << M_EC_TO_U8(EC_APB2_EN_REG_BIT_FIELD_POS::USART6),
+    ADC1        = 1 << M_EC_TO_U8(EC_APB2_EN_REG_BIT_FIELD_POS::ADC1),
+    ADC2        = 1 << M_EC_TO_U8(EC_APB2_EN_REG_BIT_FIELD_POS::ADC2),
+    ADC3        = 1 << M_EC_TO_U8(EC_APB2_EN_REG_BIT_FIELD_POS::ADC3),
+    SDIO        = 1 << M_EC_TO_U8(EC_APB2_EN_REG_BIT_FIELD_POS::SDIO),
+    SPI1        = 1 << M_EC_TO_U8(EC_APB2_EN_REG_BIT_FIELD_POS::SPI1),
+    SYSCFG      = 1 << M_EC_TO_U8(EC_APB2_EN_REG_BIT_FIELD_POS::SYSCFG),
+    TIM9        = 1 << M_EC_TO_U8(EC_APB2_EN_REG_BIT_FIELD_POS::TIM9),
+    TIM10       = 1 << M_EC_TO_U8(EC_APB2_EN_REG_BIT_FIELD_POS::TIM10),
+    TIM11       = 1 << M_EC_TO_U8(EC_APB2_EN_REG_BIT_FIELD_POS::TIM11)
+};
+
+/*
+ * APB2EN.
+ */
+enum class EC_APB1_EN_REG_BIT_FIELD_POS {
+    TIM2        = 0,
+    TIM3        = 1,
+    TIM4        = 2,
+    TIM5        = 3,
+    TIM6        = 4,
+    TIM7        = 5,
+    TIM12       = 6,
+    TIM13       = 7,
+    TIM14       = 8,
+    WWDG        = 11,
+    SPI2        = 14,
+    SPI3        = 15,
+    USART2      = 17,
+    USART3      = 18,
+    UART4       = 19,
+    UART5       = 20,
+    I2C1        = 21,
+    I2C2        = 22,
+    I2C3        = 23,
+    CAN1        = 25,
+    CAN2        = 26,
+    PWR         = 28,
+    DAC         = 29,
+};
+
+enum class EC_APB1_EN_REG_BIT_MSK {
+    TIM2        = 1 << M_EC_TO_U8(EC_APB1_EN_REG_BIT_FIELD_POS::TIM2),
+    TIM3        = 1 << M_EC_TO_U8(EC_APB1_EN_REG_BIT_FIELD_POS::TIM3),
+    TIM4        = 1 << M_EC_TO_U8(EC_APB1_EN_REG_BIT_FIELD_POS::TIM4),
+    TIM5        = 1 << M_EC_TO_U8(EC_APB1_EN_REG_BIT_FIELD_POS::TIM5),
+    TIM6        = 1 << M_EC_TO_U8(EC_APB1_EN_REG_BIT_FIELD_POS::TIM6),
+    TIM7        = 1 << M_EC_TO_U8(EC_APB1_EN_REG_BIT_FIELD_POS::TIM7),
+    TIM12       = 1 << M_EC_TO_U8(EC_APB1_EN_REG_BIT_FIELD_POS::TIM12),
+    TIM13       = 1 << M_EC_TO_U8(EC_APB1_EN_REG_BIT_FIELD_POS::TIM13),
+    TIM14       = 1 << M_EC_TO_U8(EC_APB1_EN_REG_BIT_FIELD_POS::TIM14),
+    WWDG        = 1 << M_EC_TO_U8(EC_APB1_EN_REG_BIT_FIELD_POS::WWDG),
+    SPI2        = 1 << M_EC_TO_U8(EC_APB1_EN_REG_BIT_FIELD_POS::SPI2),
+    SPI3        = 1 << M_EC_TO_U8(EC_APB1_EN_REG_BIT_FIELD_POS::SPI3),
+    USART2      = 1 << M_EC_TO_U8(EC_APB1_EN_REG_BIT_FIELD_POS::USART2),
+    USART3      = 1 << M_EC_TO_U8(EC_APB1_EN_REG_BIT_FIELD_POS::USART3),
+    UART4       = 1 << M_EC_TO_U8(EC_APB1_EN_REG_BIT_FIELD_POS::UART4),
+    UART5       = 1 << M_EC_TO_U8(EC_APB1_EN_REG_BIT_FIELD_POS::UART5),
+    I2C1        = 1 << M_EC_TO_U8(EC_APB1_EN_REG_BIT_FIELD_POS::I2C1),
+    I2C2        = 1 << M_EC_TO_U8(EC_APB1_EN_REG_BIT_FIELD_POS::I2C2),
+    I2C3        = 1 << M_EC_TO_U8(EC_APB1_EN_REG_BIT_FIELD_POS::I2C3),
+    CAN1        = 1 << M_EC_TO_U8(EC_APB1_EN_REG_BIT_FIELD_POS::CAN1),
+    CAN2        = 1 << M_EC_TO_U8(EC_APB1_EN_REG_BIT_FIELD_POS::CAN2),
+    PWR         = 1 << M_EC_TO_U8(EC_APB1_EN_REG_BIT_FIELD_POS::PWR),
+    DAC         = 1 << M_EC_TO_U8(EC_APB1_EN_REG_BIT_FIELD_POS::DAC),
+};
+
+
 enum class EC_ANSWER_CLOCK_UPDATE {
     SUCCESS                     = 0,
     STRUCT_NUMBER_IS_WRONG      = 1

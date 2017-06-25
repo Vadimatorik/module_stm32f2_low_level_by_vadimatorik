@@ -102,6 +102,16 @@ public:
      */
     void    global_port_clk_en              ( void ) const;
 
+    /*
+     * Включение/выключени/сброс различной переферии.
+     */
+    static void   spi1_clk_on               ( void );
+    static void   spi1_clk_off              ( void );
+    static void   spi2_clk_on               ( void );
+    static void   spi2_clk_off              ( void );
+    static void   spi3_clk_on               ( void );
+    static void   spi3_clk_off              ( void );
+
 private:
     /*
      * Действия производятся без каких-либо проверок.

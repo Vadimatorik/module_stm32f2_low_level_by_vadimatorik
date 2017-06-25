@@ -216,4 +216,27 @@ void rcc::global_port_clk_en ( void ) const {
     RCC->AHB_1_EN |= this->cfg->gb->msk_get();
 }
 
+void rcc::spi1_clk_on ( void ) {
+    RCC->APB_2_EN |= M_EC_TO_U32(EC_APB2_EN_REG_BIT_MSK::SPI1);
+}
+
+void rcc::spi1_clk_off ( void ) {
+    RCC->APB_2_EN &= ~M_EC_TO_U32(EC_APB2_EN_REG_BIT_MSK::SPI1);
+}
+
+void rcc::spi2_clk_on ( void ) {
+    RCC->APB_1_EN |= M_EC_TO_U32(EC_APB1_EN_REG_BIT_MSK::SPI2);
+}
+
+void rcc::spi2_clk_off ( void ) {
+    RCC->APB_1_EN &= ~M_EC_TO_U32(EC_APB1_EN_REG_BIT_MSK::SPI2);
+}
+
+void rcc::spi3_clk_on ( void ) {
+    RCC->APB_1_EN |= M_EC_TO_U32(EC_APB1_EN_REG_BIT_MSK::SPI3);
+}
+
+void rcc::spi3_clk_off ( void ) {
+    RCC->APB_1_EN &= ~M_EC_TO_U32(EC_APB1_EN_REG_BIT_MSK::SPI3);
+}
 #endif
