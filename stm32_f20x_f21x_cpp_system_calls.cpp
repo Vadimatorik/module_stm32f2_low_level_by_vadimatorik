@@ -92,25 +92,75 @@ int _getpid ( void ) {
     return 1;
 }
 
+/*
+ * Передача управления новому процессу.
+ * Процессов нет -> возвращаем ошибку.
+ */
+int _execve ( char *name, char **argv, char **env )
+{
+    errno = ENOMEM;
+    return -1;
+}
+
+/*
+ * fork - создание нового процесса.
+ * Мы их не поддерживаем.
+ */
+int _fork ( void ) {
+    errno = EAGAIN;
+    return -1;
+}
+
+/*
+ * times - временная информация о процессе
+ * ( сколько тиков: системных, процессорных и т.д. )
+ * ( Заглушка ).
+ */
+
+clock_t _times(struct tms *buf) {
+    return -1;
+}
+
+/*
+ * Удаляем имя файла ( Загулшка ).
+ */
+int _unlink(char *name)
+{
+    errno = ENOENT;
+    return -1;
+}
+
+/*
+ * Ожидание дочерних процессов.
+ * ( Заглушка ).
+ */
+int _wait(int *status)
+{
+    errno = ECHILD;
+    return -1;
+}
+
+
 const char HEAP_AND_STACK_COLLISION[] = "Heap and stack collision\n";
 
 /*
  * Проверяем, что наши данные ( которые malloc и прочие могут
  * попробовать запросить ) не наложатся на стек.
  */
-caddr_t _sbrk ( int incr ) {
+void* _sbrk ( intptr_t incr ) {
     register uint32_t stack_ptr;                                        // Адресс, на котором сейчас находится указатель стека
                                                                         // ( ячейка, на которую указывает указатель не пуста,
                                                                         // в ней последнее сохраненное слово ).
     asm volatile ( "MRS %0, msp\n" : "=r" ( stack_ptr ) );
 
-    uint32_t heap_end = ( uint32_t )&__bss_end__;                       // Указатель на первый байт после области .bss.
+    uint32_t static heap_end = ( uint32_t )&__bss_end__;                // Указатель на первый байт после области .bss.
 
     if ( heap_end + incr >= stack_ptr ) {
         _write( ( char* )HEAP_AND_STACK_COLLISION, sizeof(HEAP_AND_STACK_COLLISION) );
         abort();
     }
 
+    heap_end += incr;
     return ( caddr_t )stack_ptr;
 }
 
