@@ -100,7 +100,8 @@ const char HEAP_AND_STACK_COLLISION[] = "Heap and stack collision\n";
  */
 caddr_t _sbrk ( int incr ) {
     register uint32_t stack_ptr;                                        // Адресс, на котором сейчас находится указатель стека
-                                                                        // ( ячейка, на которую указывает указатель пуста ).
+                                                                        // ( ячейка, на которую указывает указатель не пуста,
+                                                                        // в ней последнее сохраненное слово ).
     asm volatile ( "MRS %0, msp\n" : "=r" ( stack_ptr ) );
 
     uint32_t heap_end = ( uint32_t )&__bss_end__;                       // Указатель на первый байт после области .bss.
