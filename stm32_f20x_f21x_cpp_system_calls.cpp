@@ -140,7 +140,6 @@ int _wait(int *status)
     return -1;
 }
 
-
 const char HEAP_AND_STACK_COLLISION[] = "Heap and stack collision\n";
 
 /*

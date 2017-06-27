@@ -1,4 +1,10 @@
 #include <stdint.h>
+#include "FreeRTOSConfig.h"
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 
 /*
  * В данном файле находится таблица векторов-прерываний (указатель на вершину стека + массив
@@ -269,4 +275,7 @@ void reset_handler ( void ) {
     main();
 }
 
+#ifdef __cplusplus
+}
+#endif
 
