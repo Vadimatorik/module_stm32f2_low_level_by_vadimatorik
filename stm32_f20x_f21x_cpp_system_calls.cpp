@@ -108,7 +108,7 @@ caddr_t _sbrk ( int incr ) {
 
     if ( heap_end + incr >= stack_ptr ) {
         _write( ( char* )HEAP_AND_STACK_COLLISION, sizeof(HEAP_AND_STACK_COLLISION) );
-        return NULL;
+        abort();
     }
 
     return ( caddr_t )stack_ptr;
