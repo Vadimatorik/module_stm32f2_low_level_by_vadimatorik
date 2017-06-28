@@ -12,7 +12,7 @@
 
 template < EC_SPI_CFG_MODE MODE, EC_SPI_CFG_CLK_POLARITY POLAR, EC_SPI_CFG_CLK_PHASE PHASE, EC_SPI_CFG_NUMBER_LINE NUM_LINE, EC_SPI_CFG_ONE_LINE_MODE ONE_LINE_MODE,
            EC_SPI_CFG_DATA_FRAME FRAME, EC_SPI_CFG_RECEIVE_MODE R_MODE, EC_SPI_CFG_FRAME_FORMAT FORMAT, EC_SPI_CFG_BAUD_RATE_DEV BR_DEV, EC_SPI_CFG_INTERRUPT_TX I_TX,
-           EC_SPI_CFG_INTERRUPT_RX I_RX, EC_SPI_CFG_INTERRUPT_ERROR I_ER, EC_SPI_CFG_DMA_TX_BUF DMATX, EC_SPI_CFG_DMA_RX_BUF DMARX, EC_SPI_CFG_SS CS, EC_SPI_CFG_SSM SSM, EC_SPI_CFG_SSM_MODE SSM_MODE >
+           EC_SPI_CFG_INTERRUPT_RX I_RX, EC_SPI_CFG_INTERRUPT_ERROR I_ER, EC_SPI_CFG_DMA_TX_BUF DMATX, EC_SPI_CFG_DMA_RX_BUF DMARX, EC_SPI_CFG_CS CS, EC_SPI_CFG_SSM SSM, EC_SPI_CFG_SSM_MODE SSM_MODE >
 constexpr spi_cfg< MODE, POLAR, PHASE, NUM_LINE, ONE_LINE_MODE, FRAME, R_MODE, FORMAT,
                    BR_DEV, I_TX, I_RX, I_ER, DMATX, DMARX, CS, SSM, SSM_MODE >::spi_cfg() : spi_cfg_struct( {
     .c1_msk = this->c1_reg_msk_get(),
@@ -73,8 +73,8 @@ constexpr spi_cfg< MODE, POLAR, PHASE, NUM_LINE, ONE_LINE_MODE, FRAME, R_MODE, F
                        ( DMARX == EC_SPI_CFG_DMA_RX_BUF::ENABLED ),
                 "Invalid template parameter!The DMARX can be ON or OFF!" );
 
-        static_assert( ( CS == EC_SPI_CFG_SS::DISABLED ) ||
-                       ( CS == EC_SPI_CFG_SS::ENABLED ),
+        static_assert( ( CS == EC_SPI_CFG_CS::DISABLED ) ||
+                       ( CS == EC_SPI_CFG_CS::ENABLED ),
                 "Invalid template parameter!The CS can be DISABLED or ENABLED!" );
 
         /*
@@ -106,7 +106,7 @@ constexpr spi_cfg< MODE, POLAR, PHASE, NUM_LINE, ONE_LINE_MODE, FRAME, R_MODE, F
 
 template < EC_SPI_CFG_MODE MODE, EC_SPI_CFG_CLK_POLARITY POLAR, EC_SPI_CFG_CLK_PHASE PHASE, EC_SPI_CFG_NUMBER_LINE NUM_LINE, EC_SPI_CFG_ONE_LINE_MODE ONE_LINE_MODE,
            EC_SPI_CFG_DATA_FRAME FRAME, EC_SPI_CFG_RECEIVE_MODE R_MODE, EC_SPI_CFG_FRAME_FORMAT FORMAT, EC_SPI_CFG_BAUD_RATE_DEV BR_DEV, EC_SPI_CFG_INTERRUPT_TX I_TX,
-           EC_SPI_CFG_INTERRUPT_RX I_RX, EC_SPI_CFG_INTERRUPT_ERROR I_ER, EC_SPI_CFG_DMA_TX_BUF DMATX, EC_SPI_CFG_DMA_RX_BUF DMARX, EC_SPI_CFG_SS CS, EC_SPI_CFG_SSM SSM, EC_SPI_CFG_SSM_MODE SSM_MODE >
+           EC_SPI_CFG_INTERRUPT_RX I_RX, EC_SPI_CFG_INTERRUPT_ERROR I_ER, EC_SPI_CFG_DMA_TX_BUF DMATX, EC_SPI_CFG_DMA_RX_BUF DMARX, EC_SPI_CFG_CS CS, EC_SPI_CFG_SSM SSM, EC_SPI_CFG_SSM_MODE SSM_MODE >
 constexpr uint32_t spi_cfg< MODE, POLAR, PHASE, NUM_LINE, ONE_LINE_MODE, FRAME, R_MODE, FORMAT,
                             BR_DEV, I_TX, I_RX, I_ER, DMATX, DMARX, CS, SSM, SSM_MODE >::c1_reg_msk_get ( void ) {
     uint32_t msk = 0;
@@ -124,7 +124,7 @@ constexpr uint32_t spi_cfg< MODE, POLAR, PHASE, NUM_LINE, ONE_LINE_MODE, FRAME, 
 
 template < EC_SPI_CFG_MODE MODE, EC_SPI_CFG_CLK_POLARITY POLAR, EC_SPI_CFG_CLK_PHASE PHASE, EC_SPI_CFG_NUMBER_LINE NUM_LINE, EC_SPI_CFG_ONE_LINE_MODE ONE_LINE_MODE,
            EC_SPI_CFG_DATA_FRAME FRAME, EC_SPI_CFG_RECEIVE_MODE R_MODE, EC_SPI_CFG_FRAME_FORMAT FORMAT, EC_SPI_CFG_BAUD_RATE_DEV BR_DEV, EC_SPI_CFG_INTERRUPT_TX I_TX,
-           EC_SPI_CFG_INTERRUPT_RX I_RX, EC_SPI_CFG_INTERRUPT_ERROR I_ER, EC_SPI_CFG_DMA_TX_BUF DMATX, EC_SPI_CFG_DMA_RX_BUF DMARX, EC_SPI_CFG_SS CS, EC_SPI_CFG_SSM SSM, EC_SPI_CFG_SSM_MODE SSM_MODE >
+           EC_SPI_CFG_INTERRUPT_RX I_RX, EC_SPI_CFG_INTERRUPT_ERROR I_ER, EC_SPI_CFG_DMA_TX_BUF DMATX, EC_SPI_CFG_DMA_RX_BUF DMARX, EC_SPI_CFG_CS CS, EC_SPI_CFG_SSM SSM, EC_SPI_CFG_SSM_MODE SSM_MODE >
 constexpr uint32_t spi_cfg< MODE, POLAR, PHASE, NUM_LINE, ONE_LINE_MODE, FRAME, R_MODE, FORMAT,
                             BR_DEV, I_TX, I_RX, I_ER, DMATX, DMARX, CS, SSM, SSM_MODE >::c2_reg_msk_get ( void ) {
     uint32_t msk = 0;
@@ -139,7 +139,7 @@ constexpr uint32_t spi_cfg< MODE, POLAR, PHASE, NUM_LINE, ONE_LINE_MODE, FRAME, 
 }
 
 template < EC_SPI_NAME     SPIx, EC_SPI_CFG_CLK_POLARITY   POLAR, EC_SPI_CFG_CLK_PHASE PHASE, EC_SPI_CFG_NUMBER_LINE   NUM_LINE, EC_SPI_CFG_ONE_LINE_MODE  ONE_LINE_MODE, EC_SPI_CFG_DATA_FRAME    FRAME,
-           EC_SPI_CFG_FRAME_FORMAT FORMAT, EC_SPI_CFG_BAUD_RATE_DEV    BR_DEV, EC_SPI_CFG_SS   CS >
+           EC_SPI_CFG_FRAME_FORMAT FORMAT, EC_SPI_CFG_BAUD_RATE_DEV    BR_DEV, EC_SPI_CFG_CS   CS >
 constexpr spi_master_hardware< SPIx, POLAR, PHASE, NUM_LINE, ONE_LINE_MODE, FRAME, FORMAT, BR_DEV, CS >::spi_master_hardware( void ) {
     static_assert( ( SPIx == EC_SPI_NAME::SPI1 ) ||
                    ( SPIx == EC_SPI_NAME::SPI2 ) ||
@@ -156,20 +156,44 @@ int spi< SPIx >::spi_reinit ( uint8_t number_cfg ) const {
     S->S = 0;                                                       // Сбрасываем все флаги.
     S->C1 = cfg->c1_msk;    S->C2 = cfg->c2_msk;                    // Конфигурируем SPI.
     return 0;
-}
+}*/
 
-template < EC_SPI_NAME SPIx >
-void spi< SPIx >::spi_on ( void ) const {
+template < EC_SPI_NAME     SPIx, EC_SPI_CFG_CLK_POLARITY   POLAR, EC_SPI_CFG_CLK_PHASE PHASE, EC_SPI_CFG_NUMBER_LINE   NUM_LINE, EC_SPI_CFG_ONE_LINE_MODE  ONE_LINE_MODE, EC_SPI_CFG_DATA_FRAME    FRAME,
+           EC_SPI_CFG_FRAME_FORMAT FORMAT, EC_SPI_CFG_BAUD_RATE_DEV    BR_DEV, EC_SPI_CFG_CS   CS >
+void spi_master_hardware< SPIx, POLAR, PHASE, NUM_LINE, ONE_LINE_MODE, FRAME, FORMAT, BR_DEV, CS >::on ( void ) const {
     spi_registers_struct*   S = ( spi_registers_struct* )M_EC_TO_U32(SPIx);
     S->C1 |= M_EC_TO_U32(EC_C1_REG_BIT_MSK::SPE);                   // Запскаем SPI.
 }
 
-template < EC_SPI_NAME SPIx >
-void spi< SPIx >::spi_off ( void ) const {
+template < EC_SPI_NAME     SPIx, EC_SPI_CFG_CLK_POLARITY   POLAR, EC_SPI_CFG_CLK_PHASE PHASE, EC_SPI_CFG_NUMBER_LINE   NUM_LINE, EC_SPI_CFG_ONE_LINE_MODE  ONE_LINE_MODE, EC_SPI_CFG_DATA_FRAME    FRAME,
+           EC_SPI_CFG_FRAME_FORMAT FORMAT, EC_SPI_CFG_BAUD_RATE_DEV    BR_DEV, EC_SPI_CFG_CS   CS >
+void spi_master_hardware< SPIx, POLAR, PHASE, NUM_LINE, ONE_LINE_MODE, FRAME, FORMAT, BR_DEV, CS >::off ( void ) const {
     spi_registers_struct*   S = ( spi_registers_struct* )M_EC_TO_U32(SPIx);
-    S->C1 &= ~M_EC_TO_U32(EC_C1_REG_BIT_MSK::SPE);                  // Запскаем SPI.
+    S->C1 &= ~M_EC_TO_U32(EC_C1_REG_BIT_MSK::SPE);                  // Отключаем SPI.
 }
 
+template < EC_SPI_NAME     SPIx, EC_SPI_CFG_CLK_POLARITY   POLAR, EC_SPI_CFG_CLK_PHASE PHASE, EC_SPI_CFG_NUMBER_LINE   NUM_LINE, EC_SPI_CFG_ONE_LINE_MODE  ONE_LINE_MODE, EC_SPI_CFG_DATA_FRAME    FRAME,
+           EC_SPI_CFG_FRAME_FORMAT FORMAT, EC_SPI_CFG_BAUD_RATE_DEV    BR_DEV, EC_SPI_CFG_CS   CS >
+int spi_master_hardware< SPIx, POLAR, PHASE, NUM_LINE, ONE_LINE_MODE, FRAME, FORMAT, BR_DEV, CS >::tx ( uint8_t* p_array_tx, uint16_t length ) const {
+    (void)p_array_tx; (void)length;
+    return 0;
+}
+
+template < EC_SPI_NAME     SPIx, EC_SPI_CFG_CLK_POLARITY   POLAR, EC_SPI_CFG_CLK_PHASE PHASE, EC_SPI_CFG_NUMBER_LINE   NUM_LINE, EC_SPI_CFG_ONE_LINE_MODE  ONE_LINE_MODE, EC_SPI_CFG_DATA_FRAME    FRAME,
+           EC_SPI_CFG_FRAME_FORMAT FORMAT, EC_SPI_CFG_BAUD_RATE_DEV    BR_DEV, EC_SPI_CFG_CS   CS >
+int spi_master_hardware< SPIx, POLAR, PHASE, NUM_LINE, ONE_LINE_MODE, FRAME, FORMAT, BR_DEV, CS >::tx ( uint8_t* p_array_tx, uint8_t* p_array_rx, uint16_t length ) const {
+    (void)p_array_tx; (void)p_array_rx; (void)length;
+    return 0;
+}
+
+template < EC_SPI_NAME     SPIx, EC_SPI_CFG_CLK_POLARITY   POLAR, EC_SPI_CFG_CLK_PHASE PHASE, EC_SPI_CFG_NUMBER_LINE   NUM_LINE, EC_SPI_CFG_ONE_LINE_MODE  ONE_LINE_MODE, EC_SPI_CFG_DATA_FRAME    FRAME,
+           EC_SPI_CFG_FRAME_FORMAT FORMAT, EC_SPI_CFG_BAUD_RATE_DEV    BR_DEV, EC_SPI_CFG_CS   CS >
+int spi_master_hardware< SPIx, POLAR, PHASE, NUM_LINE, ONE_LINE_MODE, FRAME, FORMAT, BR_DEV, CS >::rx ( uint8_t* p_array_rx, uint16_t length, uint8_t out_value ) const {
+    (void)p_array_rx; (void)length; (void)out_value;
+    return 0;
+}
+
+/*
 template < EC_SPI_NAME SPIx >
 void spi< SPIx >::tx       ( uint16_t& data ) const {
     spi_registers_struct*   S = ( spi_registers_struct* )M_EC_TO_U32(SPIx);

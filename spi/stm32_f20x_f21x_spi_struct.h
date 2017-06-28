@@ -152,7 +152,7 @@ enum class EC_SPI_CFG_FRAME_FORMAT {
 /*
  * SS выход
  */
-enum class EC_SPI_CFG_SS {
+enum class EC_SPI_CFG_CS {
     DISABLED   = 0,
     ENABLED    = M_EC_TO_U32(EC_C2_REG_BIT_MSK::SSOE)
 };

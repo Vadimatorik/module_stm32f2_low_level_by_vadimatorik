@@ -54,7 +54,7 @@ template < EC_SPI_CFG_MODE              MODE,           /*
            EC_SPI_CFG_DMA_RX_BUF        DMARX,
 
            /* Если у нас мастер */
-           EC_SPI_CFG_SS                CS,             /*
+           EC_SPI_CFG_CS                CS,             /*
                                                          * Использовать ли аппаратный CS в режиме мастера?
                                                          */
 
@@ -158,7 +158,7 @@ template <  EC_SPI_NAME                  SPIx,
             EC_SPI_CFG_BAUD_RATE_DEV     BR_DEV,         /*
                                                           * Определяет делитель частоты передачи.
                                                           */
-            EC_SPI_CFG_SS                CS >            /*
+            EC_SPI_CFG_CS                CS >            /*
                                                           * Использовать ли аппаратный CS в режиме мастера?
                                                           */
 class spi_master_hardware : public spi_base {
@@ -166,18 +166,36 @@ public:
     constexpr spi_master_hardware ( void );
 
 //    int    spi_reinit              ( uint8_t number_cfg = 0 ) const;
+    int tx ( uint8_t* p_array_tx, uint16_t length ) const;
+    int tx ( uint8_t* p_array_tx, uint8_t* p_array_rx, uint16_t length ) const;
+    int rx ( uint8_t* p_array_rx, uint16_t length, uint8_t out_value = 0 ) const;
 
-    /*
-    void   spi_on   ( void ) const;
-    void   spi_off  ( void ) const;
-
+    void   on   ( void ) const;
+    void   off  ( void ) const;
+/*
     void   tx       ( uint16_t& data ) const;
     void   tx       ( uint8_t& data ) const;
     void   rx       ( uint16_t& data ) const;
     void   rx       ( uint8_t& data ) const;*/
 
 private:
-
+    const spi_cfg< EC_SPI_CFG_MODE::MASTER,
+                             EC_SPI_CFG_CLK_POLARITY    :: IDLE_0,
+                             EC_SPI_CFG_CLK_PHASE       :: FIRST,
+                             EC_SPI_CFG_NUMBER_LINE     :: LINE_2,
+                             EC_SPI_CFG_ONE_LINE_MODE   :: USE_2_LINE,
+                             EC_SPI_CFG_DATA_FRAME      :: FRAME_8_BIT,
+                             EC_SPI_CFG_RECEIVE_MODE    :: FULL_DUPLEX,
+                             EC_SPI_CFG_FRAME_FORMAT    :: TI,
+                             EC_SPI_CFG_BAUD_RATE_DEV   :: DEV_2,
+                             EC_SPI_CFG_INTERRUPT_TX    :: OFF,
+                             EC_SPI_CFG_INTERRUPT_RX    :: OFF,
+                             EC_SPI_CFG_INTERRUPT_ERROR :: OFF,
+                             EC_SPI_CFG_DMA_TX_BUF      :: ENABLED,
+                             EC_SPI_CFG_DMA_RX_BUF      :: ENABLED,
+                             EC_SPI_CFG_CS              :: DISABLED,
+                             EC_SPI_CFG_SSM             :: SSM_OFF,
+                             EC_SPI_CFG_SSM_MODE        :: NO_USE > cfg;
 };
 
 #include "stm32_f20x_f21x_spi_func.h"
