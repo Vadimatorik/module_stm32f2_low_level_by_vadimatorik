@@ -13,9 +13,9 @@
 
 constexpr pin::pin ( const pin_config_t* const pin_cfg_array ):
     p_bsr               ( this->p_bsr_get( pin_cfg_array ) ),
-    p_bb_odr_read       ( this->odr_bit_read_bb_p_get( pin_cfg_array ) ),
     bsr_set_msk         ( this->set_msk_get( pin_cfg_array ) ),
     bsr_reset_msk       ( this->reset_msk_get( pin_cfg_array ) ),
+    p_bb_odr_read       ( this->odr_bit_read_bb_p_get( pin_cfg_array ) ),
     p_bb_idr_read       ( this->bb_p_idr_read_get( pin_cfg_array ) ) {};
 
 /**********************************************************************
@@ -26,14 +26,14 @@ constexpr pin::pin ( const pin_config_t* const pin_cfg_array ):
  * Метод возвращает маску установки выхода в "1" через регистр BSR.
  */
 constexpr uint32_t pin::set_msk_get ( const pin_config_t* const pin_cfg_array ) {
-    return 1 << M_EC_TO_U8(pin_cfg_array->pin_name);
+    return 1 << ( M_EC_TO_U8(pin_cfg_array->pin_name ) );
 }
 
 /*
  * Метод возвращает маску установки выхода в "0" через регистр BSR.
  */
 constexpr uint32_t pin::reset_msk_get ( const pin_config_t* const pin_cfg_array ) {
-    return 1 << M_EC_TO_U8( pin_cfg_array->pin_name ) + 16;
+    return 1 << ( M_EC_TO_U8(pin_cfg_array->pin_name) + 16 );
 }
 
 /*

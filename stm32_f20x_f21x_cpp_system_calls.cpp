@@ -29,6 +29,7 @@ void _exit ( void ) {
  * Убиваем процесс ( заглушка ).
  */
 int _kill ( int pid, int sig ) {
+    (void)pid; (void)sig;
     errno = EINVAL;
     return -1;
 }
@@ -53,6 +54,7 @@ int _write ( char* buffer, uint32_t count ) {
  * Если имеется системный терминал, то считать из него данные.
  */
 int _read ( char* ptr, int len ) {
+    (void)ptr; (void)len;
     // Реализовать считывание!
     return 0;
 }
@@ -81,6 +83,7 @@ int _lseek( void ) {
  * файл терминалом.
  */
 int _isatty ( int file ) {
+    (void)file;
     return 1;
 }
 
@@ -98,6 +101,7 @@ int _getpid ( void ) {
  */
 int _execve ( char *name, char **argv, char **env )
 {
+    (void)name; (void)argv; (void)env;
     errno = ENOMEM;
     return -1;
 }
@@ -117,15 +121,16 @@ int _fork ( void ) {
  * ( Заглушка ).
  */
 
-clock_t _times(struct tms *buf) {
+clock_t _times( struct tms *buf ) {
+    (void)buf;
     return -1;
 }
 
 /*
  * Удаляем имя файла ( Загулшка ).
  */
-int _unlink(char *name)
-{
+int _unlink( char *name ) {
+    (void)name;
     errno = ENOENT;
     return -1;
 }
@@ -134,8 +139,8 @@ int _unlink(char *name)
  * Ожидание дочерних процессов.
  * ( Заглушка ).
  */
-int _wait(int *status)
-{
+int _wait( int *status ) {
+    (void)status;
     errno = ECHILD;
     return -1;
 }

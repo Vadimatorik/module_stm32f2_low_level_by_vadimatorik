@@ -102,9 +102,9 @@ E_ANSWER_PORT_SET_LOCK	global_port::set_locked_key_port ( EC_PORT_NAME port ) co
  */
 E_ANSWER_PORT_SET_LOCK	global_port::set_locked_keys_all_port() const {
     E_ANSWER_PORT_SET_LOCK answer = E_ANSWER_PORT_SET_LOCK::OK;			// Возвратим OK или error, если хоть в одном из портов будет ошибка.
-    for ( uint32_t loop_port; loop_port < STM32_F2_PORT_COUNT; loop_port++ ) {
+    for ( uint8_t loop_port = 0; loop_port < STM32_F2_PORT_COUNT; loop_port++ ) {
         if ( set_locked_key_port((EC_PORT_NAME)loop_port) == E_ANSWER_PORT_SET_LOCK::ERROR ) {
-            answer == E_ANSWER_PORT_SET_LOCK::ERROR;
+            answer = E_ANSWER_PORT_SET_LOCK::ERROR;
         };
     }
     return answer;
