@@ -94,7 +94,7 @@ public:
      * ЗАМЕЧАНИЕ: входной прием не ведется!
      */
 
-    virtual int tx ( uint8_t* p_array_tx, uint16_t length ) const = 0;
+    virtual int tx ( uint8_t* p_array_tx, uint16_t length, uint32_t timeout_ms ) const = 0;
 
     /*
      * p_array_tx   -   указатель на массив, который требуется передать
@@ -113,7 +113,7 @@ public:
      * принятые данные перезапишут входные.
      */
 
-    virtual int tx ( uint8_t* p_array_tx, uint8_t* p_array_rx, uint16_t length ) const = 0;
+    virtual int tx ( uint8_t* p_array_tx, uint8_t* p_array_rx, uint16_t length, uint32_t timeout_ms ) const = 0;
 
    /*
     * p_array_rx    -   указатель на массив, в который будет
@@ -125,9 +125,9 @@ public:
     * value_out     -   значение, которое будет отправляться
     *                   ( в случае, если SPI мастер ).
     */
-    virtual int rx ( uint8_t* p_array_rx, uint16_t length, uint8_t out_value = 0 ) const = 0;
+    virtual int rx ( uint8_t* p_array_rx, uint16_t length, uint32_t timeout_ms, uint8_t out_value = 0 ) const = 0;
 
-    virtual ~spi_base() {};
+    virtual ~spi_base() {}
 };
 
 /**********************************************************************
@@ -165,10 +165,10 @@ class spi_master_hardware : public spi_base {
 public:
     constexpr spi_master_hardware ( void );
 
-    int     spi_reinit              ( uint8_t number_cfg = 0 ) const;
-    int     tx                      ( uint8_t* p_array_tx, uint16_t length ) const;
-    int     tx                      ( uint8_t* p_array_tx, uint8_t* p_array_rx, uint16_t length ) const;
-    int     rx                      ( uint8_t* p_array_rx, uint16_t length, uint8_t out_value = 0 ) const;
+    int     reinit                  ( void ) const;
+    int     tx                      ( uint8_t* p_array_tx, uint16_t length, uint32_t timeout_ms ) const;
+    int     tx                      ( uint8_t* p_array_tx, uint8_t* p_array_rx, uint16_t length, uint32_t timeout_ms ) const;
+    int     rx                      ( uint8_t* p_array_rx, uint16_t length, uint32_t timeout_ms, uint8_t out_value = 0 ) const;
 
     void   on   ( void ) const;
     void   off  ( void ) const;
@@ -192,7 +192,7 @@ private:
                         ( ( NUM_LINE == EC_SPI_CFG_NUMBER_LINE::LINE_1 ) && ( ONE_LINE_MODE == EC_SPI_CFG_ONE_LINE_MODE::TRANSMIT_ONLY ) ) ) ?
                             EC_SPI_CFG_INTERRUPT_TX::ON : EC_SPI_CFG_INTERRUPT_TX::OFF,
 
-                   // Таже тема с TX и RX.
+                   // Та же тема и с RX.
                    ( ( NUM_LINE == EC_SPI_CFG_NUMBER_LINE::LINE_2 ) ||
                         ( ( NUM_LINE == EC_SPI_CFG_NUMBER_LINE::LINE_1 ) && ( ONE_LINE_MODE == EC_SPI_CFG_ONE_LINE_MODE::RECEIVE_ONLY ) ) ) ?
                             EC_SPI_CFG_INTERRUPT_RX::ON : EC_SPI_CFG_INTERRUPT_RX::OFF,
