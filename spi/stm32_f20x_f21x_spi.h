@@ -170,8 +170,8 @@ public:
     int     tx                      ( uint8_t* p_array_tx, uint8_t* p_array_rx, uint16_t length, uint32_t timeout_ms ) const;
     int     rx                      ( uint8_t* p_array_rx, uint16_t length, uint32_t timeout_ms, uint8_t out_value = 0 ) const;
 
-    void   on   ( void ) const;
-    void   off  ( void ) const;
+    void    on   ( void ) const;
+    void    off  ( void ) const;
 
 private:
     mutable USER_OS_MUTEX       mutex       = USER_OS_CREATE_MUTEX_FUNC();              // Для предотвращения попытки использовать

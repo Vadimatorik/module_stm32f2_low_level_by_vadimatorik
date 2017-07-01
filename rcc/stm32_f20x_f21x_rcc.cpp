@@ -139,56 +139,64 @@ void rcc::flash_ac_set ( uint8_t &number_cfg ) const {
  * Метод проверят, включен ли основной PLL.
  */
 EC_ANSWER_PLL_STATUS rcc::pll_main_status_get ( void ) {
-    return ( *M_U32_TO_P(M_GET_BB_P_PER(  (uint32_t)&RCC->C, M_EC_TO_U8(EC_C_REG_BIT_MSK::PLLON))) ) ? EC_ANSWER_PLL_STATUS::PLL_ON : EC_ANSWER_PLL_STATUS::PLL_OFF;
+    volatile uint32_t result = *M_U32_TO_P(M_GET_BB_P_PER((uint32_t)&RCC->C, M_EC_TO_U8(EC_C_REG_BIT_MSK::PLLON)));
+    return ( result ) ? EC_ANSWER_PLL_STATUS::PLL_ON : EC_ANSWER_PLL_STATUS::PLL_OFF;
 }
 
 /*
  * Метод проверят, включен ли I2S PLL.
  */
 EC_ANSWER_PLL_STATUS rcc::pll_i2s_status_get ( void ) {
-    return ( *M_U32_TO_P(M_GET_BB_P_PER(  (uint32_t)&RCC->C, M_EC_TO_U8(EC_C_REG_BIT_MSK::PLLI2SON))) ) ? EC_ANSWER_PLL_STATUS::PLL_ON : EC_ANSWER_PLL_STATUS::PLL_OFF;
+    volatile uint32_t result = *M_U32_TO_P(M_GET_BB_P_PER((uint32_t)&RCC->C, M_EC_TO_U8(EC_C_REG_BIT_MSK::PLLI2SON)));
+    return ( result ) ? EC_ANSWER_PLL_STATUS::PLL_ON : EC_ANSWER_PLL_STATUS::PLL_OFF;
 }
 
 /*
  * Метод проверяет, стабилизировалась ли частота на основном PLL.
  */
 EC_ANSWER_PLL_READY_FLAG rcc::pll_main_clock_ready_flag_get ( void ) {
-    return ( *M_U32_TO_P(M_GET_BB_P_PER(  (uint32_t)&RCC->C, M_EC_TO_U8(EC_C_REG_BIT_FIELD_POS::PLLRDY))) ) ? EC_ANSWER_PLL_READY_FLAG::LOCKED : EC_ANSWER_PLL_READY_FLAG::PLL_UNLOCKED;
+    volatile uint32_t result = *M_U32_TO_P(M_GET_BB_P_PER((uint32_t)&RCC->C, M_EC_TO_U8(EC_C_REG_BIT_FIELD_POS::PLLRDY)));
+    return ( result ) ? EC_ANSWER_PLL_READY_FLAG::LOCKED : EC_ANSWER_PLL_READY_FLAG::PLL_UNLOCKED;
 }
 
 /*
  * Метод проверяет, стабилизировалась ли частота на I2S PLL.
  */
 EC_ANSWER_PLL_READY_FLAG rcc::pll_i2s_clock_ready_flag_get ( void ) {
-    return ( *M_U32_TO_P(M_GET_BB_P_PER(  (uint32_t)&RCC->C, M_EC_TO_U8(EC_C_REG_BIT_FIELD_POS::PLLI2SRDY))) ) ? EC_ANSWER_PLL_READY_FLAG::LOCKED : EC_ANSWER_PLL_READY_FLAG::PLL_UNLOCKED;
+    volatile uint32_t result = *M_U32_TO_P(M_GET_BB_P_PER((uint32_t)&RCC->C, M_EC_TO_U8(EC_C_REG_BIT_FIELD_POS::PLLI2SRDY)));
+    return ( result ) ? EC_ANSWER_PLL_READY_FLAG::LOCKED : EC_ANSWER_PLL_READY_FLAG::PLL_UNLOCKED;
 }
 
 /*
  * Метод проверяет, включен ли внешний источник тактового сигнала или нет.
  */
 EC_ANSWER_OSCILLATOR_STATUS rcc::hse_clock_status_get ( void ) {
-    return ( *M_U32_TO_P(M_GET_BB_P_PER(  (uint32_t)&RCC->C, M_EC_TO_U8(EC_C_REG_BIT_FIELD_POS::HSEON))) ) ? EC_ANSWER_OSCILLATOR_STATUS::ON : EC_ANSWER_OSCILLATOR_STATUS::OFF;
+    volatile uint32_t result = *M_U32_TO_P(M_GET_BB_P_PER((uint32_t)&RCC->C, M_EC_TO_U8(EC_C_REG_BIT_FIELD_POS::HSEON)));
+    return ( result ) ? EC_ANSWER_OSCILLATOR_STATUS::ON : EC_ANSWER_OSCILLATOR_STATUS::OFF;
 }
 
 /*
  * Метод проверяет, включен ли внутренний источник тактового сигнала или нет.
  */
 EC_ANSWER_OSCILLATOR_STATUS rcc::hsi_clock_status_get ( void ) {
-    return ( *M_U32_TO_P(M_GET_BB_P_PER(  (uint32_t)&RCC->C, M_EC_TO_U8(EC_C_REG_BIT_FIELD_POS::HSION))) ) ? EC_ANSWER_OSCILLATOR_STATUS::ON : EC_ANSWER_OSCILLATOR_STATUS::OFF;
+    volatile uint32_t result = *M_U32_TO_P(M_GET_BB_P_PER((uint32_t)&RCC->C, M_EC_TO_U8(EC_C_REG_BIT_FIELD_POS::HSION)));
+    return ( result ) ? EC_ANSWER_OSCILLATOR_STATUS::ON : EC_ANSWER_OSCILLATOR_STATUS::OFF;
 }
 
 /*
  * Метод проверяет, готов ли внешний источник тактового сигнала стать источникм тактирования.
  */
 EC_ANSWER_OSCILLATOR_STATE rcc::hse_clock_ready_flag_get ( void ) {
-    return ( *M_U32_TO_P(M_GET_BB_P_PER(  (uint32_t)&RCC->C, M_EC_TO_U8(EC_C_REG_BIT_FIELD_POS::HSERDY))) ) ? EC_ANSWER_OSCILLATOR_STATE::READY : EC_ANSWER_OSCILLATOR_STATE::NOT_READY;
+    volatile uint32_t result = *M_U32_TO_P(M_GET_BB_P_PER((uint32_t)&RCC->C, M_EC_TO_U8(EC_C_REG_BIT_FIELD_POS::HSERDY)));
+    return ( result ) ? EC_ANSWER_OSCILLATOR_STATE::READY : EC_ANSWER_OSCILLATOR_STATE::NOT_READY;
 }
 
 /*
  * Метод проверяет, готов ли внутренний источник тактирования сигнала стать источникм тактирования.
  */
 EC_ANSWER_OSCILLATOR_STATE rcc::hsi_clock_ready_flag_get ( void ) {
-    return ( *M_U32_TO_P(M_GET_BB_P_PER( (uint32_t)&RCC->C, M_EC_TO_U8(EC_C_REG_BIT_FIELD_POS::HSIRDY))) ) ? EC_ANSWER_OSCILLATOR_STATE::READY : EC_ANSWER_OSCILLATOR_STATE::NOT_READY;
+    volatile uint32_t result = *M_U32_TO_P(M_GET_BB_P_PER((uint32_t)&RCC->C, M_EC_TO_U8(EC_C_REG_BIT_FIELD_POS::HSIRDY)));
+    return ( result ) ? EC_ANSWER_OSCILLATOR_STATE::READY : EC_ANSWER_OSCILLATOR_STATE::NOT_READY;
 }
 
 EC_ANSWER_CLOCK_UPDATE rcc::hse_sysclk_src_clock_set ( uint8_t number_dev_cfg ) const {
