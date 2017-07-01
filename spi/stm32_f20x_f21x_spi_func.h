@@ -138,6 +138,10 @@ constexpr uint32_t spi_cfg< MODE, POLAR, PHASE, NUM_LINE, ONE_LINE_MODE, FRAME, 
     return msk;
 };
 
+
+/*
+ * Реализация SPI на прерываниях через ОС.
+ */
 template < EC_SPI_NAME     SPIx, EC_SPI_CFG_CLK_POLARITY   POLAR, EC_SPI_CFG_CLK_PHASE PHASE, EC_SPI_CFG_NUMBER_LINE   NUM_LINE, EC_SPI_CFG_ONE_LINE_MODE  ONE_LINE_MODE, EC_SPI_CFG_DATA_FRAME    FRAME,
            EC_SPI_CFG_FRAME_FORMAT FORMAT, EC_SPI_CFG_BAUD_RATE_DEV    BR_DEV, EC_SPI_CFG_CS   CS >
 constexpr spi_master_hardware< SPIx, POLAR, PHASE, NUM_LINE, ONE_LINE_MODE, FRAME, FORMAT, BR_DEV, CS >::spi_master_hardware( void ) {
@@ -151,10 +155,11 @@ template < EC_SPI_NAME     SPIx, EC_SPI_CFG_CLK_POLARITY   POLAR, EC_SPI_CFG_CLK
            EC_SPI_CFG_FRAME_FORMAT FORMAT, EC_SPI_CFG_BAUD_RATE_DEV    BR_DEV, EC_SPI_CFG_CS   CS >
 int spi_master_hardware< SPIx, POLAR, PHASE, NUM_LINE, ONE_LINE_MODE, FRAME, FORMAT, BR_DEV, CS >::reinit ( void ) const {
     spi_registers_struct*   S = ( spi_registers_struct* )M_EC_TO_U32(SPIx);
-    S->C1   = 0;                        // Отключаем SPI.
-    S->S    = 0;                        // Сбрасываем все флаги.
-    S->C1   = this->cfg.c1_msk;         // Конфигурируем SPI.
-    S->C2   = this->cfg.c2_msk;
+    S->C1   =   0;                        // Отключаем SPI.
+    S->S    =   0;                        // Сбрасываем все флаги.
+    S->C1   =   this->cfg.c1_msk;         // Конфигурируем SPI.
+    S->C2   =   this->cfg.c2_msk;
+    this->on();
     return 0;
 }
 

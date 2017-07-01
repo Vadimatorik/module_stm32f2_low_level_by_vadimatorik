@@ -174,10 +174,10 @@ public:
     void   off  ( void ) const;
 
 private:
-    mutable SemaphoreHandle_t   mutex                   = xSemaphoreCreateMutex();                  // Для предотвращения попытки использовать
-                                                                                                    // 1 SPI из разных потоков одновременно.
-    mutable SemaphoreHandle_t   semaphore               = xSemaphoreCreateBinary();                 // Сигнализирует об успешной передаче или
-                                                                                                    // приеме ).
+    mutable USER_OS_MUTEX       mutex       = USER_OS_CREATE_MUTEX_FUNC();              // Для предотвращения попытки использовать
+                                                                                        // 1 SPI из разных потоков одновременно.
+    mutable USER_OS_SEMAPHORE   semaphore   = USER_OS_CREATE_SEMAPHORE_FUNC();          // Сигнализирует об успешной передаче или
+                                                                                        // приеме ).
 
     const spi_cfg< EC_SPI_CFG_MODE::MASTER,
                    POLAR, PHASE, NUM_LINE, ONE_LINE_MODE, FRAME,
