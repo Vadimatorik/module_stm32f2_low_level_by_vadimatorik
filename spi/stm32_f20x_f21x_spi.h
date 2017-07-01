@@ -180,29 +180,29 @@ private:
                                                                                         // приеме ).
 
     const spi_cfg< EC_SPI_CFG_MODE::MASTER,
-                   POLAR, PHASE, NUM_LINE, ONE_LINE_MODE, FRAME,
-                   EC_SPI_CFG_RECEIVE_MODE    :: FULL_DUPLEX,
-                   FORMAT, BR_DEV,
+                POLAR, PHASE, NUM_LINE, ONE_LINE_MODE, FRAME,
+                EC_SPI_CFG_RECEIVE_MODE    :: FULL_DUPLEX,
+                FORMAT, BR_DEV,
 
-                   /*
-                    * Выставляем разрешение прерывания по опустошению выходного буффера, если
-                    * у нас используются обе линии или же одна в режиме выхода.
-                    */
-                   ( ( NUM_LINE == EC_SPI_CFG_NUMBER_LINE::LINE_2 ) ||
-                        ( ( NUM_LINE == EC_SPI_CFG_NUMBER_LINE::LINE_1 ) && ( ONE_LINE_MODE == EC_SPI_CFG_ONE_LINE_MODE::TRANSMIT_ONLY ) ) ) ?
-                            EC_SPI_CFG_INTERRUPT_TX::ON : EC_SPI_CFG_INTERRUPT_TX::OFF,
+                /*
+                 * Выставляем разрешение прерывания по опустошению выходного буффера, если
+                 * у нас используются обе линии или же одна в режиме выхода.
+                 */
+                ( ( NUM_LINE == EC_SPI_CFG_NUMBER_LINE::LINE_2 ) ||
+                  ( ( NUM_LINE == EC_SPI_CFG_NUMBER_LINE::LINE_1 ) && ( ONE_LINE_MODE == EC_SPI_CFG_ONE_LINE_MODE::TRANSMIT_ONLY ) ) ) ?
+                    EC_SPI_CFG_INTERRUPT_TX::ON : EC_SPI_CFG_INTERRUPT_TX::OFF,
 
-                   // Та же тема и с RX.
-                   ( ( NUM_LINE == EC_SPI_CFG_NUMBER_LINE::LINE_2 ) ||
-                        ( ( NUM_LINE == EC_SPI_CFG_NUMBER_LINE::LINE_1 ) && ( ONE_LINE_MODE == EC_SPI_CFG_ONE_LINE_MODE::RECEIVE_ONLY ) ) ) ?
-                            EC_SPI_CFG_INTERRUPT_RX::ON : EC_SPI_CFG_INTERRUPT_RX::OFF,
+                // Та же тема и с RX.
+                ( ( NUM_LINE == EC_SPI_CFG_NUMBER_LINE::LINE_2 ) ||
+                  ( ( NUM_LINE == EC_SPI_CFG_NUMBER_LINE::LINE_1 ) && ( ONE_LINE_MODE == EC_SPI_CFG_ONE_LINE_MODE::RECEIVE_ONLY ) ) ) ?
+                      EC_SPI_CFG_INTERRUPT_RX::ON : EC_SPI_CFG_INTERRUPT_RX::OFF,
 
-                   EC_SPI_CFG_INTERRUPT_ERROR :: ON,
-                   EC_SPI_CFG_DMA_TX_BUF      :: DISABLED,
-                   EC_SPI_CFG_DMA_RX_BUF      :: DISABLED,
-                   CS,
-                   EC_SPI_CFG_SSM             :: SSM_OFF,
-                   EC_SPI_CFG_SSM_MODE        :: NO_USE > cfg;
+                EC_SPI_CFG_INTERRUPT_ERROR :: ON,
+                EC_SPI_CFG_DMA_TX_BUF      :: DISABLED,
+                EC_SPI_CFG_DMA_RX_BUF      :: DISABLED,
+                CS,
+                EC_SPI_CFG_SSM             :: SSM_OFF,
+                EC_SPI_CFG_SSM_MODE        :: NO_USE > cfg;
 };
 
 #include "stm32_f20x_f21x_spi_func.h"
