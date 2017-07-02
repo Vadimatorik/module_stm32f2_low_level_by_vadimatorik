@@ -5,6 +5,8 @@
 #ifdef MODULE_SPI
 
 #include "stm32_f20x_f21x_spi_struct.h"
+#include <iostream>
+#include <type_traits>
 
 /**********************************************************************
  * Область template оболочек.
@@ -161,48 +163,86 @@ template <  EC_SPI_NAME                  SPIx,
             EC_SPI_CFG_CS                CS >            /*
                                                           * Использовать ли аппаратный CS в режиме мастера?
                                                           */
-class spi_master_hardware : public spi_base {
+class spi_master_hardware_os : public spi_base {
 public:
-    constexpr spi_master_hardware ( void );
+    constexpr spi_master_hardware_os ( void );
 
     int     reinit                  ( void ) const;
     int     tx                      ( uint8_t* p_array_tx, uint16_t length, uint32_t timeout_ms ) const;
     int     tx                      ( uint8_t* p_array_tx, uint8_t* p_array_rx, uint16_t length, uint32_t timeout_ms ) const;
     int     rx                      ( uint8_t* p_array_rx, uint16_t length, uint32_t timeout_ms, uint8_t out_value = 0 ) const;
 
-    void    on   ( void ) const;
-    void    off  ( void ) const;
+    void    on                      ( void ) const;
+    void    off                     ( void ) const;
+
+    void    handler                 ( void ) const;
 
 private:
-    mutable USER_OS_MUTEX       mutex       = USER_OS_CREATE_MUTEX_FUNC();              // Для предотвращения попытки использовать
-                                                                                        // 1 SPI из разных потоков одновременно.
-    mutable USER_OS_SEMAPHORE   semaphore   = USER_OS_CREATE_SEMAPHORE_FUNC();          // Сигнализирует об успешной передаче или
-                                                                                        // приеме ).
+    // Считать флаг опустошения буфера на передачу (1 - пустой).
+    uint32_t    tx_e_flag_get       ( void ) const;
+    // Считать флаг не пустого приема (1 - есть данные в буфере).
+    uint32_t    rx_n_e_flag_get     ( void ) const;
+
+    // Для предотвращения попытки использовать 1 SPI из разных потоков одновременно.
+    mutable USER_OS_STATIC_MUTEX_BUFFER     mutex_buf;
+    mutable USER_OS_STATIC_MUTEX            mutex = NULL;
+
+    // Сигнализирует об успешной передаче или приеме.
+    mutable USER_OS_STATIC_BIN_SEMAPHORE_BUFFER semaphore_buf;
+    mutable USER_OS_STATIC_BIN_SEMAPHORE        semaphore = NULL;
+
+    typedef typename std::conditional< FRAME == EC_SPI_CFG_DATA_FRAME::FRAME_8_BIT, uint8_t, uint16_t>::type spi_frame_size;
+    mutable spi_frame_size* p_tx = nullptr;
+    mutable spi_frame_size* p_rx = nullptr;
+
+    /*
+     * Используется в прерывании SPI. Если true, то прерывание следует обработать.
+     * Если нет, то просто сбрасываем флаги, если требуется,
+     * очищаем DR (считываем их него)  и выходим.
+     * false - обработка прерыванием не требуется.
+     * true - обработка обязательна.
+     */
+    mutable bool processing_handler_cfg_flag = false;
+
+    // Копировать в буффер данные, если они пришли?
+    // В случае, если true, данные будут писаться
+    // последовательно в массив согласно разрядности
+    // SPI ( 8 или 16 бит ).
+    mutable bool handler_rx_copy_cfg_flag = false;
+
+    // Смещать указатель на данные для передачи?
+    // Если true, то смещаем.
+    // Если false, то передаем одно и то же ( для режима приема,
+    // когда нужно слать 1 и то же значение и только принимать ).
+    mutable bool handler_tx_point_inc_cfg_flag = false;
+
+    // Колличество осташихся транзакций.
+    mutable uint32_t number_items = 0;
 
     const spi_cfg< EC_SPI_CFG_MODE::MASTER,
-                POLAR, PHASE, NUM_LINE, ONE_LINE_MODE, FRAME,
-                EC_SPI_CFG_RECEIVE_MODE    :: FULL_DUPLEX,
-                FORMAT, BR_DEV,
+                   POLAR, PHASE, NUM_LINE, ONE_LINE_MODE, FRAME,
+                   EC_SPI_CFG_RECEIVE_MODE    :: FULL_DUPLEX,
+                   FORMAT, BR_DEV,
 
-                /*
-                 * Выставляем разрешение прерывания по опустошению выходного буффера, если
-                 * у нас используются обе линии или же одна в режиме выхода.
-                 */
-                ( ( NUM_LINE == EC_SPI_CFG_NUMBER_LINE::LINE_2 ) ||
-                  ( ( NUM_LINE == EC_SPI_CFG_NUMBER_LINE::LINE_1 ) && ( ONE_LINE_MODE == EC_SPI_CFG_ONE_LINE_MODE::TRANSMIT_ONLY ) ) ) ?
-                    EC_SPI_CFG_INTERRUPT_TX::ON : EC_SPI_CFG_INTERRUPT_TX::OFF,
+                   /*
+                    * Выставляем разрешение прерывания по опустошению выходного буффера, если
+                    * у нас используются обе линии или же одна в режиме выхода.
+                    */
+                   ( ( NUM_LINE == EC_SPI_CFG_NUMBER_LINE::LINE_2 ) ||
+                     ( ( NUM_LINE == EC_SPI_CFG_NUMBER_LINE::LINE_1 ) && ( ONE_LINE_MODE == EC_SPI_CFG_ONE_LINE_MODE::TRANSMIT_ONLY ) ) ) ?
+                       EC_SPI_CFG_INTERRUPT_TX::ON : EC_SPI_CFG_INTERRUPT_TX::OFF,
 
-                // Та же тема и с RX.
-                ( ( NUM_LINE == EC_SPI_CFG_NUMBER_LINE::LINE_2 ) ||
-                  ( ( NUM_LINE == EC_SPI_CFG_NUMBER_LINE::LINE_1 ) && ( ONE_LINE_MODE == EC_SPI_CFG_ONE_LINE_MODE::RECEIVE_ONLY ) ) ) ?
-                      EC_SPI_CFG_INTERRUPT_RX::ON : EC_SPI_CFG_INTERRUPT_RX::OFF,
+                   // Та же тема и с RX.
+                   ( ( NUM_LINE == EC_SPI_CFG_NUMBER_LINE::LINE_2 ) ||
+                     ( ( NUM_LINE == EC_SPI_CFG_NUMBER_LINE::LINE_1 ) && ( ONE_LINE_MODE == EC_SPI_CFG_ONE_LINE_MODE::RECEIVE_ONLY ) ) ) ?
+                       EC_SPI_CFG_INTERRUPT_RX::ON : EC_SPI_CFG_INTERRUPT_RX::OFF,
 
-                EC_SPI_CFG_INTERRUPT_ERROR :: ON,
-                EC_SPI_CFG_DMA_TX_BUF      :: DISABLED,
-                EC_SPI_CFG_DMA_RX_BUF      :: DISABLED,
-                CS,
-                EC_SPI_CFG_SSM             :: SSM_OFF,
-                EC_SPI_CFG_SSM_MODE        :: NO_USE > cfg;
+                   EC_SPI_CFG_INTERRUPT_ERROR :: ON,
+                   EC_SPI_CFG_DMA_TX_BUF      :: DISABLED,
+                   EC_SPI_CFG_DMA_RX_BUF      :: DISABLED,
+                   CS,
+                   EC_SPI_CFG_SSM             :: SSM_OFF,
+                   EC_SPI_CFG_SSM_MODE        :: NO_USE > cfg;
 };
 
 #include "stm32_f20x_f21x_spi_func.h"
