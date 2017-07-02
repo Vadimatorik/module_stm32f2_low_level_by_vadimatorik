@@ -139,7 +139,7 @@ void rcc::flash_ac_set ( uint8_t &number_cfg ) const {
  * Метод проверят, включен ли основной PLL.
  */
 EC_ANSWER_PLL_STATUS rcc::pll_main_status_get ( void ) {
-    volatile uint32_t result = *M_U32_TO_P(M_GET_BB_P_PER((uint32_t)&RCC->C, M_EC_TO_U8(EC_C_REG_BIT_MSK::PLLON)));
+    volatile uint32_t result = *M_U32_TO_P(M_GET_BB_P_PER((uint32_t)&RCC->C, M_EC_TO_U8(EC_C_REG_BIT_FIELD_POS::PLLON)));
     return ( result ) ? EC_ANSWER_PLL_STATUS::PLL_ON : EC_ANSWER_PLL_STATUS::PLL_OFF;
 }
 
@@ -147,7 +147,7 @@ EC_ANSWER_PLL_STATUS rcc::pll_main_status_get ( void ) {
  * Метод проверят, включен ли I2S PLL.
  */
 EC_ANSWER_PLL_STATUS rcc::pll_i2s_status_get ( void ) {
-    volatile uint32_t result = *M_U32_TO_P(M_GET_BB_P_PER((uint32_t)&RCC->C, M_EC_TO_U8(EC_C_REG_BIT_MSK::PLLI2SON)));
+    volatile uint32_t result = *M_U32_TO_P(M_GET_BB_P_PER((uint32_t)&RCC->C, M_EC_TO_U8(EC_C_REG_BIT_FIELD_POS::PLLI2SON)));
     return ( result ) ? EC_ANSWER_PLL_STATUS::PLL_ON : EC_ANSWER_PLL_STATUS::PLL_OFF;
 }
 
