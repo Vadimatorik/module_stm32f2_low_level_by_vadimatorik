@@ -172,8 +172,8 @@ uint32_t spi_master_hardware_os< SPIx, POLAR, PHASE, NUM_LINE, ONE_LINE_MODE, FR
 template < EC_SPI_NAME     SPIx, EC_SPI_CFG_CLK_POLARITY   POLAR, EC_SPI_CFG_CLK_PHASE PHASE, EC_SPI_CFG_NUMBER_LINE   NUM_LINE, EC_SPI_CFG_ONE_LINE_MODE  ONE_LINE_MODE, EC_SPI_CFG_DATA_FRAME    FRAME,
            EC_SPI_CFG_FRAME_FORMAT FORMAT, EC_SPI_CFG_BAUD_RATE_DEV    BR_DEV, EC_SPI_CFG_CS   CS >
 int spi_master_hardware_os< SPIx, POLAR, PHASE, NUM_LINE, ONE_LINE_MODE, FRAME, FORMAT, BR_DEV, CS >::reinit ( void ) const {
-    this->mutex = USER_OS_CREATE_STATIC_MUTEX_CREATE( &this->mutex_buf );
-    this->semaphore = USER_OS_CREATE_STATIC_BIN_SEMAPHORE_CREATE( &this->semaphore_buf );
+    this->mutex = USER_OS_STATIC_MUTEX_CREATE( &this->mutex_buf );
+    this->semaphore = USER_OS_STATIC_BIN_SEMAPHORE_CREATE( &this->semaphore_buf );
 
     spi_registers_struct*   S = ( spi_registers_struct* )M_EC_TO_U32(SPIx);
     S->C1   =   0;                        // Отключаем SPI.
@@ -239,14 +239,26 @@ void spi_master_hardware_os< SPIx, POLAR, PHASE, NUM_LINE, ONE_LINE_MODE, FRAME,
          * RX решим, что передача закончена и нужно отдать симафор.
          * Так мы потеряем одну транзакцию.
          */
-        if ( this->rx_n_e_flag_get() == 1 ) {                                       // Если пришли данные.
-            *p_rx = S->D;                                                           // Забираем себе.
-            p_rx++;                                                                 // В сл. раз кладем в сл. ячейку ( разрядность учитывается на этапе компиляции ).
-            if ( this->number_items == 0 ) {                                        // Если передача завершена - отдаем семафор.
 
+    // Если SPI планиурется использовать на прием или чисто на прием.
+    if ( NUM_LINE == EC_SPI_CFG_NUMBER_LINE::LINE_2 ) {
+        if ( this->rx_n_e_flag_get() == 1 ) {                                       // Если пришли данные.
+            if ( handler_rx_copy_cfg_flag == true ) {                               // Если мы копируем данные куда-то себе.
+                *p_rx = S->D;                                                       // Забираем себе.
+                p_rx++;                                                             // В сл. раз кладем в сл. ячейку ( разрядность учитывается на этапе компиляции ).
+                if ( this->number_items == 0 ) {                                    // Если передача завершена - отдаем семафор.
+                    USER_OS_PRIO_TASK_WOKEN     prio;
+                    USER_OS_GIVE_BIN_SEMAPHORE_FROM_ISR( &this->semaphore, &prio );
+                }
             }
         }
+    } else if ( ONE_LINE_MODE == EC_SPI_CFG_ONE_LINE_MODE::RECEIVE_ONLY ) {
+        // Тут дописать, когда только на прием. Пока ни к спеху.
+        while( true ) {};
+    }
 
+    // Если линия прием-передача или только на передачу.
+    if ( NUM_LINE == EC_SPI_CFG_NUMBER_LINE::LINE_2 ) {
         if ( this->tx_e_flag_get() == 1 ) {                                         // Если буфер на передачу пуст.
             if ( this->number_items != 0 ) {                                        // Если мы еще должны что-то передавать.
                 S->D = *p_tx;                                                       // Ставим на передачу (разрядность учитывается на этапе компиляции).
@@ -257,6 +269,9 @@ void spi_master_hardware_os< SPIx, POLAR, PHASE, NUM_LINE, ONE_LINE_MODE, FRAME,
             }
         }
         S->S = 0;                      // СбрасываФем флаги.
+    } else {    // Если только передача сюда дописать!
+        while( true ) {};
+    }
     }
 }
 
