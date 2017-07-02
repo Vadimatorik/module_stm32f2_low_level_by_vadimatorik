@@ -82,6 +82,31 @@ enum class EC_C2_REG_BIT_MSK {
     TXEIE       = 1  << M_EC_TO_U8(EC_C2_REG_BIT_FIELD_POS::TXEIE)
 };
 
+enum class EC_S_REG_BIT_FIELD_POS {
+    RXNE        = 0,
+    TXE         = 1,
+    CHSIDE      = 2,
+    UDR         = 3,
+    CRCERR      = 4,
+    MODF        = 5,
+    OVR         = 6,
+    BSY         = 7,
+    TIFRFE      = 8
+};
+
+enum class EC_S_REG_BIT_MSK {
+    RXNE        = 1  << M_EC_TO_U8(EC_S_REG_BIT_FIELD_POS::RXNE),
+    TXE         = 1  << M_EC_TO_U8(EC_S_REG_BIT_FIELD_POS::TXE),
+    CHSIDE      = 1  << M_EC_TO_U8(EC_S_REG_BIT_FIELD_POS::CHSIDE),
+    UDR         = 1  << M_EC_TO_U8(EC_S_REG_BIT_FIELD_POS::UDR),
+    CRCERR      = 1  << M_EC_TO_U8(EC_S_REG_BIT_FIELD_POS::CRCERR),
+    MODF        = 1  << M_EC_TO_U8(EC_S_REG_BIT_FIELD_POS::MODF),
+    OVR         = 1  << M_EC_TO_U8(EC_S_REG_BIT_FIELD_POS::OVR),
+    BSY         = 1  << M_EC_TO_U8(EC_S_REG_BIT_FIELD_POS::BSY),
+    TIFRFE      = 1  << M_EC_TO_U8(EC_S_REG_BIT_FIELD_POS::TIFRFE)
+};
+
+
 /*
  * Мастер/ведомый.
  */
