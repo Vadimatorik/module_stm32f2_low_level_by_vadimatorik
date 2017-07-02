@@ -88,18 +88,21 @@
 //**********************************************************************
 //                    Для связи с используемой OS.
 //**********************************************************************
-// Метод должен создать и вернуть mutex.
-// В случае с FreeRTOS - xSemaphoreCreateMutex()
-#define USER_OS_CREATE_MUTEX_FUNC()         xSemaphoreCreateMutex()
-// Тип mutex. В случае с FreeRTOS - SemaphoreHandle_t
-#define USER_OS_MUTEX                       SemaphoreHandle_t
 
-// Симафор в ОС пользователя. В случае с FreeRTOS - SemaphoreHandle_t
-#define USER_OS_SEMAPHORE                   SemaphoreHandle_t
+// Тип переменной-буфера, в которую будет создан mutex.
+#define USER_OS_STATIC_MUTEX_BUFFER                         StaticSemaphore_t
+// Тип переменной mutex-а, который будет создан статически и в него будут помещены данные.
+#define USER_OS_STATIC_MUTEX                                SemaphoreHandle_t
+// Метод должен создать в заранее выделенной переменной-буфере mutex.
+#define USER_OS_CREATE_STATIC_MUTEX_CREATE(P_BUF)           xSemaphoreCreateMutexStatic(P_BUF)
 
-// Создать симафор.
-#define USER_OS_CREATE_SEMAPHORE_FUNC()     xSemaphoreCreateBinary()
-
+// Тип переменной-буфера, в которую будет создан бинарный semaphore.
+#define USER_OS_STATIC_BIN_SEMAPHORE_BUFFER                 StaticSemaphore_t
+// Тип переменной бинарного semaphore-а, который будет создан статически и в него будут помещены данные.
+#define USER_OS_STATIC_BIN_SEMAPHORE                        SemaphoreHandle_t
+// Метод должен создать в заранее выделенной переменной-буфере бинарный semaphore.
+#define USER_OS_CREATE_STATIC_BIN_SEMAPHORE_CREATE(P_BUF)   xSemaphoreCreateBinaryStatic(P_BUF)
+// Метод должен выдать симафор из
 
 //**********************************************************************
 //                          Для модуля PORT.
