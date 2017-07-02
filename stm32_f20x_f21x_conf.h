@@ -94,16 +94,20 @@
 // Тип переменной mutex-а, который будет создан статически и в него будут помещены данные.
 #define USER_OS_STATIC_MUTEX                                SemaphoreHandle_t
 // Метод должен создать в заранее выделенной переменной-буфере mutex.
-#define USER_OS_CREATE_STATIC_MUTEX_CREATE(P_BUF)           xSemaphoreCreateMutexStatic(P_BUF)
+#define USER_OS_STATIC_MUTEX_CREATE(P_BUF)                  xSemaphoreCreateMutexStatic(P_BUF)
 
 // Тип переменной-буфера, в которую будет создан бинарный semaphore.
 #define USER_OS_STATIC_BIN_SEMAPHORE_BUFFER                 StaticSemaphore_t
 // Тип переменной бинарного semaphore-а, который будет создан статически и в него будут помещены данные.
 #define USER_OS_STATIC_BIN_SEMAPHORE                        SemaphoreHandle_t
 // Метод должен создать в заранее выделенной переменной-буфере бинарный semaphore.
-#define USER_OS_CREATE_STATIC_BIN_SEMAPHORE_CREATE(P_BUF)   xSemaphoreCreateBinaryStatic(P_BUF)
-// Метод должен выдать симафор из
-
+#define USER_OS_STATIC_BIN_SEMAPHORE_CREATE(P_BUF)          xSemaphoreCreateBinaryStatic(P_BUF)
+// Тип переменной, которая содержит в себе указания для метода выдачи семафора и прерывания о том,
+// стоит ли удерживать данную задачу от вытеснения разблокированной с большим приоритетом (
+// если вдруг симафор таковую разблокирует) или нет.
+#define USER_OS_PRIO_TASK_WOKEN                             BaseType_t
+// Метод должен выдать семафор из прерывания.
+#define USER_OS_GIVE_BIN_SEMAPHORE_FROM_ISR(P_BUF,P_PRIO)   xSemaphoreGiveFromISR(P_BUF,P_PRIO)
 //**********************************************************************
 //                          Для модуля PORT.
 //**********************************************************************
