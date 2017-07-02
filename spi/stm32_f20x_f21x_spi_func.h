@@ -201,21 +201,32 @@ void spi_master_hardware_os< SPIx, POLAR, PHASE, NUM_LINE, ONE_LINE_MODE, FRAME,
 
 template < EC_SPI_NAME     SPIx, EC_SPI_CFG_CLK_POLARITY   POLAR, EC_SPI_CFG_CLK_PHASE PHASE, EC_SPI_CFG_NUMBER_LINE   NUM_LINE, EC_SPI_CFG_ONE_LINE_MODE  ONE_LINE_MODE, EC_SPI_CFG_DATA_FRAME    FRAME,
            EC_SPI_CFG_FRAME_FORMAT FORMAT, EC_SPI_CFG_BAUD_RATE_DEV    BR_DEV, EC_SPI_CFG_CS   CS >
-int spi_master_hardware_os< SPIx, POLAR, PHASE, NUM_LINE, ONE_LINE_MODE, FRAME, FORMAT, BR_DEV, CS >::tx ( uint8_t* p_array_tx, uint16_t length, uint32_t timeout_ms ) const {
-    (void)timeout_ms;
+int spi_master_hardware_os< SPIx, POLAR, PHASE, NUM_LINE, ONE_LINE_MODE, FRAME, FORMAT, BR_DEV, CS >::tx ( void* p_array_tx, uint16_t length, uint32_t timeout_ms ) const {
     spi_registers_struct*   S = ( spi_registers_struct* )M_EC_TO_U32(SPIx);
-    xSemaphoreTake( this->mutex, ( TickType_t ) portMAX_DELAY );
     if ( length == 0 ) return -1;
-    xSemaphoreTake( this->mutex, ( TickType_t ) portMAX_DELAY );
-    length--;
-    S->D = p_array_tx[0];
 
-    return 0;
+    USER_OS_TAKE_MUTEX( this->mutex, portMAX_DELAY );
+
+    if ( NUM_LINE == EC_SPI_CFG_NUMBER_LINE::LINE_2 ) {
+        number_items = --length;    // Отнимаем сначала одну, т.к. одну передаем сразу (посылку).
+        S->D = *( static_cast< spi_frame_size* >( p_array_tx ) );
+        p_tx = &( static_cast< spi_frame_size* >( p_array_tx ) )[1];    // Если транзакция всего одна, то ничего страшного, он просто не будет пользовать этот указатель (handler не будет пользовать).
+        this->handler_rx_copy_cfg_flag = false;
+        this->handler_tx_point_inc_cfg_flag = true;
+        this->processing_handler_cfg_flag = true;
+    }
+
+    bool reult = USER_OS_TAKE_BIN_SEMAPHORE( this->semaphore, timeout_ms );
+
+    USER_OS_GIVE_MUTEX( this->mutex );
+
+
+    return ( reult ) ? 1 : 0;
 }
 
 template < EC_SPI_NAME     SPIx, EC_SPI_CFG_CLK_POLARITY   POLAR, EC_SPI_CFG_CLK_PHASE PHASE, EC_SPI_CFG_NUMBER_LINE   NUM_LINE, EC_SPI_CFG_ONE_LINE_MODE  ONE_LINE_MODE, EC_SPI_CFG_DATA_FRAME    FRAME,
            EC_SPI_CFG_FRAME_FORMAT FORMAT, EC_SPI_CFG_BAUD_RATE_DEV    BR_DEV, EC_SPI_CFG_CS   CS >
-int spi_master_hardware_os< SPIx, POLAR, PHASE, NUM_LINE, ONE_LINE_MODE, FRAME, FORMAT, BR_DEV, CS >::tx ( uint8_t* p_array_tx, uint8_t* p_array_rx, uint16_t length, uint32_t timeout_ms ) const {
+int spi_master_hardware_os< SPIx, POLAR, PHASE, NUM_LINE, ONE_LINE_MODE, FRAME, FORMAT, BR_DEV, CS >::tx ( void* p_array_tx, void* p_array_rx, uint16_t length, uint32_t timeout_ms ) const {
     (void)timeout_ms;
     (void)p_array_tx; (void)p_array_rx; (void)length;
     return 0;
@@ -223,7 +234,7 @@ int spi_master_hardware_os< SPIx, POLAR, PHASE, NUM_LINE, ONE_LINE_MODE, FRAME, 
 
 template < EC_SPI_NAME     SPIx, EC_SPI_CFG_CLK_POLARITY   POLAR, EC_SPI_CFG_CLK_PHASE PHASE, EC_SPI_CFG_NUMBER_LINE   NUM_LINE, EC_SPI_CFG_ONE_LINE_MODE  ONE_LINE_MODE, EC_SPI_CFG_DATA_FRAME    FRAME,
            EC_SPI_CFG_FRAME_FORMAT FORMAT, EC_SPI_CFG_BAUD_RATE_DEV    BR_DEV, EC_SPI_CFG_CS   CS >
-int spi_master_hardware_os< SPIx, POLAR, PHASE, NUM_LINE, ONE_LINE_MODE, FRAME, FORMAT, BR_DEV, CS >::rx ( uint8_t* p_array_rx, uint16_t length, uint32_t timeout_ms, uint8_t out_value ) const {
+int spi_master_hardware_os< SPIx, POLAR, PHASE, NUM_LINE, ONE_LINE_MODE, FRAME, FORMAT, BR_DEV, CS >::rx ( void* p_array_rx, uint16_t length, uint32_t timeout_ms, uint8_t out_value ) const {
     (void)p_array_rx; (void)length; (void)out_value; (void)timeout_ms;
     return 0;
 }
@@ -247,6 +258,7 @@ void spi_master_hardware_os< SPIx, POLAR, PHASE, NUM_LINE, ONE_LINE_MODE, FRAME,
                 *p_rx = S->D;                                                       // Забираем себе.
                 p_rx++;                                                             // В сл. раз кладем в сл. ячейку ( разрядность учитывается на этапе компиляции ).
                 if ( this->number_items == 0 ) {                                    // Если передача завершена - отдаем семафор.
+                     this->processing_handler_cfg_flag == false;                     // Отработка этого прерывани нам больше не нужна.
                     USER_OS_PRIO_TASK_WOKEN     prio;
                     USER_OS_GIVE_BIN_SEMAPHORE_FROM_ISR( &this->semaphore, &prio );
                 }
@@ -266,13 +278,21 @@ void spi_master_hardware_os< SPIx, POLAR, PHASE, NUM_LINE, ONE_LINE_MODE, FRAME,
                     this->p_tx++;                                                   // В сл. раз уже другие данные.
                 }
                 this->number_items--;                                               // Мы передали еще 1 байт.
+            } else {    // Если мы все передали и ответа не дожидаемся, то отдаем семафор и выходим.
+                if ( handler_rx_copy_cfg_flag == false ) {
+                    this->processing_handler_cfg_flag == false;                     // Отработка этого прерывани нам больше не нужна.
+                    USER_OS_PRIO_TASK_WOKEN     prio;
+                    USER_OS_GIVE_BIN_SEMAPHORE_FROM_ISR( &this->semaphore, &prio );
+                }
             }
         }
-        S->S = 0;                      // СбрасываФем флаги.
+
     } else {    // Если только передача сюда дописать!
         while( true ) {};
     }
     }
+
+    S->S = 0;                      // СбрасываФем флаги.
 }
 
 #endif

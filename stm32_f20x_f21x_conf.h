@@ -94,20 +94,35 @@
 // Тип переменной mutex-а, который будет создан статически и в него будут помещены данные.
 #define USER_OS_STATIC_MUTEX                                SemaphoreHandle_t
 // Метод должен создать в заранее выделенной переменной-буфере mutex.
-#define USER_OS_STATIC_MUTEX_CREATE(P_BUF)                  xSemaphoreCreateMutexStatic(P_BUF)
+#define USER_OS_STATIC_MUTEX_CREATE(P_BUF)                  xSemaphoreCreateMutexStatic( P_BUF )
+// Метод должен принять mutex в потоке.
+// Вне зависимости от успеха операции возвращается код окончания операции.
+// Параметр EXPECTATION (ожидание mutex-а) выставляется в системных тиках операционной системы.
+// Должно вернуть true если успех и false - есл провал.
+#define USER_OS_TAKE_MUTEX(MUTEX,EXPECTATION)              xSemaphoreTake( MUTEX, ( TickType_t )EXPECTATION )
+// Метод должен отдать mutex в потоке.
+// Метод ничего не возвращает.
+#define USER_OS_GIVE_MUTEX(MUTEX)                           xSemaphoreGive( MUTEX )
+
 
 // Тип переменной-буфера, в которую будет создан бинарный semaphore.
 #define USER_OS_STATIC_BIN_SEMAPHORE_BUFFER                 StaticSemaphore_t
 // Тип переменной бинарного semaphore-а, который будет создан статически и в него будут помещены данные.
 #define USER_OS_STATIC_BIN_SEMAPHORE                        SemaphoreHandle_t
 // Метод должен создать в заранее выделенной переменной-буфере бинарный semaphore.
-#define USER_OS_STATIC_BIN_SEMAPHORE_CREATE(P_BUF)          xSemaphoreCreateBinaryStatic(P_BUF)
+#define USER_OS_STATIC_BIN_SEMAPHORE_CREATE(P_BUF)          xSemaphoreCreateBinaryStatic( P_BUF )
 // Тип переменной, которая содержит в себе указания для метода выдачи семафора и прерывания о том,
 // стоит ли удерживать данную задачу от вытеснения разблокированной с большим приоритетом (
 // если вдруг симафор таковую разблокирует) или нет.
 #define USER_OS_PRIO_TASK_WOKEN                             BaseType_t
 // Метод должен выдать семафор из прерывания.
-#define USER_OS_GIVE_BIN_SEMAPHORE_FROM_ISR(P_BUF,P_PRIO)   xSemaphoreGiveFromISR(P_BUF,P_PRIO)
+#define USER_OS_GIVE_BIN_SEMAPHORE_FROM_ISR(P_BUF,P_PRIO)   xSemaphoreGiveFromISR( P_BUF, P_PRIO )
+// Метод должен принять симафор в потоке.
+// Вне зависимости от успеха операции возвращается код окончания операции.
+// Параметр EXPECTATION (ожидание семафора) выставляется в системных тиках операционной системы.
+// Должно вернуть true если успех и false - есл провал.
+#define USER_OS_TAKE_BIN_SEMAPHORE(SEMAPHORE,EXPECTATION)   (bool)( xSemaphoreTake( SEMAPHORE, ( TickType_t )EXPECTATION ) )
+
 //**********************************************************************
 //                          Для модуля PORT.
 //**********************************************************************

@@ -96,7 +96,7 @@ public:
      * ЗАМЕЧАНИЕ: входной прием не ведется!
      */
 
-    virtual int tx ( uint8_t* p_array_tx, uint16_t length, uint32_t timeout_ms ) const = 0;
+    virtual int tx ( void* p_array_tx, uint16_t length, uint32_t timeout_ms ) const = 0;
 
     /*
      * p_array_tx   -   указатель на массив, который требуется передать
@@ -115,7 +115,7 @@ public:
      * принятые данные перезапишут входные.
      */
 
-    virtual int tx ( uint8_t* p_array_tx, uint8_t* p_array_rx, uint16_t length, uint32_t timeout_ms ) const = 0;
+    virtual int tx ( void* p_array_tx, void* p_array_rx, uint16_t length, uint32_t timeout_ms ) const = 0;
 
    /*
     * p_array_rx    -   указатель на массив, в который будет
@@ -127,7 +127,7 @@ public:
     * value_out     -   значение, которое будет отправляться
     *                   ( в случае, если SPI мастер ).
     */
-    virtual int rx ( uint8_t* p_array_rx, uint16_t length, uint32_t timeout_ms, uint8_t out_value = 0 ) const = 0;
+    virtual int rx ( void* p_array_rx, uint16_t length, uint32_t timeout_ms, uint8_t out_value = 0 ) const = 0;
 
     virtual ~spi_base() {}
 };
@@ -168,9 +168,9 @@ public:
     constexpr spi_master_hardware_os ( void );
 
     int     reinit                  ( void ) const;
-    int     tx                      ( uint8_t* p_array_tx, uint16_t length, uint32_t timeout_ms ) const;
-    int     tx                      ( uint8_t* p_array_tx, uint8_t* p_array_rx, uint16_t length, uint32_t timeout_ms ) const;
-    int     rx                      ( uint8_t* p_array_rx, uint16_t length, uint32_t timeout_ms, uint8_t out_value = 0 ) const;
+    int     tx                      ( void* p_array_tx, uint16_t length, uint32_t timeout_ms ) const;
+    int     tx                      ( void* p_array_tx, void* p_array_rx, uint16_t length, uint32_t timeout_ms ) const;
+    int     rx                      ( void* p_array_rx, uint16_t length, uint32_t timeout_ms, uint8_t out_value = 0 ) const;
 
     void    on                      ( void ) const;
     void    off                     ( void ) const;
