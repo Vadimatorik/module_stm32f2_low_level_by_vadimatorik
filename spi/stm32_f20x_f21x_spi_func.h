@@ -275,28 +275,4 @@ void spi_master_hardware_os< SPIx, POLAR, PHASE, NUM_LINE, ONE_LINE_MODE, FRAME,
     }
 }
 
-/*
-template < EC_SPI_NAME SPIx >
-void spi< SPIx >::tx       ( uint16_t& data ) const {
-
-}
-
-template < EC_SPI_NAME SPIx >
-void spi< SPIx >::tx       ( uint8_t& data ) const {
-    spi_registers_struct*   S = ( spi_registers_struct* )M_EC_TO_U32(SPIx);
-    S->D = data;
-}
-
-template < EC_SPI_NAME SPIx >
-void spi< SPIx >::rx ( uint16_t& data ) const {
-    spi_registers_struct*   S = ( spi_registers_struct* )M_EC_TO_U32(SPIx);
-    data = S->D;
-}
-
-template < EC_SPI_NAME SPIx >
-void spi< SPIx >::rx ( uint8_t& data ) const {
-    spi_registers_struct*   S = ( spi_registers_struct* )M_EC_TO_U32(SPIx);
-    data = S->D;
-}*/
-
 #endif
