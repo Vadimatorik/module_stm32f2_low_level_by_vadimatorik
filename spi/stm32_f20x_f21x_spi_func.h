@@ -258,7 +258,7 @@ void spi_master_hardware_os< SPIx, POLAR, PHASE, NUM_LINE, ONE_LINE_MODE, FRAME,
                 *p_rx = S->D;                                                       // Забираем себе.
                 p_rx++;                                                             // В сл. раз кладем в сл. ячейку ( разрядность учитывается на этапе компиляции ).
                 if ( this->number_items == 0 ) {                                    // Если передача завершена - отдаем семафор.
-                     this->processing_handler_cfg_flag == false;                     // Отработка этого прерывани нам больше не нужна.
+                     this->processing_handler_cfg_flag = false;                     // Отработка этого прерывани нам больше не нужна.
                     USER_OS_PRIO_TASK_WOKEN     prio;
                     USER_OS_GIVE_BIN_SEMAPHORE_FROM_ISR( &this->semaphore, &prio );
                 }
@@ -280,7 +280,7 @@ void spi_master_hardware_os< SPIx, POLAR, PHASE, NUM_LINE, ONE_LINE_MODE, FRAME,
                 this->number_items--;                                               // Мы передали еще 1 байт.
             } else {    // Если мы все передали и ответа не дожидаемся, то отдаем семафор и выходим.
                 if ( handler_rx_copy_cfg_flag == false ) {
-                    this->processing_handler_cfg_flag == false;                     // Отработка этого прерывани нам больше не нужна.
+                    this->processing_handler_cfg_flag = false;                      // Отработка этого прерывани нам больше не нужна.
                     USER_OS_PRIO_TASK_WOKEN     prio;
                     USER_OS_GIVE_BIN_SEMAPHORE_FROM_ISR( &this->semaphore, &prio );
                 }
