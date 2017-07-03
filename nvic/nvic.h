@@ -47,3 +47,18 @@ struct __attribute__((packed)) nvic_registers_struct {
     volatile uint32_t   IPR19;
     volatile uint32_t   IPR20;
 };
+
+#define NVIC            ( ( nvic_registers_struct* ) ( 0xE000E100 ) )
+
+class nvic {
+public:
+    constexpr nvic() {}
+
+    void    irq_spi1_enable             ( void );
+
+    void    irq_spi1_disable            ( void );
+
+    void    irq_spi1_set_priority       (  uint8_t prio  );
+private:
+
+};
