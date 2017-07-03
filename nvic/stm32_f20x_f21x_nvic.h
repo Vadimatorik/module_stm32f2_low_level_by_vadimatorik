@@ -6,7 +6,7 @@
  * Номер позиции прерывания.
  */
 enum class IRQ_NAME {
-    SPI1        = 25
+    SPI1        = 35
 };
 
 enum class IRQ_PRIO {

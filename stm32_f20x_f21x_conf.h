@@ -92,6 +92,20 @@
 
 // Тип переменной-буфера, в которую будет создан mutex.
 #define USER_OS_STATIC_MUTEX_BUFFER                         StaticSemaphore_t
+// Данные, которыми будет заполнена переменная-буффер при старте.
+#define USER_OS_STATIC_MUTEX_BUFFER_INIT_VALUE                  \
+{                                                               \
+    .pvDummy1 = {nullptr, nullptr, nullptr},                    \
+    .u = {                                                      \
+        .pvDummy2 = NULL,                                       \
+    },                                                          \
+    .xDummy3 = { { 0,nullptr, { 0,{ nullptr, nullptr } } },     \
+                 { 0,nullptr, { 0,{ nullptr, nullptr } } } },   \
+    .uxDummy4 = { 0, 0, 0 },                                    \
+    .ucDummy5 = { 0, 0},                                        \
+    .ucDummy6 = 0                                               \
+}
+
 // Тип переменной mutex-а, который будет создан статически и в него будут помещены данные.
 #define USER_OS_STATIC_MUTEX                                SemaphoreHandle_t
 // Метод должен создать в заранее выделенной переменной-буфере mutex.
@@ -108,6 +122,8 @@
 
 // Тип переменной-буфера, в которую будет создан бинарный semaphore.
 #define USER_OS_STATIC_BIN_SEMAPHORE_BUFFER                 StaticSemaphore_t
+// Данные, которыми будет заполнена переменная-буффер при старте.
+#define USER_OS_STATIC_BIN_SEMAPHORE_BUFFER_INIT_VALUE      USER_OS_STATIC_MUTEX_BUFFER_INIT_VALUE
 // Тип переменной бинарного semaphore-а, который будет создан статически и в него будут помещены данные.
 #define USER_OS_STATIC_BIN_SEMAPHORE                        SemaphoreHandle_t
 // Метод должен создать в заранее выделенной переменной-буфере бинарный semaphore.

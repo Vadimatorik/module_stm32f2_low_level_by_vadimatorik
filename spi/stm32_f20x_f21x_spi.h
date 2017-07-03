@@ -87,6 +87,7 @@ private:
  */
 class spi_base {
 public:
+    constexpr spi_base() {}
     /*
      * p_array_tx   -   указатель на массив, который требуется передать
      *                  по spi. Указатель на 0-й передаваемый байт
@@ -96,7 +97,7 @@ public:
      * ЗАМЕЧАНИЕ: входной прием не ведется!
      */
 
-    virtual int tx ( void* p_array_tx, uint16_t length, uint32_t timeout_ms ) const = 0;
+    int tx ( void* p_array_tx, uint16_t length, uint32_t timeout_ms ) const;
 
     /*
      * p_array_tx   -   указатель на массив, который требуется передать
@@ -115,7 +116,7 @@ public:
      * принятые данные перезапишут входные.
      */
 
-    virtual int tx ( void* p_array_tx, void* p_array_rx, uint16_t length, uint32_t timeout_ms ) const = 0;
+    int tx ( void* p_array_tx, void* p_array_rx, uint16_t length, uint32_t timeout_ms ) const;
 
    /*
     * p_array_rx    -   указатель на массив, в который будет
@@ -127,9 +128,7 @@ public:
     * value_out     -   значение, которое будет отправляться
     *                   ( в случае, если SPI мастер ).
     */
-    virtual int rx ( void* p_array_rx, uint16_t length, uint32_t timeout_ms, uint8_t out_value = 0 ) const = 0;
-
-    virtual ~spi_base() {}
+    int rx ( void* p_array_rx, uint16_t length, uint32_t timeout_ms, uint8_t out_value = 0 ) const;
 };
 
 /**********************************************************************
@@ -172,23 +171,26 @@ public:
     int     tx                      ( void* p_array_tx, void* p_array_rx, uint16_t length, uint32_t timeout_ms ) const;
     int     rx                      ( void* p_array_rx, uint16_t length, uint32_t timeout_ms, uint8_t out_value = 0 ) const;
 
-    void    on                      ( void ) const;
-    void    off                     ( void ) const;
+
 
     void    handler                 ( void ) const;
 
 private:
+
+    void    on                      ( void ) const;
+    void    off                     ( void ) const;
+
     // Считать флаг опустошения буфера на передачу (1 - пустой).
     uint32_t    tx_e_flag_get       ( void ) const;
     // Считать флаг не пустого приема (1 - есть данные в буфере).
     uint32_t    rx_n_e_flag_get     ( void ) const;
 
     // Для предотвращения попытки использовать 1 SPI из разных потоков одновременно.
-    mutable USER_OS_STATIC_MUTEX_BUFFER     mutex_buf;
+    mutable USER_OS_STATIC_MUTEX_BUFFER     mutex_buf = USER_OS_STATIC_MUTEX_BUFFER_INIT_VALUE;
     mutable USER_OS_STATIC_MUTEX            mutex = NULL;
 
     // Сигнализирует об успешной передаче или приеме.
-    mutable USER_OS_STATIC_BIN_SEMAPHORE_BUFFER semaphore_buf;
+    mutable USER_OS_STATIC_BIN_SEMAPHORE_BUFFER semaphore_buf = USER_OS_STATIC_BIN_SEMAPHORE_BUFFER_INIT_VALUE;
     mutable USER_OS_STATIC_BIN_SEMAPHORE        semaphore = NULL;
 
     typedef typename std::conditional< FRAME == EC_SPI_CFG_DATA_FRAME::FRAME_8_BIT, uint8_t, uint16_t>::type spi_frame_size;

@@ -5,6 +5,7 @@
 #ifdef MODULE_SPI
 
 #include <cstdio>
+#include "stm32_f20x_f21x_spi_struct.h"
 
 /**********************************************************************
  * Область constexpr конструкторов.
@@ -180,7 +181,6 @@ int spi_master_hardware_os< SPIx, POLAR, PHASE, NUM_LINE, ONE_LINE_MODE, FRAME, 
     S->S    =   0;                        // Сбрасываем все флаги прерываний.
     S->C1   =   this->cfg.c1_msk;         // Конфигурируем SPI.
     S->C2   =   this->cfg.c2_msk;
-    this->on();
 
     return 0;
 }
@@ -216,6 +216,7 @@ int spi_master_hardware_os< SPIx, POLAR, PHASE, NUM_LINE, ONE_LINE_MODE, FRAME, 
         this->processing_handler_cfg_flag = true;
     }
 
+    this->on();             // Включаем SPI (после передачи отключаем, чтобы не висеть в прерыании).
     bool reult = USER_OS_TAKE_BIN_SEMAPHORE( this->semaphore, timeout_ms );
 
     USER_OS_GIVE_MUTEX( this->mutex );
