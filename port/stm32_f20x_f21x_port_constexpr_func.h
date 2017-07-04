@@ -40,6 +40,9 @@ constexpr uint32_t p_base_port_address_get( EC_PORT_NAME port_name ) {
     case EC_PORT_NAME::I:   return 0x40022000;
 #endif
     }
+    // Это не произойдет, т.к. ранее уже ранее была проверка,
+    // что данные верны.
+    return 0;
 }
 
 /*

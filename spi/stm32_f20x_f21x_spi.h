@@ -166,6 +166,9 @@ template <  EC_SPI_NAME                  SPIx,
                                                           */
 class spi_master_hardware_os : public spi_base {
 public:
+    /*
+     * Внимание! Указатель можно присвоить только в реальном времени!!!
+     */
     static const spi_master_hardware_os< TEMPLATE_SPI_MASTER_HARD_OS_PARAM >* instance ( void );
 
     int     reinit                  ( void ) const;
