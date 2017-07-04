@@ -139,12 +139,20 @@ constexpr uint32_t spi_cfg< MODE, POLAR, PHASE, NUM_LINE, ONE_LINE_MODE, FRAME, 
     return msk;
 }
 
+
+template < EC_SPI_NAME     SPIx, EC_SPI_CFG_CLK_POLARITY   POLAR, EC_SPI_CFG_CLK_PHASE PHASE, EC_SPI_CFG_NUMBER_LINE   NUM_LINE, EC_SPI_CFG_ONE_LINE_MODE  ONE_LINE_MODE, EC_SPI_CFG_DATA_FRAME    FRAME,
+           EC_SPI_CFG_FRAME_FORMAT FORMAT, EC_SPI_CFG_BAUD_RATE_DEV    BR_DEV, EC_SPI_CFG_CS   CS >
+const spi_master_hardware_os< TEMPLATE_SPI_MASTER_HARD_OS_PARAM >* spi_master_hardware_os< TEMPLATE_SPI_MASTER_HARD_OS_PARAM >::instance ( void ) {
+    static const  spi_master_hardware_os< TEMPLATE_SPI_MASTER_HARD_OS_PARAM > obj;
+    return &obj;
+}
+
 /*
  * Реализация SPI на прерываниях через ОС.
  */
 template < EC_SPI_NAME     SPIx, EC_SPI_CFG_CLK_POLARITY   POLAR, EC_SPI_CFG_CLK_PHASE PHASE, EC_SPI_CFG_NUMBER_LINE   NUM_LINE, EC_SPI_CFG_ONE_LINE_MODE  ONE_LINE_MODE, EC_SPI_CFG_DATA_FRAME    FRAME,
            EC_SPI_CFG_FRAME_FORMAT FORMAT, EC_SPI_CFG_BAUD_RATE_DEV    BR_DEV, EC_SPI_CFG_CS   CS >
-constexpr spi_master_hardware_os< SPIx, POLAR, PHASE, NUM_LINE, ONE_LINE_MODE, FRAME, FORMAT, BR_DEV, CS >::spi_master_hardware_os( void ) {
+constexpr spi_master_hardware_os< TEMPLATE_SPI_MASTER_HARD_OS_PARAM >::spi_master_hardware_os ( void ) {
     static_assert( ( SPIx == EC_SPI_NAME::SPI1 ) ||
                    ( SPIx == EC_SPI_NAME::SPI2 ) ||
                    ( SPIx == EC_SPI_NAME::SPI3 ),
@@ -155,7 +163,7 @@ constexpr spi_master_hardware_os< SPIx, POLAR, PHASE, NUM_LINE, ONE_LINE_MODE, F
 
 template < EC_SPI_NAME     SPIx, EC_SPI_CFG_CLK_POLARITY   POLAR, EC_SPI_CFG_CLK_PHASE PHASE, EC_SPI_CFG_NUMBER_LINE   NUM_LINE, EC_SPI_CFG_ONE_LINE_MODE  ONE_LINE_MODE, EC_SPI_CFG_DATA_FRAME    FRAME,
            EC_SPI_CFG_FRAME_FORMAT FORMAT, EC_SPI_CFG_BAUD_RATE_DEV    BR_DEV, EC_SPI_CFG_CS   CS >
-uint32_t spi_master_hardware_os< SPIx, POLAR, PHASE, NUM_LINE, ONE_LINE_MODE, FRAME, FORMAT, BR_DEV, CS >::tx_e_flag_get ( void ) const {
+uint32_t spi_master_hardware_os< TEMPLATE_SPI_MASTER_HARD_OS_PARAM >::tx_e_flag_get ( void ) const {
     spi_registers_struct*   S = ( spi_registers_struct* )M_EC_TO_U32(SPIx);
     volatile uint32_t result = *M_U32_TO_P(M_GET_BB_P_PER((uint32_t)&S->S, M_EC_TO_U8(EC_S_REG_BIT_FIELD_POS::TXE)));
     return result;
@@ -163,16 +171,15 @@ uint32_t spi_master_hardware_os< SPIx, POLAR, PHASE, NUM_LINE, ONE_LINE_MODE, FR
 
 template < EC_SPI_NAME     SPIx, EC_SPI_CFG_CLK_POLARITY   POLAR, EC_SPI_CFG_CLK_PHASE PHASE, EC_SPI_CFG_NUMBER_LINE   NUM_LINE, EC_SPI_CFG_ONE_LINE_MODE  ONE_LINE_MODE, EC_SPI_CFG_DATA_FRAME    FRAME,
            EC_SPI_CFG_FRAME_FORMAT FORMAT, EC_SPI_CFG_BAUD_RATE_DEV    BR_DEV, EC_SPI_CFG_CS   CS >
-uint32_t spi_master_hardware_os< SPIx, POLAR, PHASE, NUM_LINE, ONE_LINE_MODE, FRAME, FORMAT, BR_DEV, CS >::rx_n_e_flag_get ( void ) const {
+uint32_t spi_master_hardware_os< TEMPLATE_SPI_MASTER_HARD_OS_PARAM >::rx_n_e_flag_get ( void ) const {
     spi_registers_struct*   S = ( spi_registers_struct* )M_EC_TO_U32(SPIx);
     volatile uint32_t result = *M_U32_TO_P(M_GET_BB_P_PER((uint32_t)&S->S, M_EC_TO_U8(EC_S_REG_BIT_FIELD_POS::RXNE)));
     return result;
 }
 
 
-template < EC_SPI_NAME     SPIx, EC_SPI_CFG_CLK_POLARITY   POLAR, EC_SPI_CFG_CLK_PHASE PHASE, EC_SPI_CFG_NUMBER_LINE   NUM_LINE, EC_SPI_CFG_ONE_LINE_MODE  ONE_LINE_MODE, EC_SPI_CFG_DATA_FRAME    FRAME,
-           EC_SPI_CFG_FRAME_FORMAT FORMAT, EC_SPI_CFG_BAUD_RATE_DEV    BR_DEV, EC_SPI_CFG_CS   CS >
-int spi_master_hardware_os< SPIx, POLAR, PHASE, NUM_LINE, ONE_LINE_MODE, FRAME, FORMAT, BR_DEV, CS >::reinit ( void ) const {
+template < TEMPLATE_SPI_MASTER_HARD_OS_HEADLINE >
+int spi_master_hardware_os< TEMPLATE_SPI_MASTER_HARD_OS_PARAM >::reinit ( void ) const {
     this->mutex = USER_OS_STATIC_MUTEX_CREATE( &this->mutex_buf );
     this->semaphore = USER_OS_STATIC_BIN_SEMAPHORE_CREATE( &this->semaphore_buf );
 
@@ -185,23 +192,20 @@ int spi_master_hardware_os< SPIx, POLAR, PHASE, NUM_LINE, ONE_LINE_MODE, FRAME, 
     return 0;
 }
 
-template < EC_SPI_NAME     SPIx, EC_SPI_CFG_CLK_POLARITY   POLAR, EC_SPI_CFG_CLK_PHASE PHASE, EC_SPI_CFG_NUMBER_LINE   NUM_LINE, EC_SPI_CFG_ONE_LINE_MODE  ONE_LINE_MODE, EC_SPI_CFG_DATA_FRAME    FRAME,
-           EC_SPI_CFG_FRAME_FORMAT FORMAT, EC_SPI_CFG_BAUD_RATE_DEV    BR_DEV, EC_SPI_CFG_CS   CS >
-void spi_master_hardware_os< SPIx, POLAR, PHASE, NUM_LINE, ONE_LINE_MODE, FRAME, FORMAT, BR_DEV, CS >::on ( void ) const {
+template < TEMPLATE_SPI_MASTER_HARD_OS_HEADLINE >
+void spi_master_hardware_os< TEMPLATE_SPI_MASTER_HARD_OS_PARAM >::on ( void ) const {
     spi_registers_struct*   S = ( spi_registers_struct* )M_EC_TO_U32(SPIx);
     S->C1 |= M_EC_TO_U32(EC_C1_REG_BIT_MSK::SPE);                   // Запскаем SPI.
 }
 
-template < EC_SPI_NAME     SPIx, EC_SPI_CFG_CLK_POLARITY   POLAR, EC_SPI_CFG_CLK_PHASE PHASE, EC_SPI_CFG_NUMBER_LINE   NUM_LINE, EC_SPI_CFG_ONE_LINE_MODE  ONE_LINE_MODE, EC_SPI_CFG_DATA_FRAME    FRAME,
-           EC_SPI_CFG_FRAME_FORMAT FORMAT, EC_SPI_CFG_BAUD_RATE_DEV    BR_DEV, EC_SPI_CFG_CS   CS >
-void spi_master_hardware_os< SPIx, POLAR, PHASE, NUM_LINE, ONE_LINE_MODE, FRAME, FORMAT, BR_DEV, CS >::off ( void ) const {
+template < TEMPLATE_SPI_MASTER_HARD_OS_HEADLINE >
+void spi_master_hardware_os< TEMPLATE_SPI_MASTER_HARD_OS_PARAM >::off ( void ) const {
     spi_registers_struct*   S = ( spi_registers_struct* )M_EC_TO_U32(SPIx);
     S->C1 &= ~M_EC_TO_U32(EC_C1_REG_BIT_MSK::SPE);                  // Отключаем SPI.
 }
 
-template < EC_SPI_NAME     SPIx, EC_SPI_CFG_CLK_POLARITY   POLAR, EC_SPI_CFG_CLK_PHASE PHASE, EC_SPI_CFG_NUMBER_LINE   NUM_LINE, EC_SPI_CFG_ONE_LINE_MODE  ONE_LINE_MODE, EC_SPI_CFG_DATA_FRAME    FRAME,
-           EC_SPI_CFG_FRAME_FORMAT FORMAT, EC_SPI_CFG_BAUD_RATE_DEV    BR_DEV, EC_SPI_CFG_CS   CS >
-int spi_master_hardware_os< SPIx, POLAR, PHASE, NUM_LINE, ONE_LINE_MODE, FRAME, FORMAT, BR_DEV, CS >::tx ( void* p_array_tx, uint16_t length, uint32_t timeout_ms ) const {
+template < TEMPLATE_SPI_MASTER_HARD_OS_HEADLINE >
+int spi_master_hardware_os< TEMPLATE_SPI_MASTER_HARD_OS_PARAM >::tx ( void* p_array_tx, uint16_t length, uint32_t timeout_ms ) const {
     (void)timeout_ms;
     spi_registers_struct*   S = ( spi_registers_struct* )M_EC_TO_U32(SPIx);
     if ( length == 0 ) return -1;
@@ -226,24 +230,21 @@ int spi_master_hardware_os< SPIx, POLAR, PHASE, NUM_LINE, ONE_LINE_MODE, FRAME, 
     return ( reult ) ? 1 : 0;
 }
 
-template < EC_SPI_NAME     SPIx, EC_SPI_CFG_CLK_POLARITY   POLAR, EC_SPI_CFG_CLK_PHASE PHASE, EC_SPI_CFG_NUMBER_LINE   NUM_LINE, EC_SPI_CFG_ONE_LINE_MODE  ONE_LINE_MODE, EC_SPI_CFG_DATA_FRAME    FRAME,
-           EC_SPI_CFG_FRAME_FORMAT FORMAT, EC_SPI_CFG_BAUD_RATE_DEV    BR_DEV, EC_SPI_CFG_CS   CS >
-int spi_master_hardware_os< SPIx, POLAR, PHASE, NUM_LINE, ONE_LINE_MODE, FRAME, FORMAT, BR_DEV, CS >::tx ( void* p_array_tx, void* p_array_rx, uint16_t length, uint32_t timeout_ms ) const {
+template < TEMPLATE_SPI_MASTER_HARD_OS_HEADLINE >
+int spi_master_hardware_os< TEMPLATE_SPI_MASTER_HARD_OS_PARAM >::tx ( void* p_array_tx, void* p_array_rx, uint16_t length, uint32_t timeout_ms ) const {
     (void)timeout_ms;
     (void)p_array_tx; (void)p_array_rx; (void)length;
     return 0;
 }
 
-template < EC_SPI_NAME     SPIx, EC_SPI_CFG_CLK_POLARITY   POLAR, EC_SPI_CFG_CLK_PHASE PHASE, EC_SPI_CFG_NUMBER_LINE   NUM_LINE, EC_SPI_CFG_ONE_LINE_MODE  ONE_LINE_MODE, EC_SPI_CFG_DATA_FRAME    FRAME,
-           EC_SPI_CFG_FRAME_FORMAT FORMAT, EC_SPI_CFG_BAUD_RATE_DEV    BR_DEV, EC_SPI_CFG_CS   CS >
-int spi_master_hardware_os< SPIx, POLAR, PHASE, NUM_LINE, ONE_LINE_MODE, FRAME, FORMAT, BR_DEV, CS >::rx ( void* p_array_rx, uint16_t length, uint32_t timeout_ms, uint8_t out_value ) const {
+template < TEMPLATE_SPI_MASTER_HARD_OS_HEADLINE >
+int spi_master_hardware_os< TEMPLATE_SPI_MASTER_HARD_OS_PARAM >::rx ( void* p_array_rx, uint16_t length, uint32_t timeout_ms, uint8_t out_value ) const {
     (void)p_array_rx; (void)length; (void)out_value; (void)timeout_ms;
     return 0;
 }
 
-template < EC_SPI_NAME     SPIx, EC_SPI_CFG_CLK_POLARITY   POLAR, EC_SPI_CFG_CLK_PHASE PHASE, EC_SPI_CFG_NUMBER_LINE   NUM_LINE, EC_SPI_CFG_ONE_LINE_MODE  ONE_LINE_MODE, EC_SPI_CFG_DATA_FRAME    FRAME,
-           EC_SPI_CFG_FRAME_FORMAT FORMAT, EC_SPI_CFG_BAUD_RATE_DEV    BR_DEV, EC_SPI_CFG_CS   CS >
-void spi_master_hardware_os< SPIx, POLAR, PHASE, NUM_LINE, ONE_LINE_MODE, FRAME, FORMAT, BR_DEV, CS >::handler ( void ) const {
+template < TEMPLATE_SPI_MASTER_HARD_OS_HEADLINE >
+void spi_master_hardware_os< TEMPLATE_SPI_MASTER_HARD_OS_PARAM >::handler ( void ) const {
     spi_registers_struct*   S = ( spi_registers_struct* )M_EC_TO_U32(SPIx);
     /*
          * Сначала проверяем RX, а потом TX. Т.к. после проверки TX мы можем выставить

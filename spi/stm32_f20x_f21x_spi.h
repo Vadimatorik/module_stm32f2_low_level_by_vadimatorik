@@ -132,6 +132,7 @@ public:
     virtual ~spi_base() {}
 };
 
+// Оформлено Одиночка (шаблон проектирования).
 /**********************************************************************
  * Область class-ов.
  **********************************************************************/
@@ -165,7 +166,7 @@ template <  EC_SPI_NAME                  SPIx,
                                                           */
 class spi_master_hardware_os : public spi_base {
 public:
-    constexpr spi_master_hardware_os ( void );
+    static const spi_master_hardware_os< TEMPLATE_SPI_MASTER_HARD_OS_PARAM >* instance ( void );
 
     int     reinit                  ( void ) const;
     int     tx                      ( void* p_array_tx, uint16_t length, uint32_t timeout_ms ) const;
@@ -177,6 +178,8 @@ public:
     void    handler                 ( void ) const;
 
 private:
+    constexpr spi_master_hardware_os ( void );
+
     void    on                      ( void ) const;
     void    off                     ( void ) const;
 
