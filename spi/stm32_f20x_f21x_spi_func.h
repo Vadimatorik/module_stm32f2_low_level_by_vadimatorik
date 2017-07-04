@@ -114,7 +114,7 @@ constexpr uint32_t spi_cfg< MODE, POLAR, PHASE, NUM_LINE, ONE_LINE_MODE, FRAME, 
 
     msk     |= M_EC_TO_U32(MODE) | M_EC_TO_U32(POLAR) | M_EC_TO_U32(PHASE) |
                M_EC_TO_U32(NUM_LINE) | M_EC_TO_U32(FRAME) | M_EC_TO_U32(R_MODE) |
-               M_EC_TO_U32(BR_DEV);
+               M_EC_TO_U32(BR_DEV) << M_EC_TO_U8(EC_C1_REG_BIT_FIELD_POS::BR);
 
     if ( MODE == EC_SPI_CFG_MODE::SLAVE ) {
         msk     |= M_EC_TO_U32(SSM) | M_EC_TO_U32(SSM_MODE);
@@ -202,6 +202,7 @@ void spi_master_hardware_os< SPIx, POLAR, PHASE, NUM_LINE, ONE_LINE_MODE, FRAME,
 template < EC_SPI_NAME     SPIx, EC_SPI_CFG_CLK_POLARITY   POLAR, EC_SPI_CFG_CLK_PHASE PHASE, EC_SPI_CFG_NUMBER_LINE   NUM_LINE, EC_SPI_CFG_ONE_LINE_MODE  ONE_LINE_MODE, EC_SPI_CFG_DATA_FRAME    FRAME,
            EC_SPI_CFG_FRAME_FORMAT FORMAT, EC_SPI_CFG_BAUD_RATE_DEV    BR_DEV, EC_SPI_CFG_CS   CS >
 int spi_master_hardware_os< SPIx, POLAR, PHASE, NUM_LINE, ONE_LINE_MODE, FRAME, FORMAT, BR_DEV, CS >::tx ( void* p_array_tx, uint16_t length, uint32_t timeout_ms ) const {
+    (void)timeout_ms;
     spi_registers_struct*   S = ( spi_registers_struct* )M_EC_TO_U32(SPIx);
     if ( length == 0 ) return -1;
 
@@ -209,15 +210,15 @@ int spi_master_hardware_os< SPIx, POLAR, PHASE, NUM_LINE, ONE_LINE_MODE, FRAME, 
 
     if ( NUM_LINE == EC_SPI_CFG_NUMBER_LINE::LINE_2 ) {
         number_items = --length;    // Отнимаем сначала одну, т.к. одну передаем сразу (посылку).
-        S->D = *( static_cast< spi_frame_size* >( p_array_tx ) );
         p_tx = &( static_cast< spi_frame_size* >( p_array_tx ) )[1];    // Если транзакция всего одна, то ничего страшного, он просто не будет пользовать этот указатель (handler не будет пользовать).
         this->handler_rx_copy_cfg_flag = false;
         this->handler_tx_point_inc_cfg_flag = true;
-        this->processing_handler_cfg_flag = true;
+        S->D    = *( static_cast< spi_frame_size* >( p_array_tx ) );                    // Делаем первую отправку.
+        S->C2   = this->cfg.c2_msk;                                                     // Включаем нужные прерывания + параметры конфиграции интерфейса (мы сбросили этот регистр в 0 в прерывании, чтрбы быстро выйти из прерывания).
     }
 
     this->on();             // Включаем SPI (после передачи отключаем, чтобы не висеть в прерыании).
-    bool reult = USER_OS_TAKE_BIN_SEMAPHORE( this->semaphore, timeout_ms );
+    bool reult = USER_OS_TAKE_BIN_SEMAPHORE( this->semaphore, portMAX_DELAY );
 
     USER_OS_GIVE_MUTEX( this->mutex );
 
@@ -244,14 +245,12 @@ template < EC_SPI_NAME     SPIx, EC_SPI_CFG_CLK_POLARITY   POLAR, EC_SPI_CFG_CLK
            EC_SPI_CFG_FRAME_FORMAT FORMAT, EC_SPI_CFG_BAUD_RATE_DEV    BR_DEV, EC_SPI_CFG_CS   CS >
 void spi_master_hardware_os< SPIx, POLAR, PHASE, NUM_LINE, ONE_LINE_MODE, FRAME, FORMAT, BR_DEV, CS >::handler ( void ) const {
     spi_registers_struct*   S = ( spi_registers_struct* )M_EC_TO_U32(SPIx);
-    if ( processing_handler_cfg_flag == true ) {                                    // Если нам вообще нужно что-то делать с прерывнаием.
-        /*
+    /*
          * Сначала проверяем RX, а потом TX. Т.к. после проверки TX мы можем выставить
          * последнюю посылку на передачу и очистить number_items. А потом проверив
          * RX решим, что передача закончена и нужно отдать симафор.
          * Так мы потеряем одну транзакцию.
          */
-
     // Если SPI планиурется использовать на прием или чисто на прием.
     if ( NUM_LINE == EC_SPI_CFG_NUMBER_LINE::LINE_2 ) {
         if ( this->rx_n_e_flag_get() == 1 ) {                                       // Если пришли данные.
@@ -259,10 +258,16 @@ void spi_master_hardware_os< SPIx, POLAR, PHASE, NUM_LINE, ONE_LINE_MODE, FRAME,
                 *p_rx = S->D;                                                       // Забираем себе.
                 p_rx++;                                                             // В сл. раз кладем в сл. ячейку ( разрядность учитывается на этапе компиляции ).
                 if ( this->number_items == 0 ) {                                    // Если передача завершена - отдаем семафор.
-                     this->processing_handler_cfg_flag = false;                     // Отработка этого прерывани нам больше не нужна.
                     USER_OS_PRIO_TASK_WOKEN     prio;
-                    USER_OS_GIVE_BIN_SEMAPHORE_FROM_ISR( &this->semaphore, &prio );
+                    USER_OS_GIVE_BIN_SEMAPHORE_FROM_ISR( this->semaphore, &prio );
+                    this->off();                                                    // Отключаем транзакции SPI.
+                    S->C2 = 0;                                                      // Отключаем генtрацию прерываний.
                 }
+            } else {
+                // Если RX себе не сохраняем, то просто считаем в никуда.
+                volatile spi_frame_size input_buf;
+                input_buf = S->D;               // Что бы ни случилосб (на всякий случай) считываем данные.
+                (void)input_buf;
             }
         }
     } else if ( ONE_LINE_MODE == EC_SPI_CFG_ONE_LINE_MODE::RECEIVE_ONLY ) {
@@ -281,16 +286,16 @@ void spi_master_hardware_os< SPIx, POLAR, PHASE, NUM_LINE, ONE_LINE_MODE, FRAME,
                 this->number_items--;                                               // Мы передали еще 1 байт.
             } else {    // Если мы все передали и ответа не дожидаемся, то отдаем семафор и выходим.
                 if ( handler_rx_copy_cfg_flag == false ) {
-                    this->processing_handler_cfg_flag = false;                      // Отработка этого прерывани нам больше не нужна.
                     USER_OS_PRIO_TASK_WOKEN     prio;
-                    USER_OS_GIVE_BIN_SEMAPHORE_FROM_ISR( &this->semaphore, &prio );
+                    USER_OS_GIVE_BIN_SEMAPHORE_FROM_ISR( this->semaphore, &prio );
+                    this->off();                                                    // Отключаем транзакции SPI.
+                    S->C2 = 0;                                                      // Отключаем генерацию прерываний (у нас есть прерывание по пустому буферу на передачу, с ним мы не выдем).
                 }
             }
         }
 
     } else {    // Если только передача сюда дописать!
         while( true ) {};
-    }
     }
 
     S->S = 0;                      // СбрасываФем флаги.

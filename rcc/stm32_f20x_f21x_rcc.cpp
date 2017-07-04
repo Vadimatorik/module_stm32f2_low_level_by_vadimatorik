@@ -113,6 +113,9 @@ void rcc::dev_after_pll_bus_set ( uint8_t &number_cfg ) const {
  * Ставим делитель без PLLльный массив).
  */
 void rcc::dev_after_hsi_or_hse_bus_set ( uint8_t &number_cfg ) const {
+    RCC->CFG &= ~( M_EC_TO_U32(EC_CFG_REG_BIT_MSK::PPRE1) |
+                   M_EC_TO_U32(EC_CFG_REG_BIT_MSK::PPRE2) |
+                   M_EC_TO_U32(EC_CFG_REG_BIT_MSK::HPRE) );
     RCC->CFG |= this->cfg->dev_cfg[number_cfg].dev_msk;
 }
 

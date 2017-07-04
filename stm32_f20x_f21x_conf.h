@@ -114,7 +114,7 @@
 // Вне зависимости от успеха операции возвращается код окончания операции.
 // Параметр EXPECTATION (ожидание mutex-а) выставляется в системных тиках операционной системы.
 // Должно вернуть true если успех и false - есл провал.
-#define USER_OS_TAKE_MUTEX(MUTEX,EXPECTATION)              xSemaphoreTake( MUTEX, ( TickType_t )EXPECTATION )
+#define USER_OS_TAKE_MUTEX(MUTEX,EXPECTATION)               xSemaphoreTake( MUTEX, ( TickType_t )EXPECTATION )
 // Метод должен отдать mutex в потоке.
 // Метод ничего не возвращает.
 #define USER_OS_GIVE_MUTEX(MUTEX)                           xSemaphoreGive( MUTEX )

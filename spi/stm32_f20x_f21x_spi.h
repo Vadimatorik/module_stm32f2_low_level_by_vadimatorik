@@ -97,7 +97,7 @@ public:
      * ЗАМЕЧАНИЕ: входной прием не ведется!
      */
 
-    int tx ( void* p_array_tx, uint16_t length, uint32_t timeout_ms ) const;
+    virtual int tx ( void* p_array_tx, uint16_t length, uint32_t timeout_ms ) const = 0;
 
     /*
      * p_array_tx   -   указатель на массив, который требуется передать
@@ -116,7 +116,7 @@ public:
      * принятые данные перезапишут входные.
      */
 
-    int tx ( void* p_array_tx, void* p_array_rx, uint16_t length, uint32_t timeout_ms ) const;
+    virtual int tx ( void* p_array_tx, void* p_array_rx, uint16_t length, uint32_t timeout_ms ) const = 0;
 
    /*
     * p_array_rx    -   указатель на массив, в который будет
@@ -128,7 +128,8 @@ public:
     * value_out     -   значение, которое будет отправляться
     *                   ( в случае, если SPI мастер ).
     */
-    int rx ( void* p_array_rx, uint16_t length, uint32_t timeout_ms, uint8_t out_value = 0 ) const;
+    virtual int rx ( void* p_array_rx, uint16_t length, uint32_t timeout_ms, uint8_t out_value = 0 ) const = 0;
+    virtual ~spi_base() {}
 };
 
 /**********************************************************************
@@ -176,7 +177,6 @@ public:
     void    handler                 ( void ) const;
 
 private:
-
     void    on                      ( void ) const;
     void    off                     ( void ) const;
 
@@ -196,15 +196,6 @@ private:
     typedef typename std::conditional< FRAME == EC_SPI_CFG_DATA_FRAME::FRAME_8_BIT, uint8_t, uint16_t>::type spi_frame_size;
     mutable spi_frame_size* p_tx = nullptr;
     mutable spi_frame_size* p_rx = nullptr;
-
-    /*
-     * Используется в прерывании SPI. Если true, то прерывание следует обработать.
-     * Если нет, то просто сбрасываем флаги, если требуется,
-     * очищаем DR (считываем их него)  и выходим.
-     * false - обработка прерыванием не требуется.
-     * true - обработка обязательна.
-     */
-    mutable bool processing_handler_cfg_flag = false;
 
     // Копировать в буффер данные, если они пришли?
     // В случае, если true, данные будут писаться
