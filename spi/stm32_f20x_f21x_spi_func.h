@@ -205,7 +205,6 @@ void spi_master_hardware_os< TEMPLATE_SPI_MASTER_HARD_OS_PARAM >::off ( void ) c
 
 template < TEMPLATE_SPI_MASTER_HARD_OS_HEADLINE >
 int spi_master_hardware_os< TEMPLATE_SPI_MASTER_HARD_OS_PARAM >::tx ( void* p_array_tx, uint16_t length, uint32_t timeout_ms ) const {
-    (void)timeout_ms;
     spi_registers_struct*   S = ( spi_registers_struct* )M_EC_TO_U32(SPIx);
     if ( length == 0 ) return -1;
 
@@ -221,7 +220,7 @@ int spi_master_hardware_os< TEMPLATE_SPI_MASTER_HARD_OS_PARAM >::tx ( void* p_ar
     }
 
     this->on();             // Включаем SPI (после передачи отключаем, чтобы не висеть в прерыании).
-    bool reult = USER_OS_TAKE_BIN_SEMAPHORE( this->semaphore, portMAX_DELAY );
+    bool reult = USER_OS_TAKE_BIN_SEMAPHORE( this->semaphore, timeout_ms );
 
     USER_OS_GIVE_MUTEX( this->mutex );
 
@@ -238,7 +237,27 @@ int spi_master_hardware_os< TEMPLATE_SPI_MASTER_HARD_OS_PARAM >::tx ( void* p_ar
 
 template < TEMPLATE_SPI_MASTER_HARD_OS_HEADLINE >
 int spi_master_hardware_os< TEMPLATE_SPI_MASTER_HARD_OS_PARAM >::rx ( void* p_array_rx, uint16_t length, uint32_t timeout_ms, uint8_t out_value ) const {
-    (void)p_array_rx; (void)length; (void)out_value; (void)timeout_ms;
+    spi_registers_struct*   S = ( spi_registers_struct* )M_EC_TO_U32(SPIx);
+    if ( length == 0 ) return -1;
+
+    USER_OS_TAKE_MUTEX( this->mutex, portMAX_DELAY );
+
+    if ( NUM_LINE == EC_SPI_CFG_NUMBER_LINE::LINE_2 ) {
+        number_items = --length;                                        // Отнимаем сначала одну, т.к. одну передаем сразу (посылку).
+        this->p_tx = &out_value;                                        // Это значение будем отправлять постоянно.
+        this->p_rx = ( spi_frame_size* )p_array_rx;
+        this->handler_rx_copy_cfg_flag = true;
+        this->handler_tx_point_inc_cfg_flag = false;
+        S->D    = *p_tx;    // Делаем первую отправку.
+        S->C2   = this->cfg.c2_msk;                                     // Включаем нужные прерывания + параметры конфиграции интерфейса (мы сбросили этот регистр в 0 в прерывании, чтрбы быстро выйти из прерывания).
+    }
+
+    this->on();                                                         // Включаем SPI (после передачи отключаем, чтобы не висеть в прерыании).
+    bool reult = USER_OS_TAKE_BIN_SEMAPHORE( this->semaphore, timeout_ms );
+
+    USER_OS_GIVE_MUTEX( this->mutex );
+
+    return ( reult ) ? 1 : 0;
     return 0;
 }
 
