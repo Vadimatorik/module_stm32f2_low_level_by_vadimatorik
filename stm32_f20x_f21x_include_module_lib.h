@@ -1,5 +1,7 @@
 #pragma once
 
+#include "stm32_f20x_f21x_nvic.h"                   // NVIC тянем всегда.
+#include "freertos_headers.h"
 #include "stm32_f20x_f21x_conf.h"
 
 /*

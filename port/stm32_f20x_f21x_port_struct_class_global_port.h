@@ -1,5 +1,4 @@
-#ifndef STM32F2_API_PORT_STM32_F20X_F21X_PORT_STRUCT_CLASS_GLOBAL_PORT_H_
-#define STM32F2_API_PORT_STM32_F20X_F21X_PORT_STRUCT_CLASS_GLOBAL_PORT_H_
+#pragma once
 
 #include "stm32_f20x_f21x_conf.h"
 
@@ -78,5 +77,4 @@ struct __attribute__((packed)) global_port_msk_reg_struct {
     const uint32_t    clk_msk;
 };
 
-#endif
 #endif
