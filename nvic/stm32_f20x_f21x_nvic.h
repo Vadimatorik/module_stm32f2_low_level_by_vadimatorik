@@ -7,7 +7,8 @@
  */
 enum class IRQ_NAME {
     SPI1        = 35,
-    SPI2        = 36
+    SPI2        = 36,
+    SPI3        = 51
 };
 
 enum class IRQ_PRIO {
