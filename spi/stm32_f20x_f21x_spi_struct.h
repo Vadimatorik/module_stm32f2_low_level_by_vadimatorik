@@ -22,7 +22,7 @@
 /*
  * Позиции битовых полей внутри регистра C1 модуля SPI.
  */
-enum class EC_C1_REG_BIT_FIELD_POS {
+enum class EC_SPI_C1_REG_BIT_FIELD_POS {
     CPHA        = 0,
     CPOL        = 1,
     MSTR        = 2,
@@ -42,21 +42,21 @@ enum class EC_C1_REG_BIT_FIELD_POS {
 /*
  * Маски бит регистра pllcfg модуля RCC.
  */
-enum class EC_C1_REG_BIT_MSK {
-    CPHA        = 1     << M_EC_TO_U8(EC_C1_REG_BIT_FIELD_POS::CPHA),
-    CPOL        = 1     << M_EC_TO_U8(EC_C1_REG_BIT_FIELD_POS::CPOL),
-    MSTR        = 1     << M_EC_TO_U8(EC_C1_REG_BIT_FIELD_POS::MSTR),
-    BR          = 0B111 << M_EC_TO_U8(EC_C1_REG_BIT_FIELD_POS::BR),
-    SPE         = 1     << M_EC_TO_U8(EC_C1_REG_BIT_FIELD_POS::SPE),
-    LSBFIRST    = 1     << M_EC_TO_U8(EC_C1_REG_BIT_FIELD_POS::LSBFIRST),
-    SSI         = 1     << M_EC_TO_U8(EC_C1_REG_BIT_FIELD_POS::SSI),
-    SSM         = 1     << M_EC_TO_U8(EC_C1_REG_BIT_FIELD_POS::SSM),
-    RXONLY      = 1     << M_EC_TO_U8(EC_C1_REG_BIT_FIELD_POS::RXONLY),
-    DFF         = 1     << M_EC_TO_U8(EC_C1_REG_BIT_FIELD_POS::DFF),
-    CRCNEXT     = 1     << M_EC_TO_U8(EC_C1_REG_BIT_FIELD_POS::CRCNEXT),
-    CRCEN       = 1     << M_EC_TO_U8(EC_C1_REG_BIT_FIELD_POS::CRCEN),
-    BIDIOE      = 1     << M_EC_TO_U8(EC_C1_REG_BIT_FIELD_POS::BIDIOE),
-    BIDIMODE    = 1     << M_EC_TO_U8(EC_C1_REG_BIT_FIELD_POS::BIDIMODE)
+enum class EC_SPI_C1_REG_BIT_MSK {
+    CPHA        = 1     << M_EC_TO_U8(EC_SPI_C1_REG_BIT_FIELD_POS::CPHA),
+    CPOL        = 1     << M_EC_TO_U8(EC_SPI_C1_REG_BIT_FIELD_POS::CPOL),
+    MSTR        = 1     << M_EC_TO_U8(EC_SPI_C1_REG_BIT_FIELD_POS::MSTR),
+    BR          = 0B111 << M_EC_TO_U8(EC_SPI_C1_REG_BIT_FIELD_POS::BR),
+    SPE         = 1     << M_EC_TO_U8(EC_SPI_C1_REG_BIT_FIELD_POS::SPE),
+    LSBFIRST    = 1     << M_EC_TO_U8(EC_SPI_C1_REG_BIT_FIELD_POS::LSBFIRST),
+    SSI         = 1     << M_EC_TO_U8(EC_SPI_C1_REG_BIT_FIELD_POS::SSI),
+    SSM         = 1     << M_EC_TO_U8(EC_SPI_C1_REG_BIT_FIELD_POS::SSM),
+    RXONLY      = 1     << M_EC_TO_U8(EC_SPI_C1_REG_BIT_FIELD_POS::RXONLY),
+    DFF         = 1     << M_EC_TO_U8(EC_SPI_C1_REG_BIT_FIELD_POS::DFF),
+    CRCNEXT     = 1     << M_EC_TO_U8(EC_SPI_C1_REG_BIT_FIELD_POS::CRCNEXT),
+    CRCEN       = 1     << M_EC_TO_U8(EC_SPI_C1_REG_BIT_FIELD_POS::CRCEN),
+    BIDIOE      = 1     << M_EC_TO_U8(EC_SPI_C1_REG_BIT_FIELD_POS::BIDIOE),
+    BIDIMODE    = 1     << M_EC_TO_U8(EC_SPI_C1_REG_BIT_FIELD_POS::BIDIMODE)
 };
 
 enum class EC_SPI_CFG_BAUD_RATE_DEV {
@@ -74,7 +74,7 @@ enum class EC_SPI_CFG_BAUD_RATE_DEV {
 /*
  * Позиции битовых полей внутри регистра C2 модуля SPI.
  */
-enum class EC_C2_REG_BIT_FIELD_POS {
+enum class EC_SPI_C2_REG_BIT_FIELD_POS {
     RXDMAEN     = 0,
     TXDMAEN     = 1,
     SSOE        = 2,
@@ -84,17 +84,17 @@ enum class EC_C2_REG_BIT_FIELD_POS {
     TXEIE       = 7
 };
 
-enum class EC_C2_REG_BIT_MSK {
-    RXDMAEN     = 1  << M_EC_TO_U8(EC_C2_REG_BIT_FIELD_POS::RXDMAEN),
-    TXDMAEN     = 1  << M_EC_TO_U8(EC_C2_REG_BIT_FIELD_POS::TXDMAEN),
-    SSOE        = 1  << M_EC_TO_U8(EC_C2_REG_BIT_FIELD_POS::SSOE),
-    FRF         = 1  << M_EC_TO_U8(EC_C2_REG_BIT_FIELD_POS::FRF),
-    ERRIE       = 1  << M_EC_TO_U8(EC_C2_REG_BIT_FIELD_POS::ERRIE),
-    RXNEIE      = 1  << M_EC_TO_U8(EC_C2_REG_BIT_FIELD_POS::RXNEIE),
-    TXEIE       = 1  << M_EC_TO_U8(EC_C2_REG_BIT_FIELD_POS::TXEIE)
+enum class EC_SPI_C2_REG_BIT_MSK {
+    RXDMAEN     = 1  << M_EC_TO_U8(EC_SPI_C2_REG_BIT_FIELD_POS::RXDMAEN),
+    TXDMAEN     = 1  << M_EC_TO_U8(EC_SPI_C2_REG_BIT_FIELD_POS::TXDMAEN),
+    SSOE        = 1  << M_EC_TO_U8(EC_SPI_C2_REG_BIT_FIELD_POS::SSOE),
+    FRF         = 1  << M_EC_TO_U8(EC_SPI_C2_REG_BIT_FIELD_POS::FRF),
+    ERRIE       = 1  << M_EC_TO_U8(EC_SPI_C2_REG_BIT_FIELD_POS::ERRIE),
+    RXNEIE      = 1  << M_EC_TO_U8(EC_SPI_C2_REG_BIT_FIELD_POS::RXNEIE),
+    TXEIE       = 1  << M_EC_TO_U8(EC_SPI_C2_REG_BIT_FIELD_POS::TXEIE)
 };
 
-enum class EC_S_REG_BIT_FIELD_POS {
+enum class EC_SPI_S_REG_BIT_FIELD_POS {
     RXNE        = 0,
     TXE         = 1,
     CHSIDE      = 2,
@@ -106,16 +106,16 @@ enum class EC_S_REG_BIT_FIELD_POS {
     TIFRFE      = 8
 };
 
-enum class EC_S_REG_BIT_MSK {
-    RXNE        = 1  << M_EC_TO_U8(EC_S_REG_BIT_FIELD_POS::RXNE),
-    TXE         = 1  << M_EC_TO_U8(EC_S_REG_BIT_FIELD_POS::TXE),
-    CHSIDE      = 1  << M_EC_TO_U8(EC_S_REG_BIT_FIELD_POS::CHSIDE),
-    UDR         = 1  << M_EC_TO_U8(EC_S_REG_BIT_FIELD_POS::UDR),
-    CRCERR      = 1  << M_EC_TO_U8(EC_S_REG_BIT_FIELD_POS::CRCERR),
-    MODF        = 1  << M_EC_TO_U8(EC_S_REG_BIT_FIELD_POS::MODF),
-    OVR         = 1  << M_EC_TO_U8(EC_S_REG_BIT_FIELD_POS::OVR),
-    BSY         = 1  << M_EC_TO_U8(EC_S_REG_BIT_FIELD_POS::BSY),
-    TIFRFE      = 1  << M_EC_TO_U8(EC_S_REG_BIT_FIELD_POS::TIFRFE)
+enum class EC_SPI_REG_BIT_MSK {
+    RXNE        = 1  << M_EC_TO_U8(EC_SPI_S_REG_BIT_FIELD_POS::RXNE),
+    TXE         = 1  << M_EC_TO_U8(EC_SPI_S_REG_BIT_FIELD_POS::TXE),
+    CHSIDE      = 1  << M_EC_TO_U8(EC_SPI_S_REG_BIT_FIELD_POS::CHSIDE),
+    UDR         = 1  << M_EC_TO_U8(EC_SPI_S_REG_BIT_FIELD_POS::UDR),
+    CRCERR      = 1  << M_EC_TO_U8(EC_SPI_S_REG_BIT_FIELD_POS::CRCERR),
+    MODF        = 1  << M_EC_TO_U8(EC_SPI_S_REG_BIT_FIELD_POS::MODF),
+    OVR         = 1  << M_EC_TO_U8(EC_SPI_S_REG_BIT_FIELD_POS::OVR),
+    BSY         = 1  << M_EC_TO_U8(EC_SPI_S_REG_BIT_FIELD_POS::BSY),
+    TIFRFE      = 1  << M_EC_TO_U8(EC_SPI_S_REG_BIT_FIELD_POS::TIFRFE)
 };
 
 
@@ -123,7 +123,7 @@ enum class EC_S_REG_BIT_MSK {
  * Мастер/ведомый.
  */
 enum class EC_SPI_CFG_MODE {
-    MASTER  = M_EC_TO_U32(EC_C1_REG_BIT_MSK::MSTR),
+    MASTER  = M_EC_TO_U32(EC_SPI_C1_REG_BIT_MSK::MSTR),
     SLAVE   = 0
 };
 
@@ -134,7 +134,7 @@ enum class EC_SPI_CFG_MODE {
  */
 enum class EC_SPI_CFG_CLK_POLARITY {
     IDLE_0  = 0,
-    IDLE_1  = M_EC_TO_U32(EC_C1_REG_BIT_MSK::CPOL)
+    IDLE_1  = M_EC_TO_U32(EC_SPI_C1_REG_BIT_MSK::CPOL)
 };
 
 
@@ -143,14 +143,14 @@ enum class EC_SPI_CFG_CLK_POLARITY {
  */
 enum class EC_SPI_CFG_CLK_PHASE {
     FIRST   = 0,
-    SECOND  = M_EC_TO_U32(EC_C1_REG_BIT_MSK::CPHA)
+    SECOND  = M_EC_TO_U32(EC_SPI_C1_REG_BIT_MSK::CPHA)
 };
 
 /*
  * Делитель частоты с AHB для шины APB1.
  */
 enum class EC_SPI_CFG_NUMBER_LINE {
-    LINE_1  = M_EC_TO_U32(EC_C1_REG_BIT_MSK::BIDIMODE),
+    LINE_1  = M_EC_TO_U32(EC_SPI_C1_REG_BIT_MSK::BIDIMODE),
     LINE_2  = 0
 };
 
@@ -158,7 +158,7 @@ enum class EC_SPI_CFG_NUMBER_LINE {
  * Разрешение прерывания по опусташению буффера отправки.
  */
 enum class EC_SPI_CFG_INTERRUPT_TX {
-    ON  = M_EC_TO_U32(EC_C2_REG_BIT_MSK::TXEIE),
+    ON  = M_EC_TO_U32(EC_SPI_C2_REG_BIT_MSK::TXEIE),
     OFF = 0
 };
 
@@ -166,7 +166,7 @@ enum class EC_SPI_CFG_INTERRUPT_TX {
  * Вызов прерывания когда буффер по входу не пустой.
  */
 enum class EC_SPI_CFG_INTERRUPT_RX {
-    ON  = M_EC_TO_U32(EC_C2_REG_BIT_MSK::RXNEIE),
+    ON  = M_EC_TO_U32(EC_SPI_C2_REG_BIT_MSK::RXNEIE),
     OFF = 0
 };
 
@@ -174,7 +174,7 @@ enum class EC_SPI_CFG_INTERRUPT_RX {
  * При возникновении ошибки.
  */
 enum class EC_SPI_CFG_INTERRUPT_ERROR {
-    ON  = M_EC_TO_U32(EC_C2_REG_BIT_MSK::ERRIE),
+    ON  = M_EC_TO_U32(EC_SPI_C2_REG_BIT_MSK::ERRIE),
     OFF = 0
 };
 
@@ -183,7 +183,7 @@ enum class EC_SPI_CFG_INTERRUPT_ERROR {
  */
 enum class EC_SPI_CFG_FRAME_FORMAT {
     MOTOROLA    = 0,
-    TI          = M_EC_TO_U32(EC_C2_REG_BIT_MSK::FRF)
+    TI          = M_EC_TO_U32(EC_SPI_C2_REG_BIT_MSK::FRF)
 };
 
 /*
@@ -191,7 +191,7 @@ enum class EC_SPI_CFG_FRAME_FORMAT {
  */
 enum class EC_SPI_CFG_CS {
     DISABLED   = 0,
-    ENABLED    = M_EC_TO_U32(EC_C2_REG_BIT_MSK::SSOE)
+    ENABLED    = M_EC_TO_U32(EC_SPI_C2_REG_BIT_MSK::SSOE)
 };
 
 /*
@@ -199,7 +199,7 @@ enum class EC_SPI_CFG_CS {
  */
 enum class EC_SPI_CFG_DMA_TX_BUF {
     DISABLED   = 0,
-    ENABLED    = M_EC_TO_U32(EC_C2_REG_BIT_MSK::TXDMAEN)
+    ENABLED    = M_EC_TO_U32(EC_SPI_C2_REG_BIT_MSK::TXDMAEN)
 };
 
 /*
@@ -207,7 +207,7 @@ enum class EC_SPI_CFG_DMA_TX_BUF {
  */
 enum class EC_SPI_CFG_DMA_RX_BUF {
     DISABLED   = 0,
-    ENABLED    = M_EC_TO_U32(EC_C2_REG_BIT_MSK::RXDMAEN)
+    ENABLED    = M_EC_TO_U32(EC_SPI_C2_REG_BIT_MSK::RXDMAEN)
 };
 
 
@@ -219,7 +219,7 @@ enum class EC_SPI_CFG_DMA_RX_BUF {
 enum class EC_SPI_CFG_ONE_LINE_MODE {
     USE_2_LINE      = 0xFF,
     RECEIVE_ONLY    = 0,
-    TRANSMIT_ONLY   = M_EC_TO_U32(EC_C1_REG_BIT_MSK::BIDIOE)
+    TRANSMIT_ONLY   = M_EC_TO_U32(EC_SPI_C1_REG_BIT_MSK::BIDIOE)
 };
 
 /*
@@ -227,7 +227,7 @@ enum class EC_SPI_CFG_ONE_LINE_MODE {
  */
 enum class EC_SPI_CFG_DATA_FRAME {
     FRAME_8_BIT     = 0,
-    FRAME_16_BIT    = M_EC_TO_U32(EC_C1_REG_BIT_MSK::DFF)
+    FRAME_16_BIT    = M_EC_TO_U32(EC_SPI_C1_REG_BIT_MSK::DFF)
 };
 
 /*
@@ -235,7 +235,7 @@ enum class EC_SPI_CFG_DATA_FRAME {
  */
 enum class EC_SPI_CFG_RECEIVE_MODE {
     FULL_DUPLEX     = 0,
-    RECEIVE_ONLY    = M_EC_TO_U32(EC_C1_REG_BIT_MSK::RXONLY)
+    RECEIVE_ONLY    = M_EC_TO_U32(EC_SPI_C1_REG_BIT_MSK::RXONLY)
 };
 
 /*
@@ -243,7 +243,7 @@ enum class EC_SPI_CFG_RECEIVE_MODE {
  */
 enum class EC_SPI_CFG_SSM {
     SSM_OFF  = 0,
-    SSM_ON   = M_EC_TO_U32(EC_C1_REG_BIT_MSK::SSM)
+    SSM_ON   = M_EC_TO_U32(EC_SPI_C1_REG_BIT_MSK::SSM)
 };
 
 /*
@@ -252,7 +252,7 @@ enum class EC_SPI_CFG_SSM {
 enum class EC_SPI_CFG_SSM_MODE {
     NO_USE       = 0xFF,
     CS_IGNORED_0 = 0,
-    CS_IGNORED_1 = M_EC_TO_U32(EC_C1_REG_BIT_MSK::SSI)
+    CS_IGNORED_1 = M_EC_TO_U32(EC_SPI_C1_REG_BIT_MSK::SSI)
 };
 
 enum class EC_SPI_NAME {

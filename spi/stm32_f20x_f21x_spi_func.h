@@ -113,7 +113,7 @@ constexpr uint32_t spi_cfg< MODE, POLAR, PHASE, NUM_LINE, ONE_LINE_MODE, FRAME, 
 
     msk     |= M_EC_TO_U32(MODE) | M_EC_TO_U32(POLAR) | M_EC_TO_U32(PHASE) |
                M_EC_TO_U32(NUM_LINE) | M_EC_TO_U32(FRAME) | M_EC_TO_U32(R_MODE) |
-               M_EC_TO_U32(BR_DEV) << M_EC_TO_U8(EC_C1_REG_BIT_FIELD_POS::BR);
+               M_EC_TO_U32(BR_DEV) << M_EC_TO_U8(EC_SPI_C1_REG_BIT_FIELD_POS::BR);
 
     if ( MODE == EC_SPI_CFG_MODE::SLAVE ) {
         msk     |= M_EC_TO_U32(SSM) | M_EC_TO_U32(SSM_MODE);
@@ -164,7 +164,7 @@ template < EC_SPI_NAME     SPIx, EC_SPI_CFG_CLK_POLARITY   POLAR, EC_SPI_CFG_CLK
            EC_SPI_CFG_FRAME_FORMAT FORMAT, EC_SPI_CFG_BAUD_RATE_DEV    BR_DEV, EC_SPI_CFG_CS   CS >
 uint32_t spi_master_hardware_os< TEMPLATE_SPI_MASTER_HARD_OS_PARAM >::tx_e_flag_get ( void ) const {
     spi_registers_struct*   S = ( spi_registers_struct* )M_EC_TO_U32(SPIx);
-    volatile uint32_t result = *M_U32_TO_P(M_GET_BB_P_PER((uint32_t)&S->S, M_EC_TO_U8(EC_S_REG_BIT_FIELD_POS::TXE)));
+    volatile uint32_t result = *M_U32_TO_P(M_GET_BB_P_PER((uint32_t)&S->S, M_EC_TO_U8(EC_SPI_S_REG_BIT_FIELD_POS::TXE)));
     return result;
 }
 
@@ -172,7 +172,7 @@ template < EC_SPI_NAME     SPIx, EC_SPI_CFG_CLK_POLARITY   POLAR, EC_SPI_CFG_CLK
            EC_SPI_CFG_FRAME_FORMAT FORMAT, EC_SPI_CFG_BAUD_RATE_DEV    BR_DEV, EC_SPI_CFG_CS   CS >
 uint32_t spi_master_hardware_os< TEMPLATE_SPI_MASTER_HARD_OS_PARAM >::rx_n_e_flag_get ( void ) const {
     spi_registers_struct*   S = ( spi_registers_struct* )M_EC_TO_U32(SPIx);
-    volatile uint32_t result = *M_U32_TO_P(M_GET_BB_P_PER((uint32_t)&S->S, M_EC_TO_U8(EC_S_REG_BIT_FIELD_POS::RXNE)));
+    volatile uint32_t result = *M_U32_TO_P(M_GET_BB_P_PER((uint32_t)&S->S, M_EC_TO_U8(EC_SPI_S_REG_BIT_FIELD_POS::RXNE)));
     return result;
 }
 
@@ -194,13 +194,13 @@ int spi_master_hardware_os< TEMPLATE_SPI_MASTER_HARD_OS_PARAM >::reinit ( void )
 template < TEMPLATE_SPI_MASTER_HARD_OS_HEADLINE >
 void spi_master_hardware_os< TEMPLATE_SPI_MASTER_HARD_OS_PARAM >::on ( void ) const {
     spi_registers_struct*   S = ( spi_registers_struct* )M_EC_TO_U32(SPIx);
-    S->C1 |= M_EC_TO_U32(EC_C1_REG_BIT_MSK::SPE);                   // Запскаем SPI.
+    S->C1 |= M_EC_TO_U32(EC_SPI_C1_REG_BIT_MSK::SPE);                   // Запскаем SPI.
 }
 
 template < TEMPLATE_SPI_MASTER_HARD_OS_HEADLINE >
 void spi_master_hardware_os< TEMPLATE_SPI_MASTER_HARD_OS_PARAM >::off ( void ) const {
     spi_registers_struct*   S = ( spi_registers_struct* )M_EC_TO_U32(SPIx);
-    S->C1 &= ~M_EC_TO_U32(EC_C1_REG_BIT_MSK::SPE);                  // Отключаем SPI.
+    S->C1 &= ~M_EC_TO_U32(EC_SPI_C1_REG_BIT_MSK::SPE);                  // Отключаем SPI.
 }
 
 template < TEMPLATE_SPI_MASTER_HARD_OS_HEADLINE >

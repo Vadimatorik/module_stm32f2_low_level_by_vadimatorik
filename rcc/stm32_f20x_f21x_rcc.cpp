@@ -247,7 +247,7 @@ EC_ANSWER_CLOCK_UPDATE rcc::pll_sysclk_src_clock_set( uint8_t number_cfg ) const
         this->hsi_clock_off();
     } else {
        this->hsi_set();
-        this->hse_clock_off();
+       this->hse_clock_off();
     }
     this->pll_main_off();                                                                       // Отключаем основной PLL.
     this->pll_set_cfg(number_cfg);                                                              // Устанавливаем режим PLL.
@@ -288,4 +288,13 @@ void rcc::spi3_clk_on ( void ) {
 void rcc::spi3_clk_off ( void ) {
     RCC->APB_1_EN &= ~M_EC_TO_U32(EC_APB1_EN_REG_BIT_MSK::SPI3);
 }
+
+void rcc::tim1_clk_on ( void ) {
+    RCC->APB_2_EN |= M_EC_TO_U32(EC_APB2_EN_REG_BIT_MSK::TIM1);
+}
+
+void rcc::tim1_clk_off ( void ) {
+    RCC->APB_2_EN &= ~M_EC_TO_U32(EC_APB2_EN_REG_BIT_MSK::TIM1);
+}
+
 #endif

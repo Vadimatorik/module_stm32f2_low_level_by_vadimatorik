@@ -130,6 +130,9 @@ public:
     static void   spi3_clk_on               ( void );
     static void   spi3_clk_off              ( void );
 
+    static void   tim1_clk_on               ( void );
+    static void   tim1_clk_off              ( void );
+
 private:
     /*
      * Действия производятся без каких-либо проверок.
@@ -152,14 +155,14 @@ private:
     static void    sw_pll_set               ( void );                                         // Переключает ядро на PLL.
 
     static void    dev1_bus_set             ( void );                                         // Выставляет делители APB1, APB2, AHB в 1.
-           void    dev_after_pll_bus_set    ( uint8_t &number_cfg ) const;                    // Метод выставляет делители частоты на для шин, рассчитаные на этапе компиляции.
+           void    dev_after_pll_bus_set    ( uint8_t &number_cfg ) const;                           // Метод выставляет делители частоты на для шин, рассчитаные на этапе компиляции.
 
-           void    pll_set_cfg              ( uint8_t &number_cfg ) const;                    // Метод выставляет выбранную конфигурацию без провекри в PLL (конфигурация должна существовать,
-                                                                                              // PLL должен быть отключен).
+           void    pll_set_cfg              ( uint8_t &number_cfg ) const;                           // Метод выставляет выбранную конфигурацию без провекри в PLL (конфигурация должна существовать,
+                                                                                                     // PLL должен быть отключен).
            void    dev_after_hsi_or_hse_bus_set ( uint8_t &number_cfg ) const;
 
     static void    flash_ac_reset           ( void );                                         // Сбрасываем предсказатель и кэш в начальное состояние.
-           void    flash_ac_set             ( uint8_t &number_cfg ) const;                    // Устанавливаем предсказатель и кэш по заданной конфигурации.
+           void    flash_ac_set             ( uint8_t &number_cfg ) const;                           // Устанавливаем предсказатель и кэш по заданной конфигурации.
 
     static EC_ANSWER_RCC_SWS_STATUS        sw_status_get                   ( void );          // Возвращает источние сообщение о том, от какого источника тактируется ядро.
 
