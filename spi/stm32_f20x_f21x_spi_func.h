@@ -211,8 +211,8 @@ int spi_master_hardware_os< TEMPLATE_SPI_MASTER_HARD_OS_PARAM >::tx ( void* p_ar
     USER_OS_TAKE_MUTEX( this->mutex, portMAX_DELAY );
 
     if ( NUM_LINE == EC_SPI_CFG_NUMBER_LINE::LINE_2 ) {
-        number_items = --length;    // Отнимаем сначала одну, т.к. одну передаем сразу (посылку).
-        p_tx = &( static_cast< spi_frame_size* >( p_array_tx ) )[1];    // Если транзакция всего одна, то ничего страшного, он просто не будет пользовать этот указатель (handler не будет пользовать).
+        this->number_items = --length;    // Отнимаем сначала одну, т.к. одну передаем сразу (посылку).
+        this->p_tx = &( static_cast< spi_frame_size* >( p_array_tx ) )[1];    // Если транзакция всего одна, то ничего страшного, он просто не будет пользовать этот указатель (handler не будет пользовать).
         this->handler_rx_copy_cfg_flag = false;
         this->handler_tx_point_inc_cfg_flag = true;
         S->D    = *( static_cast< spi_frame_size* >( p_array_tx ) );                    // Делаем первую отправку.
@@ -243,7 +243,7 @@ int spi_master_hardware_os< TEMPLATE_SPI_MASTER_HARD_OS_PARAM >::rx ( void* p_ar
     USER_OS_TAKE_MUTEX( this->mutex, portMAX_DELAY );
 
     if ( NUM_LINE == EC_SPI_CFG_NUMBER_LINE::LINE_2 ) {
-        number_items = --length;                                        // Отнимаем сначала одну, т.к. одну передаем сразу (посылку).
+        this->number_items = --length;                                        // Отнимаем сначала одну, т.к. одну передаем сразу (посылку).
         this->p_tx = &out_value;                                        // Это значение будем отправлять постоянно.
         this->p_rx = ( spi_frame_size* )p_array_rx;
         this->handler_rx_copy_cfg_flag = true;
