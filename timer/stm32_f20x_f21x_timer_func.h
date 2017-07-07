@@ -19,26 +19,32 @@ constexpr tim1_comp_one_channel_base< P_TIM, PRESCALER, PERIOD_TOGGLE, CH_TOGGLE
         .EG         = 0,
         .CCM1       = this->ccm1_reg_msk_get(),                  // Режим работы канала (нам нужен триггер).
         .CCM2       = this->ccm2_reg_msk_get(),
-        .CCE        = this->cce_reg_msk_get(),                 // Включение-отключение выходных каналов.
+        .CCE        = this->cce_reg_msk_get(),                   // Включение-отключение выходных каналов.
         .CNT        = 0,
-        .PSC        = PRESCALER,
-        .AR         = PERIOD_TOGGLE,
+        .PSC        = PRESCALER - 1,                             // Счет с 0.
+        .AR         = PERIOD_TOGGLE - 1,                         // Счет с 0.
         .RC         = 0,
-        .CC1        = PERIOD_TOGGLE,    // Мы используем всего 1 канал. Остальные будут проигнорированы.
-        .CC2        = PERIOD_TOGGLE,
-        .CC3        = PERIOD_TOGGLE,
-        .CC4        = PERIOD_TOGGLE,
-        .BDT        = 0,
+        .CC1        = 0,    // Мы используем всего 1 канал. Остальные будут проигнорированы.
+        .CC2        = 0,
+        .CC3        = 0,
+        .CC4        = 0,
+        .BDT        = this->bdt_reg_msk_get(),  // Общее разрешение выходных каналов.
         .DC         = 0,
         .DMA        = 0
     } ) {}
+
+template < TIM1_OR_TIM8 P_TIM, uint16_t PRESCALER, uint16_t PERIOD_TOGGLE, EC_TIM_CH_TOGGLE CH_TOGGLE, EC_TIM_CH_MODE MODE >
+const tim1_comp_one_channel_base< TEMPLATE_TIM_1_OR_8_TOGGLE >* tim1_comp_one_channel_base< TEMPLATE_TIM_1_OR_8_TOGGLE >::instance ( void ) {
+    static tim1_comp_one_channel_base< TEMPLATE_TIM_1_OR_8_TOGGLE > obj;
+    return &obj;
+}
 
 /*
  * COnstexpr функции для формирования масивов.
  */
 template < TIM1_OR_TIM8 P_TIM, uint16_t PRESCALER, uint16_t PERIOD_TOGGLE, EC_TIM_CH_TOGGLE CH_TOGGLE, EC_TIM_CH_MODE MODE >
 constexpr uint32_t tim1_comp_one_channel_base< P_TIM, PRESCALER, PERIOD_TOGGLE, CH_TOGGLE, MODE >::ccm1_reg_msk_get ( void ) {
-    uint32_t CCM1 = 0;    // В данном регистре для этого режима нас ничего не интересует.
+    uint32_t CCM1 = 0;
     if ( CH_TOGGLE == EC_TIM_CH_TOGGLE::CH_1 ) {
         CCM1 |= M_EC_TO_U8(OCxM_MODE::TOGGLE) << M_EC_TO_U8(EC_TIM_1_8_CCM1_REG_BIT_FIELD_POS::OC1M);
     }
@@ -50,7 +56,7 @@ constexpr uint32_t tim1_comp_one_channel_base< P_TIM, PRESCALER, PERIOD_TOGGLE, 
 
 template < TIM1_OR_TIM8 P_TIM, uint16_t PRESCALER, uint16_t PERIOD_TOGGLE, EC_TIM_CH_TOGGLE CH_TOGGLE, EC_TIM_CH_MODE MODE >
 constexpr uint32_t tim1_comp_one_channel_base< P_TIM, PRESCALER, PERIOD_TOGGLE, CH_TOGGLE, MODE >::ccm2_reg_msk_get ( void ) {
-    uint32_t CCM2 = 0;    // В данном регистре для этого режима нас ничего не интересует.
+    uint32_t CCM2 = 0;
     if ( CH_TOGGLE == EC_TIM_CH_TOGGLE::CH_3 ) {
         CCM2 |= M_EC_TO_U8(OCxM_MODE::TOGGLE) << M_EC_TO_U8(EC_TIM_1_8_CCM2_REG_BIT_FIELD_POS::OC3M);
     }
@@ -59,6 +65,14 @@ constexpr uint32_t tim1_comp_one_channel_base< P_TIM, PRESCALER, PERIOD_TOGGLE, 
     }
     return CCM2;
 }
+
+template < TIM1_OR_TIM8 P_TIM, uint16_t PRESCALER, uint16_t PERIOD_TOGGLE, EC_TIM_CH_TOGGLE CH_TOGGLE, EC_TIM_CH_MODE MODE >
+constexpr uint32_t tim1_comp_one_channel_base< P_TIM, PRESCALER, PERIOD_TOGGLE, CH_TOGGLE, MODE >::bdt_reg_msk_get( void ) {
+    uint32_t BDT = 0;
+    BDT |= M_EC_TO_U32(EC_TIM_1_8_BDT_REG_BIT_MSK::MOE);        // Общее разрешение выходных каналов.
+    return BDT;
+}
+
 
 template < TIM1_OR_TIM8 P_TIM, uint16_t PRESCALER, uint16_t PERIOD_TOGGLE, EC_TIM_CH_TOGGLE CH_TOGGLE, EC_TIM_CH_MODE MODE >
 constexpr uint32_t tim1_comp_one_channel_base< P_TIM, PRESCALER, PERIOD_TOGGLE, CH_TOGGLE, MODE>::cce_reg_msk_get ( void ) {

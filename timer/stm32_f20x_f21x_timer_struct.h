@@ -59,6 +59,28 @@ enum class EC_TIM_1_8_C2_REG_BIT_MSK {
     OIS4        = 1     << M_EC_TO_U8(EC_TIM_1_8_C2_REG_BIT_FIELD_POS::OIS4)
 };
 
+enum class EC_TIM_1_8_BDT_REG_BIT_FIELD_POS {
+    DTG         = 0,    // [7:0]
+    LOOK        = 8,    // [9:8]
+    OSS         = 10,
+    OSSR        = 11,
+    BKE         = 12,
+    BKP         = 13,
+    AOE         = 14,
+    MOE         = 15
+
+};
+enum class EC_TIM_1_8_BDT_REG_BIT_MSK {
+    DTG         = 0xFF     << M_EC_TO_U8(EC_TIM_1_8_BDT_REG_BIT_FIELD_POS::DTG),
+    LOOK        = 0b11     << M_EC_TO_U8(EC_TIM_1_8_BDT_REG_BIT_FIELD_POS::LOOK),
+    OSS         = 1        << M_EC_TO_U8(EC_TIM_1_8_BDT_REG_BIT_FIELD_POS::OSS),
+    OSSR        = 1        << M_EC_TO_U8(EC_TIM_1_8_BDT_REG_BIT_FIELD_POS::OSSR),
+    BKE         = 1        << M_EC_TO_U8(EC_TIM_1_8_BDT_REG_BIT_FIELD_POS::BKE),
+    BKP         = 1        << M_EC_TO_U8(EC_TIM_1_8_BDT_REG_BIT_FIELD_POS::BKP),
+    AOE         = 1        << M_EC_TO_U8(EC_TIM_1_8_BDT_REG_BIT_FIELD_POS::AOE),
+    MOE         = 1        << M_EC_TO_U8(EC_TIM_1_8_BDT_REG_BIT_FIELD_POS::MOE)
+};
+
 
 enum class EC_TIM_1_8_CCM1_REG_BIT_FIELD_POS {
     CC1S        = 0,    // [1:0]

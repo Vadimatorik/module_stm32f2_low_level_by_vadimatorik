@@ -39,24 +39,26 @@ enum class EC_TIM_CH_MODE {
     ALL     = 2
 };
 
-
+#define TEMPLATE_TIM_1_OR_8_TOGGLE       P_TIM, PRESCALER, PERIOD_TOGGLE, CH_TOGGLE, MODE
 
 /*
  * Конкретные реализации интерфейсов.
  */
 template < TIM1_OR_TIM8 P_TIM, uint16_t PRESCALER, uint16_t PERIOD_TOGGLE, EC_TIM_CH_TOGGLE CH_TOGGLE, EC_TIM_CH_MODE MODE >
-class tim1_comp_one_channel_base /*: public tim_comp_one_channel_base*/ {
+class tim1_comp_one_channel_base : public tim_comp_one_channel_base {
 public:
-    constexpr tim1_comp_one_channel_base();
+    static const tim1_comp_one_channel_base< TEMPLATE_TIM_1_OR_8_TOGGLE >* instance ( void );
     void reinit     ( void ) const;
     void on         ( void ) const;
     void off        ( void ) const;
 
 private:
+    constexpr tim1_comp_one_channel_base();
     constexpr uint32_t ccm1_reg_msk_get ( void );
     constexpr uint32_t ccm2_reg_msk_get ( void );
     constexpr uint32_t cce_reg_msk_get  ( void );
-    const tim_1_or_8_registers_struct cfg_tim;
+    constexpr uint32_t bdt_reg_msk_get  ( void );
+    const     tim_1_or_8_registers_struct cfg_tim;
 };
 
 #include "stm32_f20x_f21x_timer_func.h"
