@@ -277,7 +277,7 @@ void spi_master_hardware_os< TEMPLATE_SPI_MASTER_HARD_OS_PARAM >::handler ( void
                 *p_rx = S->D;                                                       // Забираем себе.
                 p_rx++;                                                             // В сл. раз кладем в сл. ячейку ( разрядность учитывается на этапе компиляции ).
                 if ( this->number_items == 0 ) {                                    // Если передача завершена - отдаем семафор.
-                    USER_OS_PRIO_TASK_WOKEN     prio;
+                    static USER_OS_PRIO_TASK_WOKEN     prio;
                     USER_OS_GIVE_BIN_SEMAPHORE_FROM_ISR( this->semaphore, &prio );
                     this->off();                                                    // Отключаем транзакции SPI.
                     S->C2 = 0;                                                      // Отключаем генtрацию прерываний.
