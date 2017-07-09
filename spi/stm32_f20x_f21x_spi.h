@@ -118,6 +118,10 @@ public:
 
     virtual int tx ( const void* const  p_array_tx, void* p_array_rx, const uint16_t& length, uint32_t timeout_ms ) const = 0;
 
+    /*
+     * Только передаем 1 байт count раз.
+     */
+    virtual int tx_one_item ( const void* const  p_item_tx, const uint16_t& count, uint32_t timeout_ms ) const = 0;
    /*
     * p_array_rx    -   указатель на массив, в который будет
     *                   осуществляться прием по spi.
@@ -170,6 +174,8 @@ public:
 
     int     reinit                  ( void ) const;
     int     tx                      ( const void* const  p_array_tx, const uint16_t& length, uint32_t timeout_ms ) const;
+    int     tx_one_item             ( const void* const  p_item_tx, const uint16_t& count, uint32_t timeout_ms ) const;
+
     int     tx                      ( const void* const  p_array_tx, void* p_array_rx, const uint16_t& length, uint32_t timeout_ms ) const;
     int     rx                      ( void* p_array_rx, const uint16_t& length, uint32_t timeout_ms, uint8_t out_value = 0 ) const;
 

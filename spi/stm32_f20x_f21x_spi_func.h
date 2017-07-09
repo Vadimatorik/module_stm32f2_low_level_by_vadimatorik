@@ -203,6 +203,32 @@ int spi_master_hardware_os< TEMPLATE_SPI_MASTER_HARD_OS_PARAM >::tx ( const void
 }
 
 template < TEMPLATE_SPI_MASTER_HARD_OS_HEADLINE >
+int spi_master_hardware_os< TEMPLATE_SPI_MASTER_HARD_OS_PARAM >::tx_one_item ( const void* const p_item_tx, const uint16_t& count, uint32_t timeout_ms ) const {
+    spi_registers_struct*   S = ( spi_registers_struct* )M_EC_TO_U32(SPIx);
+    if ( count == 0 ) return -1;
+
+    USER_OS_TAKE_MUTEX( this->mutex, portMAX_DELAY );
+
+    bool result;
+    if ( NUM_LINE == EC_SPI_CFG_NUMBER_LINE::LINE_2 ) {
+        this->number_items = count - 1;    // Отнимаем сначала одну, т.к. одну передаем сразу (посылку).
+        this->handler_rx_copy_cfg_flag = false;
+        this->handler_tx_point_inc_cfg_flag = false;    // Передаем всегда 1.
+        this->p_tx = ( spi_frame_size* )p_item_tx;     // Если транзакция всего одна, то ничего страшного, он просто не будет пользовать этот указатель (handler не будет пользовать).
+        S->D    = *this->p_tx;                    // Делаем первую отправку.
+        S->C2   = this->cfg.c2_msk;    // Разрешаем генерацию прерываний.
+        this->on();
+        result = USER_OS_TAKE_BIN_SEMAPHORE( this->semaphore, timeout_ms );
+        while ( ( S->S & M_EC_TO_U32(EC_SPI_REG_BIT_MSK::BSY) ) != 0  ) {};            //  Ждем, пока SPI окончит передачу последнего пакета (если до нас кто отсылал).
+        this->off();
+    }
+
+    USER_OS_GIVE_MUTEX( this->mutex );
+
+    return ( result ) ? 1 : 0;
+}
+
+template < TEMPLATE_SPI_MASTER_HARD_OS_HEADLINE >
 int spi_master_hardware_os< TEMPLATE_SPI_MASTER_HARD_OS_PARAM >::tx ( const void* const p_array_tx, void* p_array_rx, const uint16_t& length, uint32_t timeout_ms ) const {
     (void)timeout_ms;
     (void)p_array_tx; (void)p_array_rx; (void)length;
