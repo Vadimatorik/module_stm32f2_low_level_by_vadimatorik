@@ -33,12 +33,6 @@ constexpr tim1_comp_one_channel_base< P_TIM, PRESCALER, PERIOD_TOGGLE, CH_TOGGLE
         .DMA        = 0
     } ) {}
 
-template < TIM1_OR_TIM8 P_TIM, uint16_t PRESCALER, uint16_t PERIOD_TOGGLE, EC_TIM_CH_TOGGLE CH_TOGGLE, EC_TIM_CH_MODE MODE >
-const tim1_comp_one_channel_base< TEMPLATE_TIM_1_OR_8_TOGGLE >* tim1_comp_one_channel_base< TEMPLATE_TIM_1_OR_8_TOGGLE >::instance ( void ) {
-    static tim1_comp_one_channel_base< TEMPLATE_TIM_1_OR_8_TOGGLE > obj;
-    return &obj;
-}
-
 /*
  * COnstexpr функции для формирования масивов.
  */

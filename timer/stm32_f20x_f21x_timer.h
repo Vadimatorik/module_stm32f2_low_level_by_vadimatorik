@@ -47,13 +47,12 @@ enum class EC_TIM_CH_MODE {
 template < TIM1_OR_TIM8 P_TIM, uint16_t PRESCALER, uint16_t PERIOD_TOGGLE, EC_TIM_CH_TOGGLE CH_TOGGLE, EC_TIM_CH_MODE MODE >
 class tim1_comp_one_channel_base : public tim_comp_one_channel_base {
 public:
-    static const tim1_comp_one_channel_base< TEMPLATE_TIM_1_OR_8_TOGGLE >* instance ( void );
+    constexpr tim1_comp_one_channel_base();
     void reinit     ( void ) const;
     void on         ( void ) const;
     void off        ( void ) const;
 
 private:
-    constexpr tim1_comp_one_channel_base();
     constexpr uint32_t ccm1_reg_msk_get ( void );
     constexpr uint32_t ccm2_reg_msk_get ( void );
     constexpr uint32_t cce_reg_msk_get  ( void );

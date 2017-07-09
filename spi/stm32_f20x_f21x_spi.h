@@ -166,10 +166,7 @@ template <  EC_SPI_NAME                  SPIx,
                                                           */
 class spi_master_hardware_os : public spi_base {
 public:
-    /*
-     * Внимание! Указатель можно присвоить только в реальном времени!!!
-     */
-    static spi_master_hardware_os< TEMPLATE_SPI_MASTER_HARD_OS_PARAM >* instance ( void );
+    constexpr spi_master_hardware_os ( void );
 
     int     reinit                  ( void ) const;
     int     tx                      ( const void* const  p_array_tx, const uint16_t& length, uint32_t timeout_ms ) const;
@@ -181,12 +178,12 @@ public:
     void    handler                 ( void ) const;
 
 private:
-    constexpr spi_master_hardware_os ( void );
-
     // Считать флаг опустошения буфера на передачу (1 - пустой).
     uint32_t    tx_e_flag_get       ( void ) const;
-    // Считать флаг не пустого приема (1 - есть данные в буфере).
+    // Считать флаг не пустого буфера приема (1 - есть данные в буфере).
     uint32_t    rx_n_e_flag_get     ( void ) const;
+    // SPI еще работает?
+    uint32_t    bsy_flag_get        ( void ) const;
 
     void    on                      ( void ) const;
     void    off                     ( void ) const;

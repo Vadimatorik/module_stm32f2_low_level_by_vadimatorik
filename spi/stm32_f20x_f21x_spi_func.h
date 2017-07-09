@@ -138,14 +138,6 @@ constexpr uint32_t spi_cfg< MODE, POLAR, PHASE, NUM_LINE, ONE_LINE_MODE, FRAME, 
     return msk;
 }
 
-
-template < EC_SPI_NAME     SPIx, EC_SPI_CFG_CLK_POLARITY   POLAR, EC_SPI_CFG_CLK_PHASE PHASE, EC_SPI_CFG_NUMBER_LINE   NUM_LINE, EC_SPI_CFG_ONE_LINE_MODE  ONE_LINE_MODE, EC_SPI_CFG_DATA_FRAME    FRAME,
-           EC_SPI_CFG_FRAME_FORMAT FORMAT, EC_SPI_CFG_BAUD_RATE_DEV    BR_DEV, EC_SPI_CFG_CS   CS >
-spi_master_hardware_os< TEMPLATE_SPI_MASTER_HARD_OS_PARAM >* spi_master_hardware_os< TEMPLATE_SPI_MASTER_HARD_OS_PARAM >::instance ( void ) {
-    static spi_master_hardware_os< TEMPLATE_SPI_MASTER_HARD_OS_PARAM > obj;
-    return &obj;
-}
-
 /*
  * Реализация SPI на прерываниях через ОС.
  */
@@ -167,7 +159,6 @@ int spi_master_hardware_os< TEMPLATE_SPI_MASTER_HARD_OS_PARAM >::reinit ( void )
     S->C1   =   0;                        // Отключаем SPI.
     S->S    =   0;                        // Сбрасываем все флаги прерываний.
     S->C1   =   this->cfg.c1_msk;         // Конфигурируем SPI.
-    S->C2   =   this->cfg.c2_msk;
 
     return 0;
 }
@@ -185,6 +176,8 @@ void spi_master_hardware_os< TEMPLATE_SPI_MASTER_HARD_OS_PARAM >::off ( void ) c
 }
 
 
+volatile static uint32_t loaag[2000] = { 0 };
+volatile static uint32_t aal = 0;
 
 template < TEMPLATE_SPI_MASTER_HARD_OS_HEADLINE >
 int spi_master_hardware_os< TEMPLATE_SPI_MASTER_HARD_OS_PARAM >::tx ( const void* const p_array_tx, const uint16_t& length, uint32_t timeout_ms ) const {
@@ -199,12 +192,16 @@ int spi_master_hardware_os< TEMPLATE_SPI_MASTER_HARD_OS_PARAM >::tx ( const void
         this->handler_rx_copy_cfg_flag = false;
         this->handler_tx_point_inc_cfg_flag = true;
         this->p_tx = ( spi_frame_size* )p_array_tx;    // Если транзакция всего одна, то ничего страшного, он просто не будет пользовать этот указатель (handler не будет пользовать).
+        S->C2                               =this->cfg.c2_msk;
+        S->D    = *this->p_tx;                    // Делаем первую отправку.
         this->p_tx++;
-        S->D    = *( ( spi_frame_size* )p_array_tx );                    // Делаем первую отправку.
         this->on();             // Включаем SPI (после передачи отключаем, чтобы не висеть в прерыании).
         result = USER_OS_TAKE_BIN_SEMAPHORE( this->semaphore, timeout_ms );
+        while ( this->bsy_flag_get() != 0 ) {};            //  Ждем, пока SPI окончит передачу последнего пакета.
+        this->off();
     }
 
+    loaag[aal++] = S->S;
     USER_OS_GIVE_MUTEX( this->mutex );
 
     return ( result ) ? 1 : 0;
@@ -232,11 +229,13 @@ int spi_master_hardware_os< TEMPLATE_SPI_MASTER_HARD_OS_PARAM >::rx ( void* p_ar
         this->p_rx                          = ( spi_frame_size* )p_array_rx;
         this->handler_rx_copy_cfg_flag      = true;
         this->handler_tx_point_inc_cfg_flag = false;
+        S->C2                               = this->cfg.c2_msk;
         S->D                                = *p_tx;                                // Делаем первую отправку.
         this->p_tx++;
         this->on();                                                                 // Включаем SPI (после передачи отключаем, чтобы не висеть в прерыании).
-
         reult = USER_OS_TAKE_BIN_SEMAPHORE( this->semaphore, timeout_ms );
+        while ( this->bsy_flag_get() != 0 ) {};            //  Ждем, пока SPI окончит передачу последнего пакета.
+        this->off();
     }
 
     USER_OS_GIVE_MUTEX( this->mutex );
@@ -261,6 +260,14 @@ uint32_t spi_master_hardware_os< TEMPLATE_SPI_MASTER_HARD_OS_PARAM >::rx_n_e_fla
     return result;
 }
 
+template < EC_SPI_NAME     SPIx, EC_SPI_CFG_CLK_POLARITY   POLAR, EC_SPI_CFG_CLK_PHASE PHASE, EC_SPI_CFG_NUMBER_LINE   NUM_LINE, EC_SPI_CFG_ONE_LINE_MODE  ONE_LINE_MODE, EC_SPI_CFG_DATA_FRAME    FRAME,
+           EC_SPI_CFG_FRAME_FORMAT FORMAT, EC_SPI_CFG_BAUD_RATE_DEV    BR_DEV, EC_SPI_CFG_CS   CS >
+uint32_t spi_master_hardware_os< TEMPLATE_SPI_MASTER_HARD_OS_PARAM >::bsy_flag_get ( void ) const {
+    spi_registers_struct*   S = ( spi_registers_struct* )M_EC_TO_U32(SPIx);
+    volatile uint32_t result = *M_U32_TO_P(M_GET_BB_P_PER((uint32_t)&S->S, M_EC_TO_U8(EC_SPI_S_REG_BIT_FIELD_POS::BSY)));
+    return result;
+}
+
 
 template < TEMPLATE_SPI_MASTER_HARD_OS_HEADLINE >
 void spi_master_hardware_os< TEMPLATE_SPI_MASTER_HARD_OS_PARAM >::handler ( void ) const {
@@ -279,24 +286,24 @@ void spi_master_hardware_os< TEMPLATE_SPI_MASTER_HARD_OS_PARAM >::handler ( void
                 input_buf = S->D;
                 (void)input_buf;
             }
-
-            if ( this->number_items == 0 ) {                            // Если мы уже все передали и это был последний байт.
-                static USER_OS_PRIO_TASK_WOKEN prio = pdFALSE;          // Говорим что все передали и выходим.
-                USER_OS_GIVE_BIN_SEMAPHORE_FROM_ISR( this->semaphore, &prio );
-                this->off();    // Отключаем сразу, чтобы не залипнуть в прерывании.
-            }
+            return;
         }
 
-        if ( this->tx_e_flag_get() != 0 ) {                                             // Если в буфере на передачу есть место.
-            if ( this->number_items != 0 ) {                                              // Если мы еще должны что-то передавать.
-                S->D = *this->p_tx;                                                       // Ставим на передачу (разрядность учитывается на этапе компиляции).
-                if ( this->handler_tx_point_inc_cfg_flag ) {                              // Если нам нужно передавать разные данные.
-                    this->p_tx++;                                                         // В сл. раз уже другие данные.
+        if ( this->tx_e_flag_get() != 0 ) {                              // Если в буфере на передачу есть место.
+            if ( this->number_items != 0 ) {                             // Если мы еще должны что-то передавать.
+                S->D = *this->p_tx;                                      // Ставим на передачу (разрядность учитывается на этапе компиляции).
+                if ( this->handler_tx_point_inc_cfg_flag ) {             // Если нам нужно передавать разные данные.
+                    this->p_tx++;                                        // В сл. раз уже другие данные.
                 }
-                this->number_items--;                                                     // Мы поставили на передачу еще 1 байт.
-            }
-        }
+                this->number_items--;                                    // Мы поставили на передачу еще 1 байт.
+            } else {                                                     // На опустошение буфера не реагируем.
+                S->C2 = M_EC_TO_U32(EC_SPI_C2_REG_BIT_MSK::RXNEIE) | M_EC_TO_U32(EC_SPI_C2_REG_BIT_MSK::SSOE);      // Реагируем только на принятые байты (если отвключить NSS, то будут тупые ошибки).
+                static USER_OS_PRIO_TASK_WOKEN prio = pdFALSE;          // Говорим что все закинули (хоть и в буфер) и выходим.
+                USER_OS_GIVE_BIN_SEMAPHORE_FROM_ISR( this->semaphore, &prio );
 
+            }
+            return;
+        }
     } else {
         while( true );      // Дописать реализацию!
     }
