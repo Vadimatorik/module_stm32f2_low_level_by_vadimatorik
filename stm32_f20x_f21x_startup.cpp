@@ -29,6 +29,13 @@ extern uint32_t __bss_end__;    // Конечный адрес BSS област�
                                 // (По этому адресу записывать уже не нужно (проверяется по <)).
 extern uint32_t _stack;         // Вершина стека (конец RAM).
 
+extern void (*__preinit_array_start[])(void) __attribute__((weak));
+extern void (*__preinit_array_end[])(void) __attribute__((weak));
+extern void (*__init_array_start[])(void) __attribute__((weak));
+extern void (*__init_array_end[])(void) __attribute__((weak));
+extern void (*__fini_array_start[])(void) __attribute__((weak));
+extern void (*__fini_array_end[])(void) __attribute__((weak));
+
 /*
  * У каждого handler-а есть свое тело.
  * В случае, если пользователь не объявил его у себя в коде - используется тело-заглушка
@@ -256,6 +263,23 @@ inline void __attribute__( ( always_inline ) ) __initialize_bss ( uint32_t* sect
     while ( p < section_end ) {
         *p++ = 0;
     }
+}
+
+/*
+ * Производим все необходимые инициализации для C++.
+ */
+__attribute__((weak))
+void __libc_init_array(void){
+    size_t count;
+    size_t i;
+
+    count = __preinit_array_end - __preinit_array_start;
+    for(i = 0; i < count; i++)
+        __preinit_array_start[i]();
+
+    count = __init_array_end - __init_array_start;
+    for(i = 0; i < count; i++)
+        __init_array_start[i]();
 }
 
 /*

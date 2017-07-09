@@ -166,26 +166,57 @@ enum class OCxM_MODE {
  * Область упакованных структур.
  **********************************************************************/
 struct __attribute__((packed)) tim_1_or_8_registers_struct {
-    volatile uint32_t   C1;
-    volatile uint32_t   C2;
-    volatile uint32_t   SMC;
-    volatile uint32_t   DIE;
-    volatile uint32_t   S;
-    volatile uint32_t   EG;
-    volatile uint32_t   CCM1;
-    volatile uint32_t   CCM2;
-    volatile uint32_t   CCE;
-    volatile uint32_t   CNT;
-    volatile uint32_t   PSC;
-    volatile uint32_t   AR;
-    volatile uint32_t   RC;
-    volatile uint32_t   CC1;
-    volatile uint32_t   CC2;
-    volatile uint32_t   CC3;
-    volatile uint32_t   CC4;
-    volatile uint32_t   BDT;
-    volatile uint32_t   DC;
-    volatile uint32_t   DMA;
+    uint32_t   C1;
+    uint32_t   C2;
+    uint32_t   SMC;
+    uint32_t   DIE;
+    uint32_t   S;
+    uint32_t   EG;
+    uint32_t   CCM1;
+    uint32_t   CCM2;
+    uint32_t   CCE;
+    uint32_t   CNT;
+    uint32_t   PSC;
+    uint32_t   AR;
+    uint32_t   RC;
+    uint32_t   CC1;
+    uint32_t   CC2;
+    uint32_t   CC3;
+    uint32_t   CC4;
+    uint32_t   BDT;
+    uint32_t   DC;
+    uint32_t   DMA;
 };
+
+/*
+ * Выходной канал сравнения таймера 1.
+ */
+enum class EC_TIM_CH_TOGGLE {
+    CH_1    = 0,
+    CH_2    = 1,
+    CH_3    = 2,
+    CH_4    = 3,
+};
+
+/*
+ * Какие подканалы использовать? (Прямой, инверсный, оба)
+ */
+enum class EC_TIM_CH_MODE {
+    P       = 0,
+    N       = 1,
+    ALL     = 2
+};
+
+/*
+ * Конкретные реализации интерфейсов.
+ */
+struct tim1_comp_one_channel_cfg_t {
+    const TIM1_OR_TIM8        p_tim;
+    const uint16_t            prescaler;
+    const uint16_t            period_toggle;
+    const EC_TIM_CH_TOGGLE    ch_toggle;
+    const EC_TIM_CH_MODE      mode;
+};
+
 
 #endif

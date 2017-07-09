@@ -15,7 +15,7 @@ constexpr many_configurations_pin::many_configurations_pin ( const pin_config_t*
     cfg_count           ( size ),
     p_bb_key_looking    ( bb_p_port_look_key_get( pin_cfg_array->port ) ),
     p_bb_looking_bit    ( this->bb_p_looking_bit_get( pin_cfg_array ) ),
-    cfg                 ( pin_cfg_array ) {};
+    cfg                 ( pin_cfg_array ) {}
 
 /**********************************************************************
  * Область constexpr функций.
