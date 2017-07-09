@@ -178,13 +178,6 @@ public:
     void    handler                 ( void ) const;
 
 private:
-    // Считать флаг опустошения буфера на передачу (1 - пустой).
-    uint32_t    tx_e_flag_get       ( void ) const;
-    // Считать флаг не пустого буфера приема (1 - есть данные в буфере).
-    uint32_t    rx_n_e_flag_get     ( void ) const;
-    // SPI еще работает?
-    uint32_t    bsy_flag_get        ( void ) const;
-
     void    on                      ( void ) const;
     void    off                     ( void ) const;
 

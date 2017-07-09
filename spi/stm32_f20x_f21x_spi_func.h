@@ -175,10 +175,6 @@ void spi_master_hardware_os< TEMPLATE_SPI_MASTER_HARD_OS_PARAM >::off ( void ) c
     S->C1 &= ~M_EC_TO_U32(EC_SPI_C1_REG_BIT_MSK::SPE);                  // Отключаем SPI.
 }
 
-
-volatile static uint32_t loaag[2000] = { 0 };
-volatile static uint32_t aal = 0;
-
 template < TEMPLATE_SPI_MASTER_HARD_OS_HEADLINE >
 int spi_master_hardware_os< TEMPLATE_SPI_MASTER_HARD_OS_PARAM >::tx ( const void* const p_array_tx, const uint16_t& length, uint32_t timeout_ms ) const {
     spi_registers_struct*   S = ( spi_registers_struct* )M_EC_TO_U32(SPIx);
@@ -192,16 +188,15 @@ int spi_master_hardware_os< TEMPLATE_SPI_MASTER_HARD_OS_PARAM >::tx ( const void
         this->handler_rx_copy_cfg_flag = false;
         this->handler_tx_point_inc_cfg_flag = true;
         this->p_tx = ( spi_frame_size* )p_array_tx;    // Если транзакция всего одна, то ничего страшного, он просто не будет пользовать этот указатель (handler не будет пользовать).
-        S->C2                               =this->cfg.c2_msk;
         S->D    = *this->p_tx;                    // Делаем первую отправку.
         this->p_tx++;
-        this->on();             // Включаем SPI (после передачи отключаем, чтобы не висеть в прерыании).
+        S->C2   = this->cfg.c2_msk;    // Разрешаем генерацию прерываний.
+        this->on();
         result = USER_OS_TAKE_BIN_SEMAPHORE( this->semaphore, timeout_ms );
-        while ( this->bsy_flag_get() != 0 ) {};            //  Ждем, пока SPI окончит передачу последнего пакета.
+        while ( ( S->S & M_EC_TO_U32(EC_SPI_REG_BIT_MSK::BSY) ) != 0  ) {};            //  Ждем, пока SPI окончит передачу последнего пакета (если до нас кто отсылал).
         this->off();
     }
 
-    loaag[aal++] = S->S;
     USER_OS_GIVE_MUTEX( this->mutex );
 
     return ( result ) ? 1 : 0;
@@ -221,7 +216,7 @@ int spi_master_hardware_os< TEMPLATE_SPI_MASTER_HARD_OS_PARAM >::rx ( void* p_ar
 
     USER_OS_TAKE_MUTEX( this->mutex, portMAX_DELAY );
 
-    bool reult;
+    bool result;
 
     if ( NUM_LINE == EC_SPI_CFG_NUMBER_LINE::LINE_2 ) {
         this->number_items                  = length - 1;                               // Отнимаем сначала одну, т.к. одну передаем сразу (посылку).
@@ -233,51 +228,28 @@ int spi_master_hardware_os< TEMPLATE_SPI_MASTER_HARD_OS_PARAM >::rx ( void* p_ar
         S->D                                = *p_tx;                                // Делаем первую отправку.
         this->p_tx++;
         this->on();                                                                 // Включаем SPI (после передачи отключаем, чтобы не висеть в прерыании).
-        reult = USER_OS_TAKE_BIN_SEMAPHORE( this->semaphore, timeout_ms );
-        while ( this->bsy_flag_get() != 0 ) {};            //  Ждем, пока SPI окончит передачу последнего пакета.
+        result = USER_OS_TAKE_BIN_SEMAPHORE( this->semaphore, timeout_ms );
+        while ( ( S->S & M_EC_TO_U32(EC_SPI_REG_BIT_MSK::BSY) ) != 0  ) {};            //  Ждем, пока SPI окончит передачу последнего пакета (если до нас кто отсылал).
         this->off();
     }
 
     USER_OS_GIVE_MUTEX( this->mutex );
 
-    return ( reult ) ? 1 : 0;
+    return ( result ) ? 1 : 0;
     return 0;
 }
-
-template < EC_SPI_NAME     SPIx, EC_SPI_CFG_CLK_POLARITY   POLAR, EC_SPI_CFG_CLK_PHASE PHASE, EC_SPI_CFG_NUMBER_LINE   NUM_LINE, EC_SPI_CFG_ONE_LINE_MODE  ONE_LINE_MODE, EC_SPI_CFG_DATA_FRAME    FRAME,
-           EC_SPI_CFG_FRAME_FORMAT FORMAT, EC_SPI_CFG_BAUD_RATE_DEV    BR_DEV, EC_SPI_CFG_CS   CS >
-uint32_t spi_master_hardware_os< TEMPLATE_SPI_MASTER_HARD_OS_PARAM >::tx_e_flag_get ( void ) const {
-   spi_registers_struct*   S = ( spi_registers_struct* )M_EC_TO_U32(SPIx);
-    volatile uint32_t result = *M_U32_TO_P(M_GET_BB_P_PER((uint32_t)&S->S, M_EC_TO_U8(EC_SPI_S_REG_BIT_FIELD_POS::TXE)));
-    return result;
-}
-
-template < EC_SPI_NAME     SPIx, EC_SPI_CFG_CLK_POLARITY   POLAR, EC_SPI_CFG_CLK_PHASE PHASE, EC_SPI_CFG_NUMBER_LINE   NUM_LINE, EC_SPI_CFG_ONE_LINE_MODE  ONE_LINE_MODE, EC_SPI_CFG_DATA_FRAME    FRAME,
-           EC_SPI_CFG_FRAME_FORMAT FORMAT, EC_SPI_CFG_BAUD_RATE_DEV    BR_DEV, EC_SPI_CFG_CS   CS >
-uint32_t spi_master_hardware_os< TEMPLATE_SPI_MASTER_HARD_OS_PARAM >::rx_n_e_flag_get ( void ) const {
-    spi_registers_struct*   S = ( spi_registers_struct* )M_EC_TO_U32(SPIx);
-    volatile uint32_t result = *M_U32_TO_P(M_GET_BB_P_PER((uint32_t)&S->S, M_EC_TO_U8(EC_SPI_S_REG_BIT_FIELD_POS::RXNE)));
-    return result;
-}
-
-template < EC_SPI_NAME     SPIx, EC_SPI_CFG_CLK_POLARITY   POLAR, EC_SPI_CFG_CLK_PHASE PHASE, EC_SPI_CFG_NUMBER_LINE   NUM_LINE, EC_SPI_CFG_ONE_LINE_MODE  ONE_LINE_MODE, EC_SPI_CFG_DATA_FRAME    FRAME,
-           EC_SPI_CFG_FRAME_FORMAT FORMAT, EC_SPI_CFG_BAUD_RATE_DEV    BR_DEV, EC_SPI_CFG_CS   CS >
-uint32_t spi_master_hardware_os< TEMPLATE_SPI_MASTER_HARD_OS_PARAM >::bsy_flag_get ( void ) const {
-    spi_registers_struct*   S = ( spi_registers_struct* )M_EC_TO_U32(SPIx);
-    volatile uint32_t result = *M_U32_TO_P(M_GET_BB_P_PER((uint32_t)&S->S, M_EC_TO_U8(EC_SPI_S_REG_BIT_FIELD_POS::BSY)));
-    return result;
-}
-
 
 template < TEMPLATE_SPI_MASTER_HARD_OS_HEADLINE >
 void spi_master_hardware_os< TEMPLATE_SPI_MASTER_HARD_OS_PARAM >::handler ( void ) const {
     spi_registers_struct* const S = (spi_registers_struct* const )M_EC_TO_U32(SPIx);
 
     if ( NUM_LINE == EC_SPI_CFG_NUMBER_LINE::LINE_2 ) {
+        volatile uint32_t s_reg_damp = S->S;                             // Считывать нужно в одно время. Т.к. после чтения он сбрасывает флаг (и нельзя будет опредеить, что пришли данные).
+
         /*
          * Если что пришло в буфер - считываем.
          */
-        if ( this->rx_n_e_flag_get() != 0 ) {
+        if ( ( s_reg_damp & M_EC_TO_U32(EC_SPI_REG_BIT_MSK::RXNE) ) != 0 ) {
             if ( this->handler_rx_copy_cfg_flag == true ) {                               // Если мы копируем данные куда-то себе.
                 *this->p_rx = S->D;                                                       // Забираем себе.
                 this->p_rx++;                                                             // В сл. раз кладем в сл. ячейку ( разрядность учитывается на этапе компиляции ).
@@ -289,21 +261,29 @@ void spi_master_hardware_os< TEMPLATE_SPI_MASTER_HARD_OS_PARAM >::handler ( void
             return;
         }
 
-        if ( this->tx_e_flag_get() != 0 ) {                              // Если в буфере на передачу есть место.
-            if ( this->number_items != 0 ) {                             // Если мы еще должны что-то передавать.
-                S->D = *this->p_tx;                                      // Ставим на передачу (разрядность учитывается на этапе компиляции).
-                if ( this->handler_tx_point_inc_cfg_flag ) {             // Если нам нужно передавать разные данные.
-                    this->p_tx++;                                        // В сл. раз уже другие данные.
+            if ( ( s_reg_damp & M_EC_TO_U32(EC_SPI_REG_BIT_MSK::TXE) ) != 0 ) {                              // Если в буфере на передачу есть место.
+                if ( this->number_items != 0 ) {                             // Если мы еще должны что-то передавать.
+                    S->D = *this->p_tx;                                      // Ставим на передачу (разрядность учитывается на этапе компиляции).
+                    if ( this->handler_tx_point_inc_cfg_flag ) {             // Если нам нужно передавать разные данные.
+                        this->p_tx++;                                        // В сл. раз уже другие данные.
+                    }
+                    this->number_items--;                                    // Мы поставили на передачу еще 1 байт.
+                    if ( this->number_items == 0 )
+                        S->C2 = M_EC_TO_U32(EC_SPI_C2_REG_BIT_MSK::RXNEIE) | M_EC_TO_U32(EC_SPI_C2_REG_BIT_MSK::SSOE);      // Реагируем только на принятые байты (если отвключить NSS, то будут тупые ошибки).
+                } else {    // На случай, когда передавали 1 байт и уже когда произошло первое прерывание 1 байт был загружен в буффер).
+                    static USER_OS_PRIO_TASK_WOKEN prio = pdFALSE;          // Говорим что все закинули (хоть и в буфер) и выходим.
+                    USER_OS_GIVE_BIN_SEMAPHORE_FROM_ISR( this->semaphore, &prio );
+                    S->C2 = M_EC_TO_U32(EC_SPI_C2_REG_BIT_MSK::RXNEIE) | M_EC_TO_U32(EC_SPI_C2_REG_BIT_MSK::SSOE);
                 }
-                this->number_items--;                                    // Мы поставили на передачу еще 1 байт.
-            } else {                                                     // На опустошение буфера не реагируем.
-                S->C2 = M_EC_TO_U32(EC_SPI_C2_REG_BIT_MSK::RXNEIE) | M_EC_TO_U32(EC_SPI_C2_REG_BIT_MSK::SSOE);      // Реагируем только на принятые байты (если отвключить NSS, то будут тупые ошибки).
-                static USER_OS_PRIO_TASK_WOKEN prio = pdFALSE;          // Говорим что все закинули (хоть и в буфер) и выходим.
-                USER_OS_GIVE_BIN_SEMAPHORE_FROM_ISR( this->semaphore, &prio );
-
             }
-            return;
-        }
+
+
+
+
+
+
+
+        return;
     } else {
         while( true );      // Дописать реализацию!
     }
