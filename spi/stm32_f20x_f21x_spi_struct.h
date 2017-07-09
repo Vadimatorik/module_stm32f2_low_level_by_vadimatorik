@@ -6,15 +6,15 @@
 
 #define TEMPLATE_SPI_MASTER_HARD_OS_PARAM       SPIx, POLAR, PHASE, NUM_LINE, ONE_LINE_MODE, FRAME, FORMAT, BR_DEV, CS
 
-#define TEMPLATE_SPI_MASTER_HARD_OS_HEADLINE    EC_SPI_NAME     SPIx,                           \
-                                                EC_SPI_CFG_CLK_POLARITY   POLAR,                \
-                                                EC_SPI_CFG_CLK_PHASE PHASE,                     \
-                                                EC_SPI_CFG_NUMBER_LINE   NUM_LINE,              \
-                                                EC_SPI_CFG_ONE_LINE_MODE  ONE_LINE_MODE,        \
-                                                EC_SPI_CFG_DATA_FRAME    FRAME,                 \
-                                                EC_SPI_CFG_FRAME_FORMAT FORMAT,                 \
-                                                EC_SPI_CFG_BAUD_RATE_DEV    BR_DEV,             \
-                                                EC_SPI_CFG_CS   CS
+#define TEMPLATE_SPI_MASTER_HARD_OS_HEADLINE    EC_SPI_NAME                 SPIx,                 \
+                                                EC_SPI_CFG_CLK_POLARITY     POLAR,                \
+                                                EC_SPI_CFG_CLK_PHASE        PHASE,                \
+                                                EC_SPI_CFG_NUMBER_LINE      NUM_LINE,             \
+                                                EC_SPI_CFG_ONE_LINE_MODE    ONE_LINE_MODE,        \
+                                                EC_SPI_CFG_DATA_FRAME       FRAME,                \
+                                                EC_SPI_CFG_FRAME_FORMAT     FORMAT,               \
+                                                EC_SPI_CFG_BAUD_RATE_DEV    BR_DEV,               \
+                                                EC_SPI_CFG_CS               CS
 
 /**********************************************************************
  * Область enum class-ов.

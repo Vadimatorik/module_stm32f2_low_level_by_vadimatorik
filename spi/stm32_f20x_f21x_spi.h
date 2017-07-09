@@ -97,7 +97,7 @@ public:
      * ЗАМЕЧАНИЕ: входной прием не ведется!
      */
 
-    virtual int tx ( void* p_array_tx, uint16_t length, uint32_t timeout_ms ) const = 0;
+    virtual int tx ( const void* const  p_array_tx, const uint16_t& length, uint32_t timeout_ms ) const = 0;
 
     /*
      * p_array_tx   -   указатель на массив, который требуется передать
@@ -116,7 +116,7 @@ public:
      * принятые данные перезапишут входные.
      */
 
-    virtual int tx ( void* p_array_tx, void* p_array_rx, uint16_t length, uint32_t timeout_ms ) const = 0;
+    virtual int tx ( const void* const  p_array_tx, void* p_array_rx, const uint16_t& length, uint32_t timeout_ms ) const = 0;
 
    /*
     * p_array_rx    -   указатель на массив, в который будет
@@ -128,7 +128,7 @@ public:
     * value_out     -   значение, которое будет отправляться
     *                   ( в случае, если SPI мастер ).
     */
-    virtual int rx ( void* p_array_rx, uint16_t length, uint32_t timeout_ms, uint8_t out_value = 0 ) const = 0;
+    virtual int rx ( void* p_array_rx, const uint16_t& length, uint32_t timeout_ms, uint8_t out_value = 0 ) const = 0;
     virtual ~spi_base() {}
 };
 
@@ -169,12 +169,12 @@ public:
     /*
      * Внимание! Указатель можно присвоить только в реальном времени!!!
      */
-    static const spi_master_hardware_os< TEMPLATE_SPI_MASTER_HARD_OS_PARAM >* instance ( void );
+    static spi_master_hardware_os< TEMPLATE_SPI_MASTER_HARD_OS_PARAM >* instance ( void );
 
     int     reinit                  ( void ) const;
-    int     tx                      ( void* p_array_tx, uint16_t length, uint32_t timeout_ms ) const;
-    int     tx                      ( void* p_array_tx, void* p_array_rx, uint16_t length, uint32_t timeout_ms ) const;
-    int     rx                      ( void* p_array_rx, uint16_t length, uint32_t timeout_ms, uint8_t out_value = 0 ) const;
+    int     tx                      ( const void* const  p_array_tx, const uint16_t& length, uint32_t timeout_ms ) const;
+    int     tx                      ( const void* const  p_array_tx, void* p_array_rx, const uint16_t& length, uint32_t timeout_ms ) const;
+    int     rx                      ( void* p_array_rx, const uint16_t& length, uint32_t timeout_ms, uint8_t out_value = 0 ) const;
 
 
 
@@ -183,21 +183,21 @@ public:
 private:
     constexpr spi_master_hardware_os ( void );
 
-    void    on                      ( void ) const;
-    void    off                     ( void ) const;
-
     // Считать флаг опустошения буфера на передачу (1 - пустой).
     uint32_t    tx_e_flag_get       ( void ) const;
     // Считать флаг не пустого приема (1 - есть данные в буфере).
     uint32_t    rx_n_e_flag_get     ( void ) const;
 
+    void    on                      ( void ) const;
+    void    off                     ( void ) const;
+
     // Для предотвращения попытки использовать 1 SPI из разных потоков одновременно.
-    mutable USER_OS_STATIC_MUTEX_BUFFER     mutex_buf = USER_OS_STATIC_MUTEX_BUFFER_INIT_VALUE;
-    mutable USER_OS_STATIC_MUTEX            mutex = NULL;
+    mutable USER_OS_STATIC_MUTEX_BUFFER     mutex_buf           = USER_OS_STATIC_MUTEX_BUFFER_INIT_VALUE;
+    mutable USER_OS_STATIC_MUTEX            mutex               = nullptr;
 
     // Сигнализирует об успешной передаче или приеме.
-    mutable USER_OS_STATIC_BIN_SEMAPHORE_BUFFER semaphore_buf = USER_OS_STATIC_BIN_SEMAPHORE_BUFFER_INIT_VALUE;
-    mutable USER_OS_STATIC_BIN_SEMAPHORE        semaphore = NULL;
+    mutable USER_OS_STATIC_BIN_SEMAPHORE_BUFFER semaphore_buf   = USER_OS_STATIC_BIN_SEMAPHORE_BUFFER_INIT_VALUE;
+    mutable USER_OS_STATIC_BIN_SEMAPHORE        semaphore       = nullptr;
 
     typedef typename std::conditional< FRAME == EC_SPI_CFG_DATA_FRAME::FRAME_8_BIT, uint8_t, uint16_t>::type spi_frame_size;
     mutable spi_frame_size* p_tx = nullptr;
@@ -234,9 +234,9 @@ private:
                    // Та же тема и с RX.
                    ( ( NUM_LINE == EC_SPI_CFG_NUMBER_LINE::LINE_2 ) ||
                      ( ( NUM_LINE == EC_SPI_CFG_NUMBER_LINE::LINE_1 ) && ( ONE_LINE_MODE == EC_SPI_CFG_ONE_LINE_MODE::RECEIVE_ONLY ) ) ) ?
-                       EC_SPI_CFG_INTERRUPT_RX::ON : EC_SPI_CFG_INTERRUPT_RX::OFF,
+                        EC_SPI_CFG_INTERRUPT_RX::ON : EC_SPI_CFG_INTERRUPT_RX::OFF,
 
-                   EC_SPI_CFG_INTERRUPT_ERROR :: ON,
+                   EC_SPI_CFG_INTERRUPT_ERROR :: OFF,               // Пока режимы, где бы нужен был реально этот флаг - не поддерживаются.
                    EC_SPI_CFG_DMA_TX_BUF      :: DISABLED,
                    EC_SPI_CFG_DMA_RX_BUF      :: DISABLED,
                    CS,

@@ -243,8 +243,7 @@ const void *interrupt_vectors[] =
  */
 
 /* Заполняем 0-ми bss в RAM. */
-inline void __attribute__((always_inline))
-__initialize_data(uint32_t* from, uint32_t* section_begin, uint32_t* section_end) {
+inline void __attribute__( ( always_inline ) ) __initialize_data ( uint32_t* from, uint32_t* section_begin, uint32_t* section_end ) {
     uint32_t *p = section_begin;
     while ((uint32_t)p < (uint32_t)section_end) {
         *p++ = *from++;
@@ -252,8 +251,7 @@ __initialize_data(uint32_t* from, uint32_t* section_begin, uint32_t* section_end
 }
 
 /* Копируем область ".data" из flash в ram. */
-inline void __attribute__((always_inline))
-__initialize_bss( uint32_t* section_begin, uint32_t* section_end ) {
+inline void __attribute__( ( always_inline ) ) __initialize_bss ( uint32_t* section_begin, uint32_t* section_end ) {
     uint32_t* p = section_begin;
     while ( p < section_end ) {
         *p++ = 0;
