@@ -5,7 +5,6 @@
 #ifdef MODULE_SPI
 
 #include "stm32_f20x_f21x_spi_struct.h"
-#include <iostream>
 #include <type_traits>
 
 /**********************************************************************
