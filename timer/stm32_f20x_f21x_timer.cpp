@@ -3,8 +3,6 @@
 #ifdef MODULE_TIMER
 
 #include "stm32_f20x_f21x_timer.h"
-#include <cstdio>
-#include <stdio.h>
 #include <string.h>
 
 void tim1_comp_one_channel::reinit ( void ) const {
