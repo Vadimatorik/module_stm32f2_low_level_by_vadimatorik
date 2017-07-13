@@ -182,9 +182,10 @@ public:
 
     void    handler                 ( void ) const;
 
-private:
     void    on                      ( void ) const;
     void    off                     ( void ) const;
+private:
+
 
     // Для предотвращения попытки использовать 1 SPI из разных потоков одновременно.
     mutable USER_OS_STATIC_MUTEX_BUFFER     mutex_buf           = USER_OS_STATIC_MUTEX_BUFFER_INIT_VALUE;

@@ -156,7 +156,7 @@ int spi_master_hardware_os< TEMPLATE_SPI_MASTER_HARD_OS_PARAM >::reinit ( void )
 
     spi_registers_struct*   S = ( spi_registers_struct* )M_EC_TO_U32(SPIx);
     S->C1   =   0;                        // Отключаем SPI.
-    S->S    =   0;                        // Сбрасываем все флаги прерываний.
+    S->C2   =   this->cfg.c2_msk;   // Если этого не сделать, то после запуска сразу же сбросится режим мастера в slave (если был мастер!).
     S->C1   =   this->cfg.c1_msk;         // Конфигурируем SPI.
 
     return 0;
@@ -187,13 +187,12 @@ int spi_master_hardware_os< TEMPLATE_SPI_MASTER_HARD_OS_PARAM >::tx ( const void
         this->handler_rx_copy_cfg_flag = false;
         this->handler_tx_point_inc_cfg_flag = true;
         this->p_tx = ( spi_frame_size* )p_array_tx;    // Если транзакция всего одна, то ничего страшного, он просто не будет пользовать этот указатель (handler не будет пользовать).
+        S->S = 0;
         S->D    = *this->p_tx;                    // Делаем первую отправку.
         this->p_tx++;
         S->C2   = this->cfg.c2_msk;    // Разрешаем генерацию прерываний.
-        this->on();
         result = USER_OS_TAKE_BIN_SEMAPHORE( this->semaphore, timeout_ms );
         while ( ( S->S & M_EC_TO_U32(EC_SPI_REG_BIT_MSK::BSY) ) != 0  ) {};            //  Ждем, пока SPI окончит передачу последнего пакета (если до нас кто отсылал).
-        this->off();
     }
 
     USER_OS_GIVE_MUTEX( this->mutex );
@@ -216,10 +215,8 @@ int spi_master_hardware_os< TEMPLATE_SPI_MASTER_HARD_OS_PARAM >::tx_one_item ( c
         this->p_tx = ( spi_frame_size* )p_item_tx;     // Если транзакция всего одна, то ничего страшного, он просто не будет пользовать этот указатель (handler не будет пользовать).
         S->D    = *this->p_tx;                    // Делаем первую отправку.
         S->C2   = this->cfg.c2_msk;    // Разрешаем генерацию прерываний.
-        this->on();
         result = USER_OS_TAKE_BIN_SEMAPHORE( this->semaphore, timeout_ms );
         while ( ( S->S & M_EC_TO_U32(EC_SPI_REG_BIT_MSK::BSY) ) != 0  ) {};            //  Ждем, пока SPI окончит передачу последнего пакета (если до нас кто отсылал).
-        this->off();
     }
 
     USER_OS_GIVE_MUTEX( this->mutex );
@@ -249,13 +246,11 @@ int spi_master_hardware_os< TEMPLATE_SPI_MASTER_HARD_OS_PARAM >::rx ( void* p_ar
         this->p_rx                          = ( spi_frame_size* )p_array_rx;
         this->handler_rx_copy_cfg_flag      = true;
         this->handler_tx_point_inc_cfg_flag = false;
-        S->C2                               = this->cfg.c2_msk;
         S->D                                = *p_tx;                                // Делаем первую отправку.
         this->p_tx++;
-        this->on();                                                                 // Включаем SPI (после передачи отключаем, чтобы не висеть в прерыании).
+        S->C2                               = this->cfg.c2_msk;
         result = USER_OS_TAKE_BIN_SEMAPHORE( this->semaphore, timeout_ms );
         while ( ( S->S & M_EC_TO_U32(EC_SPI_REG_BIT_MSK::BSY) ) != 0  ) {};            //  Ждем, пока SPI окончит передачу последнего пакета (если до нас кто отсылал).
-        this->off();
     }
 
     USER_OS_GIVE_MUTEX( this->mutex );
@@ -283,6 +278,7 @@ void spi_master_hardware_os< TEMPLATE_SPI_MASTER_HARD_OS_PARAM >::handler ( void
                 input_buf = S->D;
                 (void)input_buf;
             }
+            S->S = 0;
             return;
         }
 
@@ -302,7 +298,7 @@ void spi_master_hardware_os< TEMPLATE_SPI_MASTER_HARD_OS_PARAM >::handler ( void
                 }
             }
 
-
+S->S = 0;
 
 
 
