@@ -65,10 +65,10 @@ public:
 
     void    reinit                  ( void ) const;
 
-    EC_SPI_BASE_RESULT tx           ( const uint8_t* const  p_array_tx, const uint8_t& length, const uint32_t& timeout_ms ) const;
+    EC_SPI_BASE_RESULT tx           ( const uint8_t* const  p_array_tx, const uint16_t& length, const uint32_t& timeout_ms ) const;
     EC_SPI_BASE_RESULT tx           ( const uint8_t* const  p_array_tx, uint8_t* p_array_rx, const uint16_t& length, const uint32_t& timeout_ms ) const;
     EC_SPI_BASE_RESULT tx_one_item  ( const uint8_t* const  p_item_tx, const uint16_t& count, const uint32_t& timeout_ms ) const;
-    EC_SPI_BASE_RESULT rx           ( void* p_array_rx, const uint16_t& length, const uint32_t& timeout_ms, const uint8_t& out_value = 0xFF ) const;
+    EC_SPI_BASE_RESULT rx           ( uint8_t* p_array_rx, const uint16_t& length, const uint32_t& timeout_ms, const uint8_t& out_value = 0xFF ) const;
 
     void    handler                 ( void ) const;
 
@@ -126,7 +126,7 @@ private:
                    EC_SPI_CFG_INTERRUPT_ERROR :: OFF,               // Пока режимы, где бы нужен был реально этот флаг - не поддерживаются.
                    EC_SPI_CFG_DMA_TX_BUF      :: DISABLED,
                    EC_SPI_CFG_DMA_RX_BUF      :: DISABLED,
-                   CS,
+                   EC_SPI_CFG_CS              :: ENABLED,
                    EC_SPI_CFG_SSM             :: SSM_OFF,
                    EC_SPI_CFG_SSM_MODE        :: NO_USE > cfg;
 };

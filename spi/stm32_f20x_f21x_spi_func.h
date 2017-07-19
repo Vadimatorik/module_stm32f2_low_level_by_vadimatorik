@@ -3,6 +3,7 @@
 #include "stm32_f20x_f21x_conf.h"
 #ifdef MODULE_SPI
 
+#include "mk_hardware_interfaces_spi.h"
 #include "stm32_f20x_f21x_spi_struct.h"
 
 //**********************************************************************
@@ -155,7 +156,7 @@ constexpr uint32_t spi_cfg< SPI_CFG_TEMPLATE_PARAM >::c2_reg_msk_get ( void ) {
                                                         EC_SPI_CFG_FRAME_FORMAT      FORMAT,         \
                                                         EC_SPI_CFG_BAUD_RATE_DEV     BR_DEV
 
-#define SPI_MASTER_HARDWARE_OS_TEMPLATE_PARAM           SPIx, POLAR, PHASE, NUM_LINE                 \
+#define SPI_MASTER_HARDWARE_OS_TEMPLATE_PARAM           SPIx, POLAR, PHASE, NUM_LINE,                \
                                                         ONE_LINE_MODE, FORMAT, BR_DEV
 
 template < SPI_MASTER_HARDWARE_OS_TEMPLATE_HEADING >
@@ -175,14 +176,12 @@ void spi_master_8bit_hardware_os< SPI_MASTER_HARDWARE_OS_TEMPLATE_PARAM >::reini
     S->C1   =   0;                        // Отключаем SPI.
     S->C2   =   this->cfg.c2_msk;   // Если этого не сделать, то после запуска сразу же сбросится режим мастера в slave (если был мастер!).
     S->C1   =   this->cfg.c1_msk;         // Конфигурируем SPI.
-
-    return 0;
 }
 
 template < SPI_MASTER_HARDWARE_OS_TEMPLATE_HEADING >
-EC_SPI_BASE_RESULT spi_master_8bit_hardware_os< SPI_MASTER_HARDWARE_OS_TEMPLATE_PARAM >::tx ( const uint8_t* const  p_array_tx, const uint8_t& length, const uint32_t& timeout_ms ) const {
+EC_SPI_BASE_RESULT spi_master_8bit_hardware_os< SPI_MASTER_HARDWARE_OS_TEMPLATE_PARAM >::tx ( const uint8_t* const  p_array_tx, const uint16_t& length, const uint32_t& timeout_ms ) const {
     spi_registers_struct*   S = ( spi_registers_struct* )M_EC_TO_U32(SPIx);
-    if ( length == 0 ) return -1;
+    if ( length == 0 ) return EC_SPI_BASE_RESULT::LENGTH_ERROR;
 
     USER_OS_TAKE_MUTEX( this->mutex, portMAX_DELAY );
 
@@ -191,7 +190,7 @@ EC_SPI_BASE_RESULT spi_master_8bit_hardware_os< SPI_MASTER_HARDWARE_OS_TEMPLATE_
         this->number_items = length - 1;    // Отнимаем сначала одну, т.к. одну передаем сразу (посылку).
         this->handler_rx_copy_cfg_flag = false;
         this->handler_tx_point_inc_cfg_flag = true;
-        this->p_tx = ( spi_frame_size* )p_array_tx;    // Если транзакция всего одна, то ничего страшного, он просто не будет пользовать этот указатель (handler не будет пользовать).
+        this->p_tx = ( uint8_t* )p_array_tx;    // Если транзакция всего одна, то ничего страшного, он просто не будет пользовать этот указатель (handler не будет пользовать).
         S->S = 0;
         S->D    = *this->p_tx;                    // Делаем первую отправку.
         this->p_tx++;
@@ -215,18 +214,18 @@ EC_SPI_BASE_RESULT spi_master_8bit_hardware_os< SPI_MASTER_HARDWARE_OS_TEMPLATE_
 template < SPI_MASTER_HARDWARE_OS_TEMPLATE_HEADING >
 EC_SPI_BASE_RESULT spi_master_8bit_hardware_os< SPI_MASTER_HARDWARE_OS_TEMPLATE_PARAM >::tx_one_item ( const uint8_t* const  p_item_tx, const uint16_t& count, const uint32_t& timeout_ms ) const {
     spi_registers_struct*   S = ( spi_registers_struct* )M_EC_TO_U32(SPIx);
-    if ( count == 0 ) return -1;
+    if ( count == 0 ) return EC_SPI_BASE_RESULT::LENGTH_ERROR;
 
     USER_OS_TAKE_MUTEX( this->mutex, portMAX_DELAY );
 
     bool result;
     if ( NUM_LINE == EC_SPI_CFG_NUMBER_LINE::LINE_2 ) {
-        this->number_items = count - 1;    // Отнимаем сначала одну, т.к. одну передаем сразу (посылку).
+        this->number_items = count - 1;                 // Отнимаем сначала одну, т.к. одну передаем сразу (посылку).
         this->handler_rx_copy_cfg_flag = false;
         this->handler_tx_point_inc_cfg_flag = false;    // Передаем всегда 1.
-        this->p_tx = ( spi_frame_size* )p_item_tx;     // Если транзакция всего одна, то ничего страшного, он просто не будет пользовать этот указатель (handler не будет пользовать).
-        S->D    = *this->p_tx;                    // Делаем первую отправку.
-        S->C2   = this->cfg.c2_msk;    // Разрешаем генерацию прерываний.
+        this->p_tx = ( uint8_t* )p_item_tx;                         // Если транзакция всего одна, то ничего страшного, он просто не будет пользовать этот указатель (handler не будет пользовать).
+        S->D    = *this->p_tx;                          // Делаем первую отправку.
+        S->C2   = this->cfg.c2_msk;                     // Разрешаем генерацию прерываний.
         result = USER_OS_TAKE_BIN_SEMAPHORE( this->semaphore, timeout_ms );
         while ( ( S->S & M_EC_TO_U32(EC_SPI_REG_BIT_MSK::BSY) ) != 0  ) {};            //  Ждем, пока SPI окончит передачу последнего пакета (если до нас кто отсылал).
     }
@@ -237,9 +236,9 @@ EC_SPI_BASE_RESULT spi_master_8bit_hardware_os< SPI_MASTER_HARDWARE_OS_TEMPLATE_
 }
 
 template < SPI_MASTER_HARDWARE_OS_TEMPLATE_HEADING >
-EC_SPI_BASE_RESULT spi_master_8bit_hardware_os< SPI_MASTER_HARDWARE_OS_TEMPLATE_PARAM >::rx ( void* p_array_rx, const uint16_t& length, const uint32_t& timeout_ms, const uint8_t& out_value ) const {
+EC_SPI_BASE_RESULT spi_master_8bit_hardware_os< SPI_MASTER_HARDWARE_OS_TEMPLATE_PARAM >::rx ( uint8_t* p_array_rx, const uint16_t& length, const uint32_t& timeout_ms, const uint8_t& out_value ) const {
     volatile spi_registers_struct* const S = ( spi_registers_struct* )M_EC_TO_U32(SPIx);
-    if ( length == 0 ) return -1;
+    if ( length == 0 ) return EC_SPI_BASE_RESULT::LENGTH_ERROR;
 
     USER_OS_TAKE_MUTEX( this->mutex, portMAX_DELAY );
 
@@ -247,8 +246,8 @@ EC_SPI_BASE_RESULT spi_master_8bit_hardware_os< SPI_MASTER_HARDWARE_OS_TEMPLATE_
 
     if ( NUM_LINE == EC_SPI_CFG_NUMBER_LINE::LINE_2 ) {
         this->number_items                  = length - 1;                               // Отнимаем сначала одну, т.к. одну передаем сразу (посылку).
-        this->p_tx                          = &out_value;                               // Это значение будем отправлять постоянно.
-        this->p_rx                          = ( spi_frame_size* )p_array_rx;
+        this->p_tx                          = ( uint8_t* )&out_value;                               // Это значение будем отправлять постоянно.
+        this->p_rx                          = p_array_rx;
         this->handler_rx_copy_cfg_flag      = true;
         this->handler_tx_point_inc_cfg_flag = false;
         S->D                                = *p_tx;                                    // Делаем первую отправку.
@@ -274,11 +273,11 @@ void spi_master_8bit_hardware_os< SPI_MASTER_HARDWARE_OS_TEMPLATE_PARAM >::handl
          * Если что пришло в буфер - считываем.
          */
         if ( ( s_reg_damp & M_EC_TO_U32(EC_SPI_REG_BIT_MSK::RXNE) ) != 0 ) {
-            if ( this->handler_rx_copy_cfg_flag == true ) {                               // Если мы копируем данные куда-то себе.
-                *this->p_rx = S->D;                                                       // Забираем себе.
-                this->p_rx++;                                                             // В сл. раз кладем в сл. ячейку ( разрядность учитывается на этапе компиляции ).
+            if ( this->handler_rx_copy_cfg_flag == true ) {                  // Если мы копируем данные куда-то себе.
+                *this->p_rx = S->D;                                          // Забираем себе.
+                this->p_rx++;                                                // В сл. раз кладем в сл. ячейку ( разрядность учитывается на этапе компиляции ).
             } else {
-                volatile spi_frame_size input_buf;                                        // Если RX себе не сохраняем, то просто считаем в никуда.
+                volatile uint8_t input_buf;                                  // Если RX себе не сохраняем, то просто считаем в никуда.
                 input_buf = S->D;
                 (void)input_buf;
             }
