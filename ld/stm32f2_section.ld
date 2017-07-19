@@ -95,6 +95,7 @@ SECTIONS
     *(.bss .bss.*)
     *(.bss_end .bss_end.*)
     *(.noinit .noinit.*) 
+    *(COMMON)			/* Не инициализированные глобальные переменных тоже пусть в bss будут. */
     . = ALIGN(4);
     __bss_end__ = .;
   } >RAM1
