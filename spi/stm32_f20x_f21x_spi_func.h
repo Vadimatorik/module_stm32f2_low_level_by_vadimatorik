@@ -5,21 +5,38 @@
 
 #include "stm32_f20x_f21x_spi_struct.h"
 
-/**********************************************************************
- * Область constexpr конструкторов.
- **********************************************************************/
+//**********************************************************************
+// Генерация масок регистров SPI.
+//**********************************************************************
+#define SPI_CFG_TEMPLATE_HEADING            EC_SPI_CFG_MODE             MODE,           \
+                                            EC_SPI_CFG_CLK_POLARITY     POLAR,          \
+                                            EC_SPI_CFG_CLK_PHASE        PHASE,          \
+                                            EC_SPI_CFG_NUMBER_LINE      NUM_LINE,       \
+                                            EC_SPI_CFG_ONE_LINE_MODE    ONE_LINE_MODE,  \
+                                            EC_SPI_CFG_DATA_FRAME       FRAME,          \
+                                            EC_SPI_CFG_RECEIVE_MODE     R_MODE,         \
+                                            EC_SPI_CFG_FRAME_FORMAT     FORMAT,         \
+                                            EC_SPI_CFG_BAUD_RATE_DEV    BR_DEV,         \
+                                            EC_SPI_CFG_INTERRUPT_TX     I_TX,           \
+                                            EC_SPI_CFG_INTERRUPT_RX     I_RX,           \
+                                            EC_SPI_CFG_INTERRUPT_ERROR  I_ER,           \
+                                            EC_SPI_CFG_DMA_TX_BUF       DMATX,          \
+                                            EC_SPI_CFG_DMA_RX_BUF       DMARX,          \
+                                            EC_SPI_CFG_CS               CS,             \
+                                            EC_SPI_CFG_SSM              SSM,            \
+                                            EC_SPI_CFG_SSM_MODE         SSM_MODE
 
-template < EC_SPI_CFG_MODE MODE, EC_SPI_CFG_CLK_POLARITY POLAR, EC_SPI_CFG_CLK_PHASE PHASE, EC_SPI_CFG_NUMBER_LINE NUM_LINE, EC_SPI_CFG_ONE_LINE_MODE ONE_LINE_MODE,
-           EC_SPI_CFG_DATA_FRAME FRAME, EC_SPI_CFG_RECEIVE_MODE R_MODE, EC_SPI_CFG_FRAME_FORMAT FORMAT, EC_SPI_CFG_BAUD_RATE_DEV BR_DEV, EC_SPI_CFG_INTERRUPT_TX I_TX,
-           EC_SPI_CFG_INTERRUPT_RX I_RX, EC_SPI_CFG_INTERRUPT_ERROR I_ER, EC_SPI_CFG_DMA_TX_BUF DMATX, EC_SPI_CFG_DMA_RX_BUF DMARX, EC_SPI_CFG_CS CS, EC_SPI_CFG_SSM SSM, EC_SPI_CFG_SSM_MODE SSM_MODE >
-constexpr spi_cfg< MODE, POLAR, PHASE, NUM_LINE, ONE_LINE_MODE, FRAME, R_MODE, FORMAT,
-                   BR_DEV, I_TX, I_RX, I_ER, DMATX, DMARX, CS, SSM, SSM_MODE >::spi_cfg() : spi_cfg_struct( {
+#define SPI_CFG_TEMPLATE_PARAM              MODE, POLAR, PHASE, NUM_LINE,               \
+                                            ONE_LINE_MODE, FRAME, R_MODE, FORMAT,       \
+                                            BR_DEV, I_TX, I_RX, I_ER,                   \
+                                            DMATX, DMARX, CS, SSM, SSM_MODE
+
+template < SPI_CFG_TEMPLATE_HEADING >
+constexpr spi_cfg< SPI_CFG_TEMPLATE_PARAM >::spi_cfg() : spi_cfg_struct( {
     .c1_msk = this->c1_reg_msk_get(),
     .c2_msk = this->c2_reg_msk_get()
 } ) {
-        /*
-         * Параметры ниже указываются при любых режимах.
-         */
+        // Параметры ниже указываются при любых режимах.
         static_assert( ( MODE == EC_SPI_CFG_MODE::MASTER ) ||
                        ( MODE == EC_SPI_CFG_MODE::SLAVE ),
                 "Invalid template parameter!The MODE can be MASTER or SLAVE!" );
@@ -76,9 +93,7 @@ constexpr spi_cfg< MODE, POLAR, PHASE, NUM_LINE, ONE_LINE_MODE, FRAME, R_MODE, F
                        ( CS == EC_SPI_CFG_CS::ENABLED ),
                 "Invalid template parameter!The CS can be DISABLED or ENABLED!" );
 
-        /*
-         * В случае, если используется только одна линия.
-         */
+        // В случае, если используется только одна линия.
         static_assert( !( ( NUM_LINE == EC_SPI_CFG_NUMBER_LINE::LINE_1 ) &&
                           ( ( ONE_LINE_MODE == EC_SPI_CFG_ONE_LINE_MODE::RECEIVE_ONLY ) ||
                             ( ONE_LINE_MODE == EC_SPI_CFG_ONE_LINE_MODE::TRANSMIT_ONLY ) ) ),
@@ -92,9 +107,7 @@ constexpr spi_cfg< MODE, POLAR, PHASE, NUM_LINE, ONE_LINE_MODE, FRAME, R_MODE, F
                 "NUM_LINE is selected as LINE_2"
                 "The ONE_LINE_MODE can be USE_2_LINE!" );
 
-        /*
-         * Если SPI сконфигурирован как мастер.
-         */
+        // Если SPI сконфигурирован как мастер.
         static_assert( !( ( MODE == EC_SPI_CFG_MODE::SLAVE )  &&
                           ( SSM == EC_SPI_CFG_SSM::SSM_ON ) &&
                           ( SSM_MODE != EC_SPI_CFG_SSM_MODE::NO_USE ) ),
@@ -103,11 +116,8 @@ constexpr spi_cfg< MODE, POLAR, PHASE, NUM_LINE, ONE_LINE_MODE, FRAME, R_MODE, F
                 "The SSM_MODE not can be NO_USE!" );
  }
 
-template < EC_SPI_CFG_MODE MODE, EC_SPI_CFG_CLK_POLARITY POLAR, EC_SPI_CFG_CLK_PHASE PHASE, EC_SPI_CFG_NUMBER_LINE NUM_LINE, EC_SPI_CFG_ONE_LINE_MODE ONE_LINE_MODE,
-           EC_SPI_CFG_DATA_FRAME FRAME, EC_SPI_CFG_RECEIVE_MODE R_MODE, EC_SPI_CFG_FRAME_FORMAT FORMAT, EC_SPI_CFG_BAUD_RATE_DEV BR_DEV, EC_SPI_CFG_INTERRUPT_TX I_TX,
-           EC_SPI_CFG_INTERRUPT_RX I_RX, EC_SPI_CFG_INTERRUPT_ERROR I_ER, EC_SPI_CFG_DMA_TX_BUF DMATX, EC_SPI_CFG_DMA_RX_BUF DMARX, EC_SPI_CFG_CS CS, EC_SPI_CFG_SSM SSM, EC_SPI_CFG_SSM_MODE SSM_MODE >
-constexpr uint32_t spi_cfg< MODE, POLAR, PHASE, NUM_LINE, ONE_LINE_MODE, FRAME, R_MODE, FORMAT,
-                            BR_DEV, I_TX, I_RX, I_ER, DMATX, DMARX, CS, SSM, SSM_MODE >::c1_reg_msk_get ( void ) {
+template < SPI_CFG_TEMPLATE_HEADING >
+constexpr uint32_t spi_cfg< SPI_CFG_TEMPLATE_PARAM >::c1_reg_msk_get ( void ) {
     uint32_t msk = 0;
 
     msk     |= M_EC_TO_U32(MODE) | M_EC_TO_U32(POLAR) | M_EC_TO_U32(PHASE) |
@@ -121,11 +131,8 @@ constexpr uint32_t spi_cfg< MODE, POLAR, PHASE, NUM_LINE, ONE_LINE_MODE, FRAME, 
     return msk;
 }
 
-template < EC_SPI_CFG_MODE MODE, EC_SPI_CFG_CLK_POLARITY POLAR, EC_SPI_CFG_CLK_PHASE PHASE, EC_SPI_CFG_NUMBER_LINE NUM_LINE, EC_SPI_CFG_ONE_LINE_MODE ONE_LINE_MODE,
-           EC_SPI_CFG_DATA_FRAME FRAME, EC_SPI_CFG_RECEIVE_MODE R_MODE, EC_SPI_CFG_FRAME_FORMAT FORMAT, EC_SPI_CFG_BAUD_RATE_DEV BR_DEV, EC_SPI_CFG_INTERRUPT_TX I_TX,
-           EC_SPI_CFG_INTERRUPT_RX I_RX, EC_SPI_CFG_INTERRUPT_ERROR I_ER, EC_SPI_CFG_DMA_TX_BUF DMATX, EC_SPI_CFG_DMA_RX_BUF DMARX, EC_SPI_CFG_CS CS, EC_SPI_CFG_SSM SSM, EC_SPI_CFG_SSM_MODE SSM_MODE >
-constexpr uint32_t spi_cfg< MODE, POLAR, PHASE, NUM_LINE, ONE_LINE_MODE, FRAME, R_MODE, FORMAT,
-                            BR_DEV, I_TX, I_RX, I_ER, DMATX, DMARX, CS, SSM, SSM_MODE >::c2_reg_msk_get ( void ) {
+template < SPI_CFG_TEMPLATE_HEADING >
+constexpr uint32_t spi_cfg< SPI_CFG_TEMPLATE_PARAM >::c2_reg_msk_get ( void ) {
     uint32_t msk = 0;
     msk     |= M_EC_TO_U32(FORMAT) | M_EC_TO_U32(I_TX) | M_EC_TO_U32(I_RX) |
                M_EC_TO_U32(I_ER) | M_EC_TO_U32(DMATX) | M_EC_TO_U32(DMARX);
@@ -137,20 +144,30 @@ constexpr uint32_t spi_cfg< MODE, POLAR, PHASE, NUM_LINE, ONE_LINE_MODE, FRAME, 
     return msk;
 }
 
-/*
- * Реализация SPI на прерываниях через ОС.
- */
-template < EC_SPI_NAME     SPIx, EC_SPI_CFG_CLK_POLARITY   POLAR, EC_SPI_CFG_CLK_PHASE PHASE, EC_SPI_CFG_NUMBER_LINE   NUM_LINE, EC_SPI_CFG_ONE_LINE_MODE  ONE_LINE_MODE, EC_SPI_CFG_DATA_FRAME    FRAME,
-           EC_SPI_CFG_FRAME_FORMAT FORMAT, EC_SPI_CFG_BAUD_RATE_DEV    BR_DEV, EC_SPI_CFG_CS   CS >
-constexpr spi_master_hardware_os< TEMPLATE_SPI_MASTER_HARD_OS_PARAM >::spi_master_hardware_os ( void ) {
+//**********************************************************************
+// Конфигурация SPI в режиме мастера, посылки по 8 бит.
+//**********************************************************************
+#define SPI_MASTER_HARDWARE_OS_TEMPLATE_HEADING         EC_SPI_NAME                  SPIx,           \
+                                                        EC_SPI_CFG_CLK_POLARITY      POLAR,          \
+                                                        EC_SPI_CFG_CLK_PHASE         PHASE,          \
+                                                        EC_SPI_CFG_NUMBER_LINE       NUM_LINE,       \
+                                                        EC_SPI_CFG_ONE_LINE_MODE     ONE_LINE_MODE,  \
+                                                        EC_SPI_CFG_FRAME_FORMAT      FORMAT,         \
+                                                        EC_SPI_CFG_BAUD_RATE_DEV     BR_DEV
+
+#define SPI_MASTER_HARDWARE_OS_TEMPLATE_PARAM           SPIx, POLAR, PHASE, NUM_LINE                 \
+                                                        ONE_LINE_MODE, FORMAT, BR_DEV
+
+template < SPI_MASTER_HARDWARE_OS_TEMPLATE_HEADING >
+constexpr spi_master_8bit_hardware_os< SPI_MASTER_HARDWARE_OS_TEMPLATE_PARAM >::spi_master_8bit_hardware_os ( void ) {
     static_assert( ( SPIx == EC_SPI_NAME::SPI1 ) ||
                    ( SPIx == EC_SPI_NAME::SPI2 ) ||
                    ( SPIx == EC_SPI_NAME::SPI3 ),
                    "Invalid template parameter!The SPIx can be SPI1, SPI2 or SPI3!" );
 }
 
-template < TEMPLATE_SPI_MASTER_HARD_OS_HEADLINE >
-int spi_master_hardware_os< TEMPLATE_SPI_MASTER_HARD_OS_PARAM >::reinit ( void ) const {
+template < SPI_MASTER_HARDWARE_OS_TEMPLATE_HEADING >
+void spi_master_8bit_hardware_os< SPI_MASTER_HARDWARE_OS_TEMPLATE_PARAM >::reinit ( void ) const {
     this->mutex = USER_OS_STATIC_MUTEX_CREATE( &this->mutex_buf );
     this->semaphore = USER_OS_STATIC_BIN_SEMAPHORE_CREATE( &this->semaphore_buf );
 
@@ -162,20 +179,8 @@ int spi_master_hardware_os< TEMPLATE_SPI_MASTER_HARD_OS_PARAM >::reinit ( void )
     return 0;
 }
 
-template < TEMPLATE_SPI_MASTER_HARD_OS_HEADLINE >
-void spi_master_hardware_os< TEMPLATE_SPI_MASTER_HARD_OS_PARAM >::on ( void ) const {
-    spi_registers_struct*   S = ( spi_registers_struct* )M_EC_TO_U32(SPIx);
-    S->C1 |= M_EC_TO_U32(EC_SPI_C1_REG_BIT_MSK::SPE);                   // Запскаем SPI.
-}
-
-template < TEMPLATE_SPI_MASTER_HARD_OS_HEADLINE >
-void spi_master_hardware_os< TEMPLATE_SPI_MASTER_HARD_OS_PARAM >::off ( void ) const {
-    spi_registers_struct*   S = ( spi_registers_struct* )M_EC_TO_U32(SPIx);
-    S->C1 &= ~M_EC_TO_U32(EC_SPI_C1_REG_BIT_MSK::SPE);                  // Отключаем SPI.
-}
-
-template < TEMPLATE_SPI_MASTER_HARD_OS_HEADLINE >
-int spi_master_hardware_os< TEMPLATE_SPI_MASTER_HARD_OS_PARAM >::tx ( const void* const p_array_tx, const uint16_t& length, uint32_t timeout_ms ) const {
+template < SPI_MASTER_HARDWARE_OS_TEMPLATE_HEADING >
+EC_SPI_BASE_RESULT spi_master_8bit_hardware_os< SPI_MASTER_HARDWARE_OS_TEMPLATE_PARAM >::tx ( const uint8_t* const  p_array_tx, const uint8_t& length, const uint32_t& timeout_ms ) const {
     spi_registers_struct*   S = ( spi_registers_struct* )M_EC_TO_U32(SPIx);
     if ( length == 0 ) return -1;
 
@@ -197,11 +202,18 @@ int spi_master_hardware_os< TEMPLATE_SPI_MASTER_HARD_OS_PARAM >::tx ( const void
 
     USER_OS_GIVE_MUTEX( this->mutex );
 
-    return ( result ) ? 1 : 0;
+    return ( result ) ? EC_SPI_BASE_RESULT::OK : EC_SPI_BASE_RESULT::TIME_OUT;
 }
 
-template < TEMPLATE_SPI_MASTER_HARD_OS_HEADLINE >
-int spi_master_hardware_os< TEMPLATE_SPI_MASTER_HARD_OS_PARAM >::tx_one_item ( const void* const p_item_tx, const uint16_t& count, uint32_t timeout_ms ) const {
+template < SPI_MASTER_HARDWARE_OS_TEMPLATE_HEADING >
+EC_SPI_BASE_RESULT spi_master_8bit_hardware_os< SPI_MASTER_HARDWARE_OS_TEMPLATE_PARAM >::tx ( const uint8_t* const  p_array_tx, uint8_t* p_array_rx, const uint16_t& length, const uint32_t& timeout_ms ) const {
+    (void)timeout_ms;
+    (void)p_array_tx; (void)p_array_rx; (void)length;
+    return EC_SPI_BASE_RESULT::OK;
+}
+
+template < SPI_MASTER_HARDWARE_OS_TEMPLATE_HEADING >
+EC_SPI_BASE_RESULT spi_master_8bit_hardware_os< SPI_MASTER_HARDWARE_OS_TEMPLATE_PARAM >::tx_one_item ( const uint8_t* const  p_item_tx, const uint16_t& count, const uint32_t& timeout_ms ) const {
     spi_registers_struct*   S = ( spi_registers_struct* )M_EC_TO_U32(SPIx);
     if ( count == 0 ) return -1;
 
@@ -221,18 +233,11 @@ int spi_master_hardware_os< TEMPLATE_SPI_MASTER_HARD_OS_PARAM >::tx_one_item ( c
 
     USER_OS_GIVE_MUTEX( this->mutex );
 
-    return ( result ) ? 1 : 0;
+    return ( result ) ? EC_SPI_BASE_RESULT::OK : EC_SPI_BASE_RESULT::TIME_OUT;
 }
 
-template < TEMPLATE_SPI_MASTER_HARD_OS_HEADLINE >
-int spi_master_hardware_os< TEMPLATE_SPI_MASTER_HARD_OS_PARAM >::tx ( const void* const p_array_tx, void* p_array_rx, const uint16_t& length, uint32_t timeout_ms ) const {
-    (void)timeout_ms;
-    (void)p_array_tx; (void)p_array_rx; (void)length;
-    return 0;
-}
-
-template < TEMPLATE_SPI_MASTER_HARD_OS_HEADLINE >
-int spi_master_hardware_os< TEMPLATE_SPI_MASTER_HARD_OS_PARAM >::rx ( void* p_array_rx, const uint16_t& length, uint32_t timeout_ms, uint8_t out_value ) const {
+template < SPI_MASTER_HARDWARE_OS_TEMPLATE_HEADING >
+EC_SPI_BASE_RESULT spi_master_8bit_hardware_os< SPI_MASTER_HARDWARE_OS_TEMPLATE_PARAM >::rx ( void* p_array_rx, const uint16_t& length, const uint32_t& timeout_ms, const uint8_t& out_value ) const {
     volatile spi_registers_struct* const S = ( spi_registers_struct* )M_EC_TO_U32(SPIx);
     if ( length == 0 ) return -1;
 
@@ -242,25 +247,24 @@ int spi_master_hardware_os< TEMPLATE_SPI_MASTER_HARD_OS_PARAM >::rx ( void* p_ar
 
     if ( NUM_LINE == EC_SPI_CFG_NUMBER_LINE::LINE_2 ) {
         this->number_items                  = length - 1;                               // Отнимаем сначала одну, т.к. одну передаем сразу (посылку).
-        this->p_tx                          = &out_value;                           // Это значение будем отправлять постоянно.
+        this->p_tx                          = &out_value;                               // Это значение будем отправлять постоянно.
         this->p_rx                          = ( spi_frame_size* )p_array_rx;
         this->handler_rx_copy_cfg_flag      = true;
         this->handler_tx_point_inc_cfg_flag = false;
-        S->D                                = *p_tx;                                // Делаем первую отправку.
+        S->D                                = *p_tx;                                    // Делаем первую отправку.
         this->p_tx++;
         S->C2                               = this->cfg.c2_msk;
         result = USER_OS_TAKE_BIN_SEMAPHORE( this->semaphore, timeout_ms );
-        while ( ( S->S & M_EC_TO_U32(EC_SPI_REG_BIT_MSK::BSY) ) != 0  ) {};            //  Ждем, пока SPI окончит передачу последнего пакета (если до нас кто отсылал).
+        while ( ( S->S & M_EC_TO_U32(EC_SPI_REG_BIT_MSK::BSY) ) != 0  ) {};             //  Ждем, пока SPI окончит передачу последнего пакета (если до нас кто отсылал).
     }
 
     USER_OS_GIVE_MUTEX( this->mutex );
 
-    return ( result ) ? 1 : 0;
-    return 0;
+    return ( result ) ? EC_SPI_BASE_RESULT::OK : EC_SPI_BASE_RESULT::TIME_OUT;
 }
 
-template < TEMPLATE_SPI_MASTER_HARD_OS_HEADLINE >
-void spi_master_hardware_os< TEMPLATE_SPI_MASTER_HARD_OS_PARAM >::handler ( void ) const {
+template < SPI_MASTER_HARDWARE_OS_TEMPLATE_HEADING >
+void spi_master_8bit_hardware_os< SPI_MASTER_HARDWARE_OS_TEMPLATE_PARAM >::handler ( void ) const {
     spi_registers_struct* const S = (spi_registers_struct* const )M_EC_TO_U32(SPIx);
 
     if ( NUM_LINE == EC_SPI_CFG_NUMBER_LINE::LINE_2 ) {
@@ -310,4 +314,15 @@ S->S = 0;
     }
 }
 
+template < SPI_MASTER_HARDWARE_OS_TEMPLATE_HEADING >
+void spi_master_8bit_hardware_os< SPI_MASTER_HARDWARE_OS_TEMPLATE_PARAM >::on ( void ) const {
+    spi_registers_struct*   S = ( spi_registers_struct* )M_EC_TO_U32(SPIx);
+    S->C1 |= M_EC_TO_U32(EC_SPI_C1_REG_BIT_MSK::SPE);                   // Запскаем SPI.
+}
+
+template < SPI_MASTER_HARDWARE_OS_TEMPLATE_HEADING >
+void spi_master_8bit_hardware_os< SPI_MASTER_HARDWARE_OS_TEMPLATE_PARAM >::off ( void ) const {
+    spi_registers_struct*   S = ( spi_registers_struct* )M_EC_TO_U32(SPIx);
+    S->C1 &= ~M_EC_TO_U32(EC_SPI_C1_REG_BIT_MSK::SPE);                  // Отключаем SPI.
+}
 #endif
