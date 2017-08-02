@@ -212,7 +212,7 @@ EC_SPI_BASE_RESULT spi_master_8bit_hardware_os< SPI_MASTER_HARDWARE_OS_TEMPLATE_
 }
 
 template < SPI_MASTER_HARDWARE_OS_TEMPLATE_HEADING >
-EC_SPI_BASE_RESULT spi_master_8bit_hardware_os< SPI_MASTER_HARDWARE_OS_TEMPLATE_PARAM >::tx_one_item ( const uint8_t* const  p_item_tx, const uint16_t& count, const uint32_t& timeout_ms ) const {
+EC_SPI_BASE_RESULT spi_master_8bit_hardware_os< SPI_MASTER_HARDWARE_OS_TEMPLATE_PARAM >::tx_one_item ( const uint8_t p_item_tx, const uint16_t count, const uint32_t timeout_ms ) const {
     spi_registers_struct*   S = ( spi_registers_struct* )M_EC_TO_U32(SPIx);
     if ( count == 0 ) return EC_SPI_BASE_RESULT::LENGTH_ERROR;
 
@@ -223,7 +223,7 @@ EC_SPI_BASE_RESULT spi_master_8bit_hardware_os< SPI_MASTER_HARDWARE_OS_TEMPLATE_
         this->number_items = count - 1;                 // Отнимаем сначала одну, т.к. одну передаем сразу (посылку).
         this->handler_rx_copy_cfg_flag = false;
         this->handler_tx_point_inc_cfg_flag = false;    // Передаем всегда 1.
-        this->p_tx = ( uint8_t* )p_item_tx;                         // Если транзакция всего одна, то ничего страшного, он просто не будет пользовать этот указатель (handler не будет пользовать).
+        this->p_tx = (uint8_t*)&p_item_tx;              // Если транзакция всего одна, то ничего страшного, он просто не будет пользовать этот указатель (handler не будет пользовать).
         S->D    = *this->p_tx;                          // Делаем первую отправку.
         S->C2   = this->cfg.c2_msk;                     // Разрешаем генерацию прерываний.
         result = USER_OS_TAKE_BIN_SEMAPHORE( this->semaphore, timeout_ms );
@@ -282,6 +282,12 @@ void spi_master_8bit_hardware_os< SPI_MASTER_HARDWARE_OS_TEMPLATE_PARAM >::handl
                 (void)input_buf;
             }
             S->S = 0;
+            // Если мы уже кинули в TX все и сейчас забрали последнее, то выходим.
+            if ( this->number_items == 0 ) {
+                static USER_OS_PRIO_TASK_WOKEN prio = pdFALSE;          // Говорим что все закинули (хоть и в буфер) и выходим.
+                USER_OS_GIVE_BIN_SEMAPHORE_FROM_ISR( this->semaphore, &prio );
+                S->C2 = M_EC_TO_U32(EC_SPI_C2_REG_BIT_MSK::RXNEIE) | M_EC_TO_U32(EC_SPI_C2_REG_BIT_MSK::SSOE);
+            }
             return;
         }
 
