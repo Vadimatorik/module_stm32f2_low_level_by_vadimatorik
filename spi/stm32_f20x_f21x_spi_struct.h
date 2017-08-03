@@ -94,7 +94,7 @@ enum class EC_SPI_S_REG_BIT_FIELD_POS {
     TIFRFE      = 8
 };
 
-enum class EC_SPI_REG_BIT_MSK {
+enum class EC_SPI_S_REG_BIT_MSK {
     RXNE        = 1  << M_EC_TO_U8(EC_SPI_S_REG_BIT_FIELD_POS::RXNE),
     TXE         = 1  << M_EC_TO_U8(EC_SPI_S_REG_BIT_FIELD_POS::TXE),
     CHSIDE      = 1  << M_EC_TO_U8(EC_SPI_S_REG_BIT_FIELD_POS::CHSIDE),

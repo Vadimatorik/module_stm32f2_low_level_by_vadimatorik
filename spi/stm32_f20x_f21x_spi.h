@@ -70,8 +70,6 @@ public:
     EC_SPI_BASE_RESULT tx_one_item  ( const uint8_t p_item_tx, const uint16_t count, const uint32_t timeout_ms ) const;
     EC_SPI_BASE_RESULT rx           ( uint8_t* p_array_rx, const uint16_t& length, const uint32_t& timeout_ms, const uint8_t& out_value = 0xFF ) const;
 
-    void    handler                 ( void ) const;
-
     void    on                      ( void ) const;
     void    off                     ( void ) const;
 
@@ -80,48 +78,15 @@ private:
     mutable USER_OS_STATIC_MUTEX_BUFFER         mutex_buf       = USER_OS_STATIC_MUTEX_BUFFER_INIT_VALUE;
     mutable USER_OS_STATIC_MUTEX                mutex           = nullptr;
 
-    // Сигнализирует об успешной передаче или приеме.
-    mutable USER_OS_STATIC_BIN_SEMAPHORE_BUFFER semaphore_buf   = USER_OS_STATIC_BIN_SEMAPHORE_BUFFER_INIT_VALUE;
-    mutable USER_OS_STATIC_BIN_SEMAPHORE        semaphore       = nullptr;
-
-    mutable uint8_t* p_tx = nullptr;
-    mutable uint8_t* p_rx = nullptr;
-
-    //**********************************************************************
-    // Копировать в буффер данные, если они пришли?
-    // В случае, если true, данные будут писаться последовательно в массив.
-    //**********************************************************************
-    mutable bool handler_rx_copy_cfg_flag      = false;
-
-    //**********************************************************************
-    // Смещать указатель на данные для передачи?
-    // Если true, то смещаем.
-    // Если false, то передаем одно и то же ( для режима приема,
-    // когда нужно слать 1 и то же значение и только принимать ).
-    //**********************************************************************
-    mutable bool handler_tx_point_inc_cfg_flag = false;
-
-    // Колличество осташихся транзакций.
-    mutable uint32_t number_items = 0;
-
     const spi_cfg< EC_SPI_CFG_MODE::MASTER,
                    POLAR, PHASE, NUM_LINE, ONE_LINE_MODE,
                    EC_SPI_CFG_DATA_FRAME      :: FRAME_8_BIT,
                    EC_SPI_CFG_RECEIVE_MODE    :: FULL_DUPLEX,
                    FORMAT, BR_DEV,
 
-                   /*
-                    * Выставляем разрешение прерывания по опустошению выходного буффера, если
-                    * у нас используются обе линии или же одна в режиме выхода.
-                    */
-                   ( ( NUM_LINE == EC_SPI_CFG_NUMBER_LINE::LINE_2 ) ||
-                     ( ( NUM_LINE == EC_SPI_CFG_NUMBER_LINE::LINE_1 ) && ( ONE_LINE_MODE == EC_SPI_CFG_ONE_LINE_MODE::TRANSMIT_ONLY ) ) ) ?
-                       EC_SPI_CFG_INTERRUPT_TX::ON : EC_SPI_CFG_INTERRUPT_TX::OFF,
-
-                   // Та же тема и с RX.
-                   ( ( NUM_LINE == EC_SPI_CFG_NUMBER_LINE::LINE_2 ) ||
-                     ( ( NUM_LINE == EC_SPI_CFG_NUMBER_LINE::LINE_1 ) && ( ONE_LINE_MODE == EC_SPI_CFG_ONE_LINE_MODE::RECEIVE_ONLY ) ) ) ?
-                        EC_SPI_CFG_INTERRUPT_RX::ON : EC_SPI_CFG_INTERRUPT_RX::OFF,
+                   // Прерывания не используются из-за их глючности (или у меня руки кривые...)
+                   EC_SPI_CFG_INTERRUPT_TX::OFF,
+                   EC_SPI_CFG_INTERRUPT_RX::OFF,
 
                    EC_SPI_CFG_INTERRUPT_ERROR :: OFF,               // Пока режимы, где бы нужен был реально этот флаг - не поддерживаются.
                    EC_SPI_CFG_DMA_TX_BUF      :: DISABLED,
