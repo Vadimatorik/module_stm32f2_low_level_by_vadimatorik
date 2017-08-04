@@ -44,6 +44,10 @@ private:
     constexpr uint32_t  c2_reg_msk_get              ( void );
 };
 
+struct spi_master_8bit_hardware_os_cfg_t {
+    USER_OS_STATIC_MUTEX*       mutex;      // Для предотвращения попытки использовать 1 SPI из разных потоков одновременно.
+};
+
 //**********************************************************************
 // Конфигурация SPI в режиме мастера, посылки по 8 бит.
 //
@@ -61,7 +65,7 @@ template <  EC_SPI_NAME                  SPIx,           // SPI1, SPI2...
             EC_SPI_CFG_BAUD_RATE_DEV     BR_DEV >        // Определяет делитель частоты передачи.
 class spi_master_8bit_hardware_os : public spi_master_8bit_base {
 public:
-    constexpr spi_master_8bit_hardware_os ( void );
+    constexpr spi_master_8bit_hardware_os ( const spi_master_8bit_hardware_os_cfg_t* const cfg );
 
     void    reinit                  ( void ) const;
 
@@ -74,9 +78,7 @@ public:
     void    off                     ( void ) const;
 
 private:
-    // Для предотвращения попытки использовать 1 SPI из разных потоков одновременно.
-    mutable USER_OS_STATIC_MUTEX_BUFFER         mutex_buf       = USER_OS_STATIC_MUTEX_BUFFER_INIT_VALUE;
-    mutable USER_OS_STATIC_MUTEX                mutex           = nullptr;
+    const spi_master_8bit_hardware_os_cfg_t* const cfg;
 
     const spi_cfg< EC_SPI_CFG_MODE::MASTER,
                    POLAR, PHASE, NUM_LINE, ONE_LINE_MODE,
@@ -93,7 +95,7 @@ private:
                    EC_SPI_CFG_DMA_RX_BUF      :: DISABLED,
                    EC_SPI_CFG_CS              :: ENABLED,
                    EC_SPI_CFG_SSM             :: SSM_OFF,
-                   EC_SPI_CFG_SSM_MODE        :: NO_USE > cfg;
+                   EC_SPI_CFG_SSM_MODE        :: NO_USE > cfg_low;
 };
 
 #include "stm32_f20x_f21x_spi_func.h"

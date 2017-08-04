@@ -160,7 +160,7 @@ constexpr uint32_t spi_cfg< SPI_CFG_TEMPLATE_PARAM >::c2_reg_msk_get ( void ) {
                                                         ONE_LINE_MODE, FORMAT, BR_DEV
 
 template < SPI_MASTER_HARDWARE_OS_TEMPLATE_HEADING >
-constexpr spi_master_8bit_hardware_os< SPI_MASTER_HARDWARE_OS_TEMPLATE_PARAM >::spi_master_8bit_hardware_os ( void ) {
+constexpr spi_master_8bit_hardware_os< SPI_MASTER_HARDWARE_OS_TEMPLATE_PARAM >::spi_master_8bit_hardware_os ( const spi_master_8bit_hardware_os_cfg_t* const cfg ) : cfg( cfg )  {
     static_assert( ( SPIx == EC_SPI_NAME::SPI1 ) ||
                    ( SPIx == EC_SPI_NAME::SPI2 ) ||
                    ( SPIx == EC_SPI_NAME::SPI3 ),
@@ -169,11 +169,9 @@ constexpr spi_master_8bit_hardware_os< SPI_MASTER_HARDWARE_OS_TEMPLATE_PARAM >::
 
 template < SPI_MASTER_HARDWARE_OS_TEMPLATE_HEADING >
 void spi_master_8bit_hardware_os< SPI_MASTER_HARDWARE_OS_TEMPLATE_PARAM >::reinit ( void ) const {
-    this->mutex         = USER_OS_STATIC_MUTEX_CREATE( &this->mutex_buf );
-
     spi_registers_struct* S = ( spi_registers_struct* )M_EC_TO_U32(SPIx);
-    S->C2   =   this->cfg.c2_msk;   // Если этого не сделать, то после запуска сразу же сбросится режим мастера в slave (если был мастер!).
-    S->C1   =   this->cfg.c1_msk;         // Конфигурируем SPI.
+    S->C2   =   this->cfg_low.c2_msk;   // Если этого не сделать, то после запуска сразу же сбросится режим мастера в slave (если был мастер!).
+    S->C1   =   this->cfg_low.c1_msk;         // Конфигурируем SPI.
 }
 
 template < SPI_MASTER_HARDWARE_OS_TEMPLATE_HEADING >
@@ -183,7 +181,7 @@ EC_SPI_BASE_RESULT spi_master_8bit_hardware_os< SPI_MASTER_HARDWARE_OS_TEMPLATE_
 
     if ( length == 0 ) return EC_SPI_BASE_RESULT::LENGTH_ERROR;
 
-    USER_OS_TAKE_MUTEX( this->mutex, portMAX_DELAY );
+    USER_OS_TAKE_MUTEX( *this->cfg->mutex, portMAX_DELAY );
 
     if ( NUM_LINE == EC_SPI_CFG_NUMBER_LINE::LINE_2 ) {
         uint8_t* p = ( uint8_t* )p_array_tx;
@@ -192,23 +190,18 @@ EC_SPI_BASE_RESULT spi_master_8bit_hardware_os< SPI_MASTER_HARDWARE_OS_TEMPLATE_
 
         while ( ( S->S & M_EC_TO_U32( EC_SPI_S_REG_BIT_MSK::BSY ) ) != 0  );
 
-        S->D = *p;
-        p++;
-        while ( ( S->S & M_EC_TO_U32( EC_SPI_S_REG_BIT_MSK::TXE ) ) == 0  );                // Ждем, пока конвейер SPI примет 1-й пакет.
-
-        for ( uint16_t loop = 0; loop < length - 1; loop++ ) {                              // В случае, если всего 1 передача, этот цикл не будет использован.
+        // Непрерывный конвейер не реализован из-за того, что при высоких скоростях
+        // мы получаем наложение принятого байта! (этого никак не избежать, скорости не хватает).
+        for ( uint16_t loop = 0; loop < length; loop++ ) {
             S->D = *p;
             p++;
-            while ( ( S->S & M_EC_TO_U32( EC_SPI_S_REG_BIT_MSK::TXE ) ) == 0  );            // Ждем, пока конвейер SPI примет 2-й пакет.
-            while ( ( S->S & M_EC_TO_U32( EC_SPI_S_REG_BIT_MSK::RXNE ) ) == 0  );           // Ждем, когда в ответ придет первый байт.
+            while ( ( S->S & M_EC_TO_U32( EC_SPI_S_REG_BIT_MSK::TXE ) ) == 0  );
+            while ( ( S->S & M_EC_TO_U32( EC_SPI_S_REG_BIT_MSK::RXNE ) ) == 0  );
             buf_read = S->D;
         }
-
-        while ( ( S->S & M_EC_TO_U32( EC_SPI_S_REG_BIT_MSK::RXNE ) ) == 0  );               // Ждем, когда в ответ придет последний байт.
-        buf_read = S->D;
     }
 
-    USER_OS_GIVE_MUTEX( this->mutex );
+    USER_OS_GIVE_MUTEX( *this->cfg->mutex );
     return EC_SPI_BASE_RESULT::OK;
 }
 
@@ -219,32 +212,24 @@ EC_SPI_BASE_RESULT spi_master_8bit_hardware_os< SPI_MASTER_HARDWARE_OS_TEMPLATE_
 
     if ( length == 0 ) return EC_SPI_BASE_RESULT::LENGTH_ERROR;
 
-    USER_OS_TAKE_MUTEX( this->mutex, portMAX_DELAY );
+    USER_OS_TAKE_MUTEX( *this->cfg->mutex, portMAX_DELAY );
 
     if ( NUM_LINE == EC_SPI_CFG_NUMBER_LINE::LINE_2 ) {
         uint8_t* p_out = ( uint8_t* )p_array_tx;
         uint8_t* p_in = ( uint8_t* )p_array_rx;
 
         while ( ( S->S & M_EC_TO_U32( EC_SPI_S_REG_BIT_MSK::BSY ) ) != 0  );
-
-        S->D = *p_out;
-        p_out++;
-        while ( ( S->S & M_EC_TO_U32( EC_SPI_S_REG_BIT_MSK::TXE ) ) == 0  );                // Ждем, пока конвейер SPI примет 1-й пакет.
-
-        for ( uint16_t loop = 0; loop < length - 1; loop++ ) {                              // В случае, если всего 1 передача, этот цикл не будет использован.
+        for ( uint16_t loop = 0; loop < length; loop++ ) {
             S->D = *p_out;
             p_out++;
-            while ( ( S->S & M_EC_TO_U32( EC_SPI_S_REG_BIT_MSK::TXE ) ) == 0  );            // Ждем, пока конвейер SPI примет 2-й пакет.
-            while ( ( S->S & M_EC_TO_U32( EC_SPI_S_REG_BIT_MSK::RXNE ) ) == 0  );           // Ждем, когда в ответ придет первый байт.
+            while ( ( S->S & M_EC_TO_U32( EC_SPI_S_REG_BIT_MSK::TXE ) ) == 0  );
+            while ( ( S->S & M_EC_TO_U32( EC_SPI_S_REG_BIT_MSK::RXNE ) ) == 0  );
             *p_in = S->D;
             p_in++;
         }
-
-        while ( ( S->S & M_EC_TO_U32( EC_SPI_S_REG_BIT_MSK::RXNE ) ) == 0  );               // Ждем, когда в ответ придет последний байт.
-        *p_in = S->D;
     }
 
-    USER_OS_GIVE_MUTEX( this->mutex );
+    USER_OS_GIVE_MUTEX( *this->cfg->mutex );
     return EC_SPI_BASE_RESULT::OK;
 }
 
@@ -255,7 +240,7 @@ EC_SPI_BASE_RESULT spi_master_8bit_hardware_os< SPI_MASTER_HARDWARE_OS_TEMPLATE_
 
     if ( count == 0 ) return EC_SPI_BASE_RESULT::LENGTH_ERROR;
 
-    USER_OS_TAKE_MUTEX( this->mutex, portMAX_DELAY );
+    USER_OS_TAKE_MUTEX( *this->cfg->mutex, portMAX_DELAY );
 
     if ( NUM_LINE == EC_SPI_CFG_NUMBER_LINE::LINE_2 ) {
         volatile uint32_t buf_read;
@@ -263,21 +248,15 @@ EC_SPI_BASE_RESULT spi_master_8bit_hardware_os< SPI_MASTER_HARDWARE_OS_TEMPLATE_
 
         while ( ( S->S & M_EC_TO_U32( EC_SPI_S_REG_BIT_MSK::BSY ) ) != 0  );
 
-        S->D = p_item_tx;
-        while ( ( S->S & M_EC_TO_U32( EC_SPI_S_REG_BIT_MSK::TXE ) ) == 0  );                // Ждем, пока конвейер SPI примет 1-й пакет.
-
-        for ( uint16_t loop = 0; loop < count - 1; loop++ ) {                               // В случае, если всего 1 передача, этот цикл не будет использован.
+        for ( uint16_t loop = 0; loop < count; loop++ ) {
             S->D = p_item_tx;
-            while ( ( S->S & M_EC_TO_U32( EC_SPI_S_REG_BIT_MSK::TXE ) ) == 0  );            // Ждем, пока конвейер SPI примет 2-й пакет.
-            while ( ( S->S & M_EC_TO_U32( EC_SPI_S_REG_BIT_MSK::RXNE ) ) == 0  );           // Ждем, когда в ответ придет первый байт.
+            while ( ( S->S & M_EC_TO_U32( EC_SPI_S_REG_BIT_MSK::TXE ) ) == 0  );
+            while ( ( S->S & M_EC_TO_U32( EC_SPI_S_REG_BIT_MSK::RXNE ) ) == 0  );
             buf_read = S->D;
         }
-
-        while ( ( S->S & M_EC_TO_U32( EC_SPI_S_REG_BIT_MSK::RXNE ) ) == 0  );               // Ждем, когда в ответ придет последний байт.
-        buf_read = S->D;
     }
 
-    USER_OS_GIVE_MUTEX( this->mutex );
+    USER_OS_GIVE_MUTEX( *this->cfg->mutex );
     return EC_SPI_BASE_RESULT::OK;
 }
 
@@ -288,42 +267,35 @@ EC_SPI_BASE_RESULT spi_master_8bit_hardware_os< SPI_MASTER_HARDWARE_OS_TEMPLATE_
 
     if ( length == 0 ) return EC_SPI_BASE_RESULT::LENGTH_ERROR;
 
-    USER_OS_TAKE_MUTEX( this->mutex, portMAX_DELAY );
+    USER_OS_TAKE_MUTEX( *this->cfg->mutex, portMAX_DELAY );
 
     if ( NUM_LINE == EC_SPI_CFG_NUMBER_LINE::LINE_2 ) {
         uint8_t* p = ( uint8_t* )p_array_rx;
 
         while ( ( S->S & M_EC_TO_U32( EC_SPI_S_REG_BIT_MSK::BSY ) ) != 0  );
 
-        S->D = out_value;
-        while ( ( S->S & M_EC_TO_U32( EC_SPI_S_REG_BIT_MSK::TXE ) ) == 0  );                // Ждем, пока конвейер SPI примет 1-й пакет.
-
-        for ( uint16_t loop = 0; loop < length - 1; loop++ ) {                              // В случае, если всего 1 передача, этот цикл не будет использован.
+        for ( uint16_t loop = 0; loop < length; loop++ ) {
             S->D = out_value;
-
-            while ( ( S->S & M_EC_TO_U32( EC_SPI_S_REG_BIT_MSK::TXE ) ) == 0  );            // Ждем, пока конвейер SPI примет 2-й пакет.
-            while ( ( S->S & M_EC_TO_U32( EC_SPI_S_REG_BIT_MSK::RXNE ) ) == 0  );           // Ждем, когда в ответ придет первый байт.
+            while ( ( S->S & M_EC_TO_U32( EC_SPI_S_REG_BIT_MSK::TXE ) ) == 0  );
+            while ( ( S->S & M_EC_TO_U32( EC_SPI_S_REG_BIT_MSK::RXNE ) ) == 0  );
             *p = S->D;
             p++;
         }
-
-        while ( ( S->S & M_EC_TO_U32( EC_SPI_S_REG_BIT_MSK::RXNE ) ) == 0  );               // Ждем, когда в ответ придет последний байт.
-        *p = S->D;
     }
 
-    USER_OS_GIVE_MUTEX( this->mutex );
+    USER_OS_GIVE_MUTEX( *this->cfg->mutex );
     return EC_SPI_BASE_RESULT::OK;
 }
 
 template < SPI_MASTER_HARDWARE_OS_TEMPLATE_HEADING >
 void spi_master_8bit_hardware_os< SPI_MASTER_HARDWARE_OS_TEMPLATE_PARAM >::on ( void ) const {
     spi_registers_struct*   S = ( spi_registers_struct* )M_EC_TO_U32(SPIx);
-    S->C1 |= M_EC_TO_U32(EC_SPI_C1_REG_BIT_MSK::SPE);                   // Запскаем SPI.
+    S->C1 |= M_EC_TO_U32(EC_SPI_C1_REG_BIT_MSK::SPE);
 }
 
 template < SPI_MASTER_HARDWARE_OS_TEMPLATE_HEADING >
 void spi_master_8bit_hardware_os< SPI_MASTER_HARDWARE_OS_TEMPLATE_PARAM >::off ( void ) const {
     spi_registers_struct*   S = ( spi_registers_struct* )M_EC_TO_U32(SPIx);
-    S->C1 &= ~M_EC_TO_U32(EC_SPI_C1_REG_BIT_MSK::SPE);                  // Отключаем SPI.
+    S->C1 &= ~M_EC_TO_U32(EC_SPI_C1_REG_BIT_MSK::SPE);
 }
 #endif
