@@ -297,4 +297,21 @@ void rcc::tim1_clk_off ( void ) {
     RCC->APB_2_EN &= ~M_EC_TO_U32(EC_APB2_EN_REG_BIT_MSK::TIM1);
 }
 
+// TIM6
+void rcc::tim6_clk_on ( void ) {
+    RCC->APB_1_EN |= M_EC_TO_U32( EC_APB1_EN_REG_BIT_MSK::TIM6 );
+}
+
+void rcc::tim6_clk_off ( void ) {
+    RCC->APB_1_EN &= ~M_EC_TO_U32( EC_APB1_EN_REG_BIT_MSK::TIM6 );
+}
+
+// TIM7
+void rcc::tim7_clk_on ( void ) {
+    RCC->APB_1_EN |= M_EC_TO_U32(EC_APB1_EN_REG_BIT_MSK::TIM7);
+}
+
+void rcc::tim7_clk_off ( void ) {
+    RCC->APB_1_EN &= ~M_EC_TO_U32(EC_APB1_EN_REG_BIT_MSK::TIM7);
+}
 #endif

@@ -38,12 +38,13 @@ private:
 template < TIM6_OR_TIM7        P_TIM,                   // Используемый таймер.
            uint16_t            PRESCALER,               // Предделитель 1..0x10000.
            uint16_t            PERIOD_TOGGLE >          // Еще 1 делитель 1..0x10000.
-class tim6_or_7_comp_one_channel : public tim_interrupt_base {
+class tim6_or_7_interrupt : public tim_interrupt_base {
 public:
-    tim6_or_7_comp_one_channel ();
-    void reinit     ( void ) const;
-    void on         ( void ) const;
-    void off        ( void ) const;
+    tim6_or_7_interrupt ();
+    void reinit                 ( void ) const;
+    void clear_interrupt_flag   ( void ) const;         // Вызывать по входу в прерывание.
+    void on                     ( void ) const;
+    void off                    ( void ) const;
 
 private:
     tim_6_or_7_registers_struct*            const tim;

@@ -136,7 +136,7 @@ void tim1_or_8_comp_one_channel< TIM1_OR_8_COMP_ONE_CHANNEL_CFG_TEMPLATE_PARAM >
 #define TIM6_OR_7_COMP_ONE_CHANNEL_CFG_TEMPLATE_PARAM       P_TIM, PRESCALER, PERIOD_TOGGLE
 
 template < TIM6_OR_7_COMP_ONE_CHANNEL_CFG_TEMPLATE_HEADING >
-tim6_or_7_comp_one_channel< TIM6_OR_7_COMP_ONE_CHANNEL_CFG_TEMPLATE_PARAM >::tim6_or_7_comp_one_channel () :
+tim6_or_7_interrupt< TIM6_OR_7_COMP_ONE_CHANNEL_CFG_TEMPLATE_PARAM >::tim6_or_7_interrupt () :
     tim( ( tim_6_or_7_registers_struct* )P_TIM ),
     cfg( {
             .C1         = 0,
@@ -154,18 +154,24 @@ tim6_or_7_comp_one_channel< TIM6_OR_7_COMP_ONE_CHANNEL_CFG_TEMPLATE_PARAM >::tim
         } ) {}
 
 template < TIM6_OR_7_COMP_ONE_CHANNEL_CFG_TEMPLATE_HEADING >
-void tim6_or_7_comp_one_channel< TIM6_OR_7_COMP_ONE_CHANNEL_CFG_TEMPLATE_PARAM >::reinit ( void ) const {
+void tim6_or_7_interrupt< TIM6_OR_7_COMP_ONE_CHANNEL_CFG_TEMPLATE_PARAM >::reinit ( void ) const {
     memcpy( (void*)this->tim, &this->cfg, sizeof( tim_6_or_7_registers_struct ) );
 }
 
 template < TIM6_OR_7_COMP_ONE_CHANNEL_CFG_TEMPLATE_HEADING >
-void tim6_or_7_comp_one_channel< TIM6_OR_7_COMP_ONE_CHANNEL_CFG_TEMPLATE_PARAM >::on ( void ) const {
+void tim6_or_7_interrupt< TIM6_OR_7_COMP_ONE_CHANNEL_CFG_TEMPLATE_PARAM >::on ( void ) const {
     this->tim->C1 |= M_EC_TO_U32( EC_TIM_6_OR_7_C1_REG_BIT_MSK::CEN );
 }
 
 template < TIM6_OR_7_COMP_ONE_CHANNEL_CFG_TEMPLATE_HEADING >
-void tim6_or_7_comp_one_channel< TIM6_OR_7_COMP_ONE_CHANNEL_CFG_TEMPLATE_PARAM >::off ( void ) const {
+void tim6_or_7_interrupt< TIM6_OR_7_COMP_ONE_CHANNEL_CFG_TEMPLATE_PARAM >::off ( void ) const {
     this->tim->C1 &= ~M_EC_TO_U32( EC_TIM_6_OR_7_C1_REG_BIT_MSK::CEN );
+}
+
+
+template < TIM6_OR_7_COMP_ONE_CHANNEL_CFG_TEMPLATE_HEADING >
+void tim6_or_7_interrupt< TIM6_OR_7_COMP_ONE_CHANNEL_CFG_TEMPLATE_PARAM >::clear_interrupt_flag ( void ) const {
+    this->tim->S = 0;
 }
 
 #endif
