@@ -207,16 +207,4 @@ enum class EC_TIM_CH_MODE {
     ALL     = 2
 };
 
-/*
- * Конкретные реализации интерфейсов.
- */
-struct tim1_comp_one_channel_cfg_t {
-    const TIM1_OR_TIM8        p_tim;
-    const uint16_t            prescaler;
-    const uint16_t            period_toggle;
-    const EC_TIM_CH_TOGGLE    ch_toggle;
-    const EC_TIM_CH_MODE      mode;
-};
-
-
 #endif

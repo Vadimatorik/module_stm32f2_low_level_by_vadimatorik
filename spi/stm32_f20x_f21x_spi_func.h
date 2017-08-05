@@ -171,7 +171,7 @@ template < SPI_MASTER_HARDWARE_OS_TEMPLATE_HEADING >
 void spi_master_8bit_hardware_os< SPI_MASTER_HARDWARE_OS_TEMPLATE_PARAM >::reinit ( void ) const {
     spi_registers_struct* S = ( spi_registers_struct* )M_EC_TO_U32(SPIx);
     S->C2   =   this->cfg_low.c2_msk;   // Если этого не сделать, то после запуска сразу же сбросится режим мастера в slave (если был мастер!).
-    S->C1   =   this->cfg_low.c1_msk;         // Конфигурируем SPI.
+    S->C1   =   this->cfg_low.c1_msk;   // Конфигурируем SPI.
 }
 
 template < SPI_MASTER_HARDWARE_OS_TEMPLATE_HEADING >
