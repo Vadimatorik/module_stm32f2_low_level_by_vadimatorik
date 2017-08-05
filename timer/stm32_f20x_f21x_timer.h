@@ -7,6 +7,9 @@
 #include "mk_hardware_interfaces_timer.h"
 #include "stm32_f20x_f21x_timer_struct.h"
 
+//
+// Генератор прямоугольных импульсов.
+//
 template < TIM1_OR_TIM8        P_TIM,                   // Используемый таймер.
            uint16_t            PRESCALER,               // Предделитель 1..0x10000.
            uint16_t            PERIOD_TOGGLE,           // Еще 1 делитель 1..0x10000.
@@ -27,6 +30,24 @@ private:
 
     tim_1_or_8_registers_struct*            const tim;
     const tim_1_or_8_registers_struct       cfg;
+};
+
+//
+// Генератор прерываний.
+//
+template < TIM6_OR_TIM7        P_TIM,                   // Используемый таймер.
+           uint16_t            PRESCALER,               // Предделитель 1..0x10000.
+           uint16_t            PERIOD_TOGGLE >          // Еще 1 делитель 1..0x10000.
+class tim6_or_7_comp_one_channel : public tim_interrupt_base {
+public:
+    tim6_or_7_comp_one_channel ();
+    void reinit     ( void ) const;
+    void on         ( void ) const;
+    void off        ( void ) const;
+
+private:
+    tim_6_or_7_registers_struct*            const tim;
+    const tim_6_or_7_registers_struct       cfg;
 };
 
 #include "stm32_f20x_f21x_timer_func.h"
