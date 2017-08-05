@@ -4,6 +4,8 @@
 
 #ifdef MODULE_PORT
 
+#include "stm32_f20x_f21x_pin_struct.h"
+
 /**********************************************************************
  * Область enum class-ов.
  **********************************************************************/
@@ -76,5 +78,8 @@ struct __attribute__((packed)) global_port_msk_reg_struct {
      */
     const uint32_t    clk_msk;
 };
+
+
+
 
 #endif

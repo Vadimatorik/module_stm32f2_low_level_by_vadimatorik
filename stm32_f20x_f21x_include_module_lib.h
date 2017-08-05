@@ -8,7 +8,9 @@
  * Подключаем файлы-заголовки модулей (которые используются).
  */
 #ifdef MODULE_PORT
+#include "stm32_f20x_f21x_pin.h"
 #include "stm32_f20x_f21x_port.h"
+#include "stm32_f20x_f21x_pin_many_configurations_pin.h"
 #endif
 
 #ifdef MODULE_RCC

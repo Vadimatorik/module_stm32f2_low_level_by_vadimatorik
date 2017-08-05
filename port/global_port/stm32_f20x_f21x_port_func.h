@@ -4,8 +4,17 @@
 
 #ifdef MODULE_PORT
 
-#include "stm32_f20x_f21x_port_struct_class_global_port.h"
 #include "stm32_f20x_f21x_port_struct.h"
+
+/*
+ * Указатель на bit_banding область памяти, в которой находится бит блокировки порта.
+ */
+constexpr uint32_t bb_p_port_look_key_get( EC_PORT_NAME port_name ) {
+    uint32_t port_point = p_base_port_address_get( port_name ); // Получаем физический адрес порта вывода.
+    port_point += 0x1C;                                         // Прибавляем смещение к IDR регистру.
+    return M_GET_BB_P_PER( port_point, 16 );                    // Получаем адрес конкретного бита регистра IDR (состояние на входе).
+}
+
 
 /**********************************************************************
  * Область constexpr конструкторов.
@@ -169,11 +178,11 @@ constexpr uint32_t global_port::reg_od_msk_init_get( const pin_config_t* const p
     return reg_odr;
 }
 
-/*
- * Метод проходит по всем пришедшем структурам конфигурации
- * и создает константу-маску для включения/выключения всех
- * использующихся портов.
- */
+//
+// Метод проходит по всем пришедшем структурам конфигурации
+// и создает константу-маску для включения/выключения всех
+// использующихся портов.
+//
 constexpr uint32_t global_port::clk_msk_get ( const pin_config_t* const pin_cfg_array, const uint32_t pin_count ) {
     uint32_t msk = 0;
     for ( uint32_t l = 0; l < pin_count; l++ ) {
@@ -268,5 +277,6 @@ constexpr global_port_msk_reg_struct global_port::fill_out_mas_struct( const pin
     };
     return p_st;
 }
+
 
 #endif
