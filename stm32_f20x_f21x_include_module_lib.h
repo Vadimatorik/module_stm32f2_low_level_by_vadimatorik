@@ -22,5 +22,6 @@
 #endif
 
 #ifdef MODULE_TIMER
-#include "stm32_f20x_f21x_timer.h"
+#include "tim1_or_8_comp_one_channel.h"
+#include "tim6_or_7_interrupt.h"
 #endif
