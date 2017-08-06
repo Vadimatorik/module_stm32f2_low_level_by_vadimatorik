@@ -1,18 +1,18 @@
 #include "stm32_f20x_f21x_timer_1_and_8_struct.h"
 #include "string.h"
 
-#define TIM1_OR_8_COMP_ONE_CHANNEL_CFG_TEMPLATE_HEADING     TIM1_OR_TIM8        P_TIM,              \
+#define tim1_and_8_comp_one_channel_CFG_TEMPLATE_HEADING     TIM1_OR_TIM8        P_TIM,              \
                                                             uint16_t            PRESCALER,          \
                                                             uint16_t            PERIOD_TOGGLE,      \
                                                             EC_TIM_CH_TOGGLE    CH_TOGGLE,          \
                                                             EC_TIM_CH_MODE      MODE
 
-#define TIM1_OR_8_COMP_ONE_CHANNEL_CFG_TEMPLATE_PARAM       P_TIM, PRESCALER,                       \
+#define tim1_and_8_comp_one_channel_CFG_TEMPLATE_PARAM       P_TIM, PRESCALER,                       \
                                                             PERIOD_TOGGLE, CH_TOGGLE, MODE
 
-template < TIM1_OR_8_COMP_ONE_CHANNEL_CFG_TEMPLATE_HEADING >
-tim1_or_8_comp_one_channel< TIM1_OR_8_COMP_ONE_CHANNEL_CFG_TEMPLATE_PARAM >::tim1_or_8_comp_one_channel () :
-    tim( ( tim_1_or_8_registers_struct* )P_TIM ),
+template < tim1_and_8_comp_one_channel_CFG_TEMPLATE_HEADING >
+tim1_and_8_comp_one_channel< tim1_and_8_comp_one_channel_CFG_TEMPLATE_PARAM >::tim1_and_8_comp_one_channel () :
+    tim( ( tim_1_and_8_registers_struct* )P_TIM ),
     cfg( {
             .C1         = 0,
             .C2         = 0,
@@ -39,84 +39,84 @@ tim1_or_8_comp_one_channel< TIM1_OR_8_COMP_ONE_CHANNEL_CFG_TEMPLATE_PARAM >::tim
 /*
  * COnstexpr функции для формирования масивов.
  */
-template < TIM1_OR_8_COMP_ONE_CHANNEL_CFG_TEMPLATE_HEADING >
-constexpr uint32_t tim1_or_8_comp_one_channel< TIM1_OR_8_COMP_ONE_CHANNEL_CFG_TEMPLATE_PARAM >::ccm1_reg_msk_get ( void ) {
+template < tim1_and_8_comp_one_channel_CFG_TEMPLATE_HEADING >
+constexpr uint32_t tim1_and_8_comp_one_channel< tim1_and_8_comp_one_channel_CFG_TEMPLATE_PARAM >::ccm1_reg_msk_get ( void ) {
     uint32_t CCM1 = 0;
     if ( CH_TOGGLE == EC_TIM_CH_TOGGLE::CH_1 ) {
-        CCM1 |= M_EC_TO_U8(OCxM_MODE::TOGGLE) << M_EC_TO_U8(EC_TIM_1_8_CCM1_REG_BIT_FIELD_POS::OC1M);
+        CCM1 |= M_EC_TO_U8(OCxM_MODE::TOGGLE) << M_EC_TO_U8(EC_TIM_1_AND_8_CCM1_REG_BIT_FIELD_POS::OC1M);
     }
     if ( CH_TOGGLE == EC_TIM_CH_TOGGLE::CH_2 ) {
-        CCM1 |= M_EC_TO_U8(OCxM_MODE::TOGGLE) << M_EC_TO_U8(EC_TIM_1_8_CCM1_REG_BIT_FIELD_POS::OC2M);
+        CCM1 |= M_EC_TO_U8(OCxM_MODE::TOGGLE) << M_EC_TO_U8(EC_TIM_1_AND_8_CCM1_REG_BIT_FIELD_POS::OC2M);
     }
     return CCM1;
 }
 
-template < TIM1_OR_8_COMP_ONE_CHANNEL_CFG_TEMPLATE_HEADING >
-constexpr uint32_t tim1_or_8_comp_one_channel< TIM1_OR_8_COMP_ONE_CHANNEL_CFG_TEMPLATE_PARAM >::ccm2_reg_msk_get ( void ) {
+template < tim1_and_8_comp_one_channel_CFG_TEMPLATE_HEADING >
+constexpr uint32_t tim1_and_8_comp_one_channel< tim1_and_8_comp_one_channel_CFG_TEMPLATE_PARAM >::ccm2_reg_msk_get ( void ) {
     uint32_t CCM2 = 0;
     if ( CH_TOGGLE == EC_TIM_CH_TOGGLE::CH_3 ) {
-        CCM2 |= M_EC_TO_U8(OCxM_MODE::TOGGLE) << M_EC_TO_U8(EC_TIM_1_8_CCM2_REG_BIT_FIELD_POS::OC3M);
+        CCM2 |= M_EC_TO_U8(OCxM_MODE::TOGGLE) << M_EC_TO_U8(EC_TIM_1_AND_8_CCM2_REG_BIT_FIELD_POS::OC3M);
     }
     if ( CH_TOGGLE == EC_TIM_CH_TOGGLE::CH_4 ) {
-        CCM2 |= M_EC_TO_U8(OCxM_MODE::TOGGLE) << M_EC_TO_U8(EC_TIM_1_8_CCM2_REG_BIT_FIELD_POS::OC4M);
+        CCM2 |= M_EC_TO_U8(OCxM_MODE::TOGGLE) << M_EC_TO_U8(EC_TIM_1_AND_8_CCM2_REG_BIT_FIELD_POS::OC4M);
     }
     return CCM2;
 }
 
-template < TIM1_OR_8_COMP_ONE_CHANNEL_CFG_TEMPLATE_HEADING >
-constexpr uint32_t tim1_or_8_comp_one_channel< TIM1_OR_8_COMP_ONE_CHANNEL_CFG_TEMPLATE_PARAM >::bdt_reg_msk_get ( void ) {
+template < tim1_and_8_comp_one_channel_CFG_TEMPLATE_HEADING >
+constexpr uint32_t tim1_and_8_comp_one_channel< tim1_and_8_comp_one_channel_CFG_TEMPLATE_PARAM >::bdt_reg_msk_get ( void ) {
     uint32_t BDT = 0;
-    BDT |= M_EC_TO_U32(EC_TIM_1_8_BDT_REG_BIT_MSK::MOE);        // Общее разрешение выходных каналов.
+    BDT |= M_EC_TO_U32(EC_TIM_1_AND_8_BDT_REG_BIT_MSK::MOE);        // Общее разрешение выходных каналов.
     return BDT;
 }
 
 
-template < TIM1_OR_8_COMP_ONE_CHANNEL_CFG_TEMPLATE_HEADING >
-constexpr uint32_t tim1_or_8_comp_one_channel< TIM1_OR_8_COMP_ONE_CHANNEL_CFG_TEMPLATE_PARAM >::cce_reg_msk_get ( void ) {
+template < tim1_and_8_comp_one_channel_CFG_TEMPLATE_HEADING >
+constexpr uint32_t tim1_and_8_comp_one_channel< tim1_and_8_comp_one_channel_CFG_TEMPLATE_PARAM >::cce_reg_msk_get ( void ) {
     uint32_t CCE = 0;    // В данном регистре для этого режима нас ничего не интересует.
     if ( CH_TOGGLE == EC_TIM_CH_TOGGLE::CH_1 ) {
         if ( ( MODE == EC_TIM_CH_MODE::P ) || ( MODE == EC_TIM_CH_MODE::ALL ) ) {
-            CCE |= M_EC_TO_U32(EC_TIM_1_8_CCE_REG_BIT_MSK::CC1E);
+            CCE |= M_EC_TO_U32(EC_TIM_1_AND_8_CCE_REG_BIT_MSK::CC1E);
         }
         if ( ( MODE == EC_TIM_CH_MODE::N ) || ( MODE == EC_TIM_CH_MODE::ALL ) ) {
-            CCE |= M_EC_TO_U32(EC_TIM_1_8_CCE_REG_BIT_MSK::CC1NE);
+            CCE |= M_EC_TO_U32(EC_TIM_1_AND_8_CCE_REG_BIT_MSK::CC1NE);
         }
     }
     if ( CH_TOGGLE == EC_TIM_CH_TOGGLE::CH_2 ) {
         if ( ( MODE == EC_TIM_CH_MODE::P ) || ( MODE == EC_TIM_CH_MODE::ALL ) ) {
-            CCE |= M_EC_TO_U32(EC_TIM_1_8_CCE_REG_BIT_MSK::CC2E);
+            CCE |= M_EC_TO_U32(EC_TIM_1_AND_8_CCE_REG_BIT_MSK::CC2E);
         }
         if ( ( MODE == EC_TIM_CH_MODE::N ) || ( MODE == EC_TIM_CH_MODE::ALL ) ) {
-            CCE |= M_EC_TO_U32(EC_TIM_1_8_CCE_REG_BIT_MSK::CC2NE);
+            CCE |= M_EC_TO_U32(EC_TIM_1_AND_8_CCE_REG_BIT_MSK::CC2NE);
         }
     }
     if ( CH_TOGGLE == EC_TIM_CH_TOGGLE::CH_3 ) {
         if ( ( MODE == EC_TIM_CH_MODE::P ) || ( MODE == EC_TIM_CH_MODE::ALL ) ) {
-            CCE |= M_EC_TO_U32(EC_TIM_1_8_CCE_REG_BIT_MSK::CC3E);
+            CCE |= M_EC_TO_U32(EC_TIM_1_AND_8_CCE_REG_BIT_MSK::CC3E);
         }
         if ( ( MODE == EC_TIM_CH_MODE::N ) || ( MODE == EC_TIM_CH_MODE::ALL ) ) {
-            CCE |= M_EC_TO_U32(EC_TIM_1_8_CCE_REG_BIT_MSK::CC3NE);
+            CCE |= M_EC_TO_U32(EC_TIM_1_AND_8_CCE_REG_BIT_MSK::CC3NE);
         }
     }
     if ( CH_TOGGLE == EC_TIM_CH_TOGGLE::CH_4 ) {
         if ( ( MODE == EC_TIM_CH_MODE::P ) || ( MODE == EC_TIM_CH_MODE::ALL ) ) {
-            CCE |= M_EC_TO_U32(EC_TIM_1_8_CCE_REG_BIT_MSK::CC4E);
+            CCE |= M_EC_TO_U32(EC_TIM_1_AND_8_CCE_REG_BIT_MSK::CC4E);
         }
     }
     return CCE;
 }
 
-template < TIM1_OR_8_COMP_ONE_CHANNEL_CFG_TEMPLATE_HEADING >
-void tim1_or_8_comp_one_channel< TIM1_OR_8_COMP_ONE_CHANNEL_CFG_TEMPLATE_PARAM >::reinit ( void ) const {
-    memcpy( (void*)this->tim, &this->cfg, sizeof( tim_1_or_8_registers_struct ) );
+template < tim1_and_8_comp_one_channel_CFG_TEMPLATE_HEADING >
+void tim1_and_8_comp_one_channel< tim1_and_8_comp_one_channel_CFG_TEMPLATE_PARAM >::reinit ( void ) const {
+    memcpy( (void*)this->tim, &this->cfg, sizeof( tim_1_and_8_registers_struct ) );
 }
 
-template < TIM1_OR_8_COMP_ONE_CHANNEL_CFG_TEMPLATE_HEADING >
-void tim1_or_8_comp_one_channel< TIM1_OR_8_COMP_ONE_CHANNEL_CFG_TEMPLATE_PARAM >::on ( void ) const {
-    this->tim->C1 |= M_EC_TO_U32(EC_TIM_1_8_C1_REG_BIT_MSK::CEN);
+template < tim1_and_8_comp_one_channel_CFG_TEMPLATE_HEADING >
+void tim1_and_8_comp_one_channel< tim1_and_8_comp_one_channel_CFG_TEMPLATE_PARAM >::on ( void ) const {
+    this->tim->C1 |= M_EC_TO_U32(EC_TIM_1_AND_8_C1_REG_BIT_MSK::CEN);
 }
 
-template < TIM1_OR_8_COMP_ONE_CHANNEL_CFG_TEMPLATE_HEADING >
-void tim1_or_8_comp_one_channel< TIM1_OR_8_COMP_ONE_CHANNEL_CFG_TEMPLATE_PARAM >::off ( void ) const {
-    this->tim->C1 &= ~M_EC_TO_U32(EC_TIM_1_8_C1_REG_BIT_MSK::CEN);
+template < tim1_and_8_comp_one_channel_CFG_TEMPLATE_HEADING >
+void tim1_and_8_comp_one_channel< tim1_and_8_comp_one_channel_CFG_TEMPLATE_PARAM >::off ( void ) const {
+    this->tim->C1 &= ~M_EC_TO_U32(EC_TIM_1_AND_8_C1_REG_BIT_MSK::CEN);
 }

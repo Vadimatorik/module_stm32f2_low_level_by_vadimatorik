@@ -22,6 +22,6 @@
 #endif
 
 #ifdef MODULE_TIMER
-#include "tim1_or_8_comp_one_channel.h"
-#include "tim6_or_7_interrupt.h"
+#include "tim1_and_8_comp_one_channel.h"
+#include "tim6_and_7_interrupt.h"
 #endif
