@@ -118,6 +118,6 @@ void pin< PIN_CFG_TEMPLATE_PARAM >::invert( void ) const {
 
 // Метод возвращает состояние на входе вывода.
 template < PIN_CFG_TEMPLATE_HEADING >
-int pin< PIN_CFG_TEMPLATE_PARAM >::read() const {
+bool pin< PIN_CFG_TEMPLATE_PARAM >::read() const {
     return *M_U32_TO_P_CONST(p_bb_idr_read);
 }

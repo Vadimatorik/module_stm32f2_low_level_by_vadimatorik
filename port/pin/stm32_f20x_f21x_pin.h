@@ -23,7 +23,7 @@ public:
     void    set     ( bool state )          const;
     void    set     ( int state )           const;
     void    invert  ( void )                const;
-    int     read    ( void )                const;
+    bool    read    ( void )                const;
 
 private:
     constexpr uint32_t  p_bsr_get                ( void );
