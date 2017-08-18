@@ -24,16 +24,16 @@ void global_port::write_image_port_in_registrs ( uint8_t number ) const {
 /*
  * Метод переинициализирует все порты ввода-вывода.
  */
-E_ANSWER_GP global_port::reinit_all_ports ( void ) const {
+EC_ANSWER_GP global_port::reinit_all_ports ( void ) const {
     /*
      * Флаг того, что во время переинициализации был обнаружен порт со включенной блокировкой
      * (или же инициализация прошла удачно).
      */
-    E_ANSWER_GP answer = E_ANSWER_GP::SUCCESS;
+    EC_ANSWER_GP answer = EC_ANSWER_GP::SUCCESS;
 
     for ( uint8_t loop_port = 0; loop_port < STM32_F2_PORT_COUNT; loop_port++ ) {
-        if ( get_state_locked_key_port( (EC_PORT_NAME)loop_port ) == E_PORT_LOCKED_KEY::SET ) {
-            answer = E_ANSWER_GP::LOOK;
+        if ( get_state_locked_key_port( (EC_PORT_NAME)loop_port ) == EC_PORT_LOCKED_KEY::SET ) {
+            answer = EC_ANSWER_GP::LOOK;
 /*
  * В случае, если пользователь посчитал, что при обнаружении заблокированного порта не следует пытаться
  * переинициализировать незаблокированные выводы, пропускаем дальнейшую попытку переинициализации.
@@ -50,7 +50,7 @@ E_ANSWER_GP global_port::reinit_all_ports ( void ) const {
 /*
  * Метод переинициализирует конкретный порт ввода-вывода.
  */
-E_ANSWER_GP	global_port::reinit_port ( EC_PORT_NAME port ) const {
+EC_ANSWER_GP	global_port::reinit_port ( EC_PORT_NAME port ) const {
 /*
  * В случае, если пользователь посчитал, что при обнаружении заблокированного порта не следует пытаться
  * переинициализировать незаблокированные выводы, проверяем наличие блокировки. И в случае, если она есть
@@ -62,17 +62,17 @@ E_ANSWER_GP	global_port::reinit_port ( EC_PORT_NAME port ) const {
     };
 #endif
     write_image_port_in_registrs( (uint8_t)port );  // Записываем образ в регистры (с учётом предосторожностей переключения).
-    return E_ANSWER_GP::SUCCESS;
+    return EC_ANSWER_GP::SUCCESS;
 }
 
 /*
  * Метод возвращает состояние ключа блокировки порта.
  */
-E_PORT_LOCKED_KEY global_port::get_state_locked_key_port ( EC_PORT_NAME port ) const {
+EC_PORT_LOCKED_KEY global_port::get_state_locked_key_port ( EC_PORT_NAME port ) const {
     if ( *M_U32_TO_P_CONST(gb_msk_struct.port[M_EC_TO_U8(port)].p_look_key) != 0 ) {
-        return E_PORT_LOCKED_KEY::SET;
+        return EC_PORT_LOCKED_KEY::SET;
     } else {
-        return E_PORT_LOCKED_KEY::RESET;
+        return EC_PORT_LOCKED_KEY::RESET;
     }
 }
 
@@ -80,7 +80,7 @@ E_PORT_LOCKED_KEY global_port::get_state_locked_key_port ( EC_PORT_NAME port ) c
  * Метод производит попытку заблокировать порт.
  */
 E_ANSWER_PORT_SET_LOCK	global_port::set_locked_key_port ( EC_PORT_NAME port ) const {
-    if ( get_state_locked_key_port(port) == E_PORT_LOCKED_KEY::SET ) {		// Если порт уже заблокирован.
+    if ( get_state_locked_key_port(port) == EC_PORT_LOCKED_KEY::SET ) {		// Если порт уже заблокирован.
 	    return E_ANSWER_PORT_SET_LOCK::ALREADY;
     }
     port_registers_struct *p = (port_registers_struct *)gb_msk_struct.port[(uint32_t)port].p_port;
@@ -90,7 +90,7 @@ E_ANSWER_PORT_SET_LOCK	global_port::set_locked_key_port ( EC_PORT_NAME port ) co
     p->lck = gb_msk_struct.port[M_EC_TO_U8(port)].lck | (1<<16);
     volatile uint32_t buffer = p->lck;                                  // Порт должен заблокироваться после этого действия.
     (void)buffer;
-    if (get_state_locked_key_port(port) == E_PORT_LOCKED_KEY::SET) {    // Проверяем, что порт был заблокирован.
+    if (get_state_locked_key_port(port) == EC_PORT_LOCKED_KEY::SET) {    // Проверяем, что порт был заблокирован.
         return E_ANSWER_PORT_SET_LOCK::OK;
     } else {
         return E_ANSWER_PORT_SET_LOCK::ERROR;

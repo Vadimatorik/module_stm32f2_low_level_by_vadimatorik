@@ -15,9 +15,9 @@ class global_port {
 public:
     constexpr   global_port ( const pin_config_t* const pin_cfg_array, const uint32_t pin_count );
 
-    E_ANSWER_GP             reinit_all_ports            ( void ) const;
-    E_ANSWER_GP             reinit_port                 ( EC_PORT_NAME port ) const;
-    E_PORT_LOCKED_KEY       get_state_locked_key_port   ( EC_PORT_NAME port ) const;
+    EC_ANSWER_GP             reinit_all_ports            ( void ) const;
+    EC_ANSWER_GP             reinit_port                 ( EC_PORT_NAME port ) const;
+    EC_PORT_LOCKED_KEY       get_state_locked_key_port   ( EC_PORT_NAME port ) const;
     E_ANSWER_PORT_SET_LOCK  set_locked_key_port         ( EC_PORT_NAME port ) const;
     E_ANSWER_PORT_SET_LOCK  set_locked_keys_all_port    ( void ) const;
 

@@ -13,7 +13,7 @@
 /*
  * Ответы от функций reinit_all, reinit_port объекта global_port.
  */
-enum class E_ANSWER_GP {
+enum class EC_ANSWER_GP {
     SUCCESS = 0,    // Переинициализация была успешной.
     LOOK    = 1     // Порт заблокирован, переинициализация некоторых
                     // (или всех) выводов невозможна.
@@ -22,7 +22,7 @@ enum class E_ANSWER_GP {
 /*
  * Состояние ключа блокировки порта.
  */
-enum class E_PORT_LOCKED_KEY {
+enum class EC_PORT_LOCKED_KEY {
     SET     = 1,
     RESET   = 0
 };
