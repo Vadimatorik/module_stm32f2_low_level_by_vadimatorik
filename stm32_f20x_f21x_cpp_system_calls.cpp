@@ -151,7 +151,7 @@ const char HEAP_AND_STACK_COLLISION[] = "Heap and stack collision\n";
  * попробовать запросить ) не наложатся на стек.
  */
 void* _sbrk ( intptr_t incr ) {
-    register uint32_t stack_ptr;                                        // Адресс, на котором сейчас находится указатель стека
+    uint32_t stack_ptr;                                                 // Адресс, на котором сейчас находится указатель стека
                                                                         // ( ячейка, на которую указывает указатель не пуста,
                                                                         // в ней последнее сохраненное слово ).
     asm volatile ( "MRS %0, msp\n" : "=r" ( stack_ptr ) );
