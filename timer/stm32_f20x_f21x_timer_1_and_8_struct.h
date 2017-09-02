@@ -32,7 +32,6 @@ struct __attribute__ ( ( packed ) ) tim_1_and_8_registers_struct {
     uint32_t   DMA;
 };
 
-
 enum class EC_TIM_1_AND_8_C1_REG_BIT_FIELD_POS {
     CEN         = 0,
     UDIS        = 1,
