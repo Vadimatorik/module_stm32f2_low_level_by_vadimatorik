@@ -1,4 +1,4 @@
-#include "stm32_f20x_f21x_timer_3_and_4_struct.h"
+#include "tim_3_and_4_struct.h"
 #include "string.h"
 
 #define TIM3_AND_4_PWM_ONE_CHANNEL_CFG_TEMPLATE_HEADING     TIM3_OR_TIM4        P_TIM,              \

@@ -4,8 +4,8 @@
 
 #ifdef MODULE_RCC
 
-#include "stm32_f20x_f21x_rcc_struct.h"
-#include "stm32_f20x_f21x_rcc_struct_class_pll.h"
+#include "rcc_struct.h"
+#include "rcc_struct_class_pll.h"
 
 /*
  * Метод возвращвет числовое значение делителя из enum class-а EC_RCC_AHB_DIV.

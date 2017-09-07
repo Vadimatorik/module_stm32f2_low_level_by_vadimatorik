@@ -1,4 +1,4 @@
-#include "stm32_f20x_f21x_nvic.h"
+#include "nvic.h"
 
 void nvic::irq_enable ( const IRQ_NAME IRQ ) const {
     NVIC->ISER[ M_EC_TO_U8(IRQ) / 32 ] =

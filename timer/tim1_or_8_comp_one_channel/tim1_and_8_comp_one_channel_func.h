@@ -1,4 +1,4 @@
-#include "stm32_f20x_f21x_timer_1_and_8_struct.h"
+#include "tim_1_and_8_struct.h"
 #include "string.h"
 
 #define tim1_and_8_comp_one_channel_CFG_TEMPLATE_HEADING     TIM1_OR_TIM8        P_TIM,              \

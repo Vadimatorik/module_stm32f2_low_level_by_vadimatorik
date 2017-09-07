@@ -4,7 +4,7 @@
 #ifdef MODULE_SPI
 
 #include "mk_hardware_interfaces_spi.h"
-#include "stm32_f20x_f21x_spi_struct.h"
+#include "spi_struct.h"
 
 //**********************************************************************
 // Генерация масок регистров SPI.

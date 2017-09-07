@@ -4,8 +4,8 @@
 
 #ifdef MODULE_RCC
 
-#include "stm32_f20x_f21x_rcc_struct.h"
-#include "stm32_f20x_f21x_rcc_struct_class_pll.h"
+#include "rcc_struct.h"
+#include "rcc_struct_class_pll.h"
 
 /**********************************************************************
  * Область template оболочек.
@@ -77,7 +77,7 @@ private:
 };
 
 
-#include "stm32_f20x_f21x_rcc_constexpr_func_class_pll.h"
+#include "rcc_constexpr_func_class_pll.h"
 
 /**********************************************************************
  * Область class-ов.
@@ -189,6 +189,6 @@ private:
     const rcc_cfg*  const cfg;
 };
 
-#include "stm32_f20x_f21x_rcc_func.h"
+#include "rcc_func.h"
 
 #endif

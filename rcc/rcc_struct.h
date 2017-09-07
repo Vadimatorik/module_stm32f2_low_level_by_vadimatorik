@@ -5,7 +5,7 @@
 #ifdef MODULE_RCC
 
 #include <cmath>
-#include "stm32_f20x_f21x_rcc_struct_class_pll.h"
+#include "rcc_struct_class_pll.h"
 #include "stm32_f20x_f21x_port.h"
 
 /**********************************************************************

@@ -4,7 +4,7 @@
 
 #ifdef MODULE_PORT
 
-#include "stm32_f20x_f21x_port_struct.h"
+#include "port_struct.h"
 
 /*
  * Класс объекта "глобального порта".
@@ -45,6 +45,6 @@ private:
     const global_port_msk_reg_struct    gb_msk_struct;
 };
 
-#include "stm32_f20x_f21x_port_func.h"
+#include "port_func.h"
 
 #endif

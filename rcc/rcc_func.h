@@ -4,7 +4,7 @@
 
 #ifdef MODULE_RCC
 
-#include "stm32_f20x_f21x_rcc.h"
+#include "rcc.h"
 #include "stm32_f20x_f21x_port.h"
 #include <cmath>
 

@@ -2,7 +2,7 @@
 
 #ifdef MODULE_PORT
 
-#include "stm32_f20x_f21x_port.h"
+#include "port.h"
 
 /*
  * Внутренний метод записи образа регистров порта

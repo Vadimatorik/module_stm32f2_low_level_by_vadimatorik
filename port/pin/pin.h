@@ -5,7 +5,7 @@
 #ifdef MODULE_PORT
 
 #include "mk_hardware_interfaces_pin.h"
-#include "stm32_f20x_f21x_pin_struct.h"
+#include "pin_struct.h"
 
 
 /*
@@ -37,6 +37,6 @@ private:
     const uint32_t  p_bb_odr_read, p_bb_idr_read;
 };
 
-#include "stm32_f20x_f21x_pin_func.h"
+#include "pin_func.h"
 
 #endif

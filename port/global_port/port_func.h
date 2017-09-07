@@ -4,7 +4,7 @@
 
 #ifdef MODULE_PORT
 
-#include "stm32_f20x_f21x_port_struct.h"
+#include "port_struct.h"
 
 /*
  * Указатель на bit_banding область памяти, в которой находится бит блокировки порта.

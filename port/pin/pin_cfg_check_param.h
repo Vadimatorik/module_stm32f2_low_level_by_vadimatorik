@@ -1,6 +1,6 @@
 #pragma once
 
-#include "stm32_f20x_f21x_pin_struct.h"
+#include "pin_struct.h"
 
 template < EC_PORT_NAME              PORT,
            EC_PORT_PIN_NAME          PIN_NAME,

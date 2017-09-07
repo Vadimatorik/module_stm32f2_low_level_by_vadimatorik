@@ -2,7 +2,7 @@
 
 #ifdef MODULE_RCC
 
-#include "stm32_f20x_f21x_rcc.h"
+#include "rcc.h"
 
 /*
  * Метод включет основной PLL (конфигурация должна быть заданна заранее).

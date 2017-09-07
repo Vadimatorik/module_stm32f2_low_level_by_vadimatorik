@@ -1,6 +1,6 @@
 #pragma once
 
-#include "stm32_f20x_f21x_timer_6_and_7_struct.h"
+#include "tim_6_and_7_struct.h"
 #include "mk_hardware_interfaces_timer.h"
 
 // Генератор прерываний.

@@ -5,7 +5,7 @@
 #ifdef MODULE_SPI
 
 #include "mk_hardware_interfaces_spi.h"
-#include "stm32_f20x_f21x_spi_struct.h"
+#include "spi_struct.h"
 
 //**********************************************************************
 // Создание масок регистров SPI по параметрам.
@@ -98,6 +98,6 @@ private:
                    EC_SPI_CFG_SSM_MODE        :: NO_USE > cfg_low;
 };
 
-#include "stm32_f20x_f21x_spi_func.h"
+#include "spi_func.h"
 
 #endif

@@ -5,7 +5,7 @@
 #ifdef MODULE_TIMER
 
 #include "mk_hardware_interfaces_timer.h"
-#include "stm32_f20x_f21x_timer_3_and_4_struct.h"
+#include "tim_3_and_4_struct.h"
 
 //
 // Генератор ШИМ сигнала таймерами 3 и 5.

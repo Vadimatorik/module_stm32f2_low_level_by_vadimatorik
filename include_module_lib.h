@@ -1,6 +1,6 @@
 #pragma once
 
-#include "stm32_f20x_f21x_nvic.h"                   // NVIC тянем всегда.
+#include "nvic.h"                   // NVIC тянем всегда.
 #include "freertos_headers.h"
 #include "stm32_f20x_f21x_conf.h"
 
@@ -14,11 +14,11 @@
 #endif
 
 #ifdef MODULE_RCC
-#include "stm32_f20x_f21x_rcc.h"
+#include "rcc.h"
 #endif
 
 #ifdef MODULE_SPI
-#include "stm32_f20x_f21x_spi.h"
+#include "spi.h"
 #endif
 
 #ifdef MODULE_TIMER
