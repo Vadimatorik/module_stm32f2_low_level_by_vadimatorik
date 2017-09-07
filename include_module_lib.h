@@ -2,7 +2,7 @@
 
 #include "nvic.h"                   // NVIC тянем всегда.
 #include "freertos_headers.h"
-#include "stm32_f20x_f21x_conf.h"
+#include "f2_api_conf.h"
 
 /*
  * Подключаем файлы-заголовки модулей (которые используются).

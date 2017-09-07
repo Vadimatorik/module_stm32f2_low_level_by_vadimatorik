@@ -1,10 +1,10 @@
 #pragma once
 
-#include "stm32_f20x_f21x_conf.h"
+#include "f2_api_conf.h"
 
 #ifdef MODULE_PORT
 
-#include "stm32_f20x_f21x_pin_struct.h"
+#include "pin_struct.h"
 
 /**********************************************************************
  * Область enum class-ов.

@@ -1,11 +1,11 @@
 #pragma once
 
-#include "stm32_f20x_f21x_conf.h"
+#include "f2_api_conf.h"
 
 #ifdef MODULE_RCC
 
 #include "rcc.h"
-#include "stm32_f20x_f21x_port.h"
+#include "port.h"
 #include <cmath>
 
 /**********************************************************************

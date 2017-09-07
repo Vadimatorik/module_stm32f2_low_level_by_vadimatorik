@@ -1,6 +1,6 @@
 #pragma once
 
-#include "stm32_f20x_f21x_conf.h"
+#include "f2_api_conf.h"
 
 /*
  * Номер позиции прерывания.

@@ -1,12 +1,12 @@
 #pragma once
 
-#include "stm32_f20x_f21x_conf.h"
+#include "f2_api_conf.h"
 
 #ifdef MODULE_RCC
 
 #include <cmath>
 #include "rcc_struct_class_pll.h"
-#include "stm32_f20x_f21x_port.h"
+#include "port.h"
 
 /**********************************************************************
  * Область упакованных структур.

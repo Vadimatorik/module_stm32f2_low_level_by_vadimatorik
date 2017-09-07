@@ -3,7 +3,7 @@ extern "C" {
 #endif
 
 #include <stdint.h>
-#include "stm32_f20x_f21x_conf.h"
+#include "f2_api_conf.h"
 
 /*
  * В данном файле находится таблица векторов-прерываний (указатель на вершину стека + массив
