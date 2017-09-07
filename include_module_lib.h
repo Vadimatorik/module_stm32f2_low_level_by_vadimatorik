@@ -8,9 +8,9 @@
  * Подключаем файлы-заголовки модулей (которые используются).
  */
 #ifdef MODULE_PORT
-#include "stm32_f20x_f21x_pin.h"
-#include "stm32_f20x_f21x_port.h"
-#include "stm32_f20x_f21x_pin_many_configurations_pin.h"
+#include "pin.h"
+#include "port.h"
+#include "pin_many_cfg_pin.h"
 #endif
 
 #ifdef MODULE_RCC
@@ -25,4 +25,8 @@
 #include "tim3_and_4_pwm_one_channel.h"
 #include "tim1_and_8_comp_one_channel.h"
 #include "tim6_and_7_interrupt.h"
+#endif
+
+#ifdef MODULE_WDT
+#include "wdt.h"
 #endif

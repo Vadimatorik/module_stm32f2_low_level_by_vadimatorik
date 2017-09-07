@@ -4,6 +4,8 @@
 
 #ifdef MODULE_WDT
 
+#include "wdt_struct.h"
+
 struct wdt_cfg {
     uint8_t             task_prio;              // Приоритет задачи, сбрасывающий wdt.
     uint32_t            run_time_ms;            // Время перезагрузки по сторожевому таймеру.
@@ -27,8 +29,8 @@ private:
 
     static  void    task    ( void* p_obj );
 
-    USER_OS_STATIC_STACK_TYPE           task_stack[ F2_WDT_TASK_STACK_SIZE ] = { 0 };
-    USER_OS_STATIC_TASK_STRUCT_TYPE     task_struct;
+    mutable USER_OS_STATIC_STACK_TYPE           task_stack[ F2_WDT_TASK_STACK_SIZE ] = { 0 };
+    mutable USER_OS_STATIC_TASK_STRUCT_TYPE     task_struct;
 
     uint8_t reboot;
 };

@@ -8,30 +8,31 @@ void wdt::init ( void ) const {
 
     *((uint32_t *) 0xE0042008)  = 0x1DFF;				// Если процессор находится в состоянии halt, watchdog будет стоять и не мешать отладке.
 
-    IWDG->KR = 0xCCCC;									// Запускаем сторожевой таймер, таймер стартует с значением по умолчанию 0xFFF.
+    IWDG->K = 0xCCCC;									// Запускаем сторожевой таймер, таймер стартует с значением по умолчанию 0xFFF.
 
-    IWDG->KR = 0x5555;									// Ключ, разрешающий запись.
-    while ( IWDG->SR & ( IWDG_SR_PVU | IWDG_SR_RVU ) );	// Ждем, чтобы операция загрузки значения завершилась,
+    IWDG->K = 0x5555;									// Ключ, разрешающий запись.
+    while ( IWDG->S & ( M_EC_TO_U32( EC_WDT_S_MSK::PVU ) |
+                        M_EC_TO_U32( EC_WDT_S_MSK::RVU ) ) );	// Ждем, чтобы операция загрузки значения завершилась,
                                                         // прескалер был готов к обновлению.
-    IWDG->PR = 0x6;										// Деление частоты watchdog (40кгц) на 256
+    IWDG->P = 0x6;										// Деление частоты watchdog (40кгц) на 256
     while ( true ) {
-        sr = IWDG->SR;
-        if (!(sr&IWDG_SR_PVU)) break;
+        sr = IWDG->S;
+        if ( ! ( sr & M_EC_TO_U32( EC_WDT_S_MSK::RVU ) ) )  break;
     }
-    IWDG->RLR = 40 * this->cfg->startup_time / 256;
-    USER_OS_STATIC_TASK_CREATE( wdt::task, "wdt_thread", F2_WDT_TASK_STACK_SIZE, ( void* )this, this->cfg->task_prio, this->task_stack, &this->task_struct );
+    IWDG->RL = 40 * this->cfg->startup_time_ms / 256;
+    USER_OS_STATIC_TASK_CREATE( this->task, "wdt_th", F2_WDT_TASK_STACK_SIZE, ( void* )this, this->cfg->task_prio, this->task_stack, &this->task_struct );
 }
 
 void wdt::reset ( void ) const {
-    IWDG->KR = 0x5555;									// Rлюч, разрешающий запись.
-    IWDG->RLR = 40 * this->cfg->run_time_ms / 256;
-    IWDG->KR = 0xAAAA;									// Ключ, перезагружающий таймер.
+    IWDG->K = 0x5555;									// Rлюч, разрешающий запись.
+    IWDG->RL = 40 * this->cfg->run_time_ms / 256;
+    IWDG->K = 0xAAAA;									// Ключ, перезагружающий таймер.
 }
 
 void wdt::reset_service	( void ) const {
-    IWDG->KR = 0x5555;									// Ключ, разрешающий запись.
-    IWDG->RLR = 400UL *  this->cfg->service_time_ms / 256;
-    IWDG->KR = 0xAAAA;									// Ключ, перезагружающий таймер.
+    IWDG->K = 0x5555;									// Ключ, разрешающий запись.
+    IWDG->RL = 400UL *  this->cfg->service_time_ms / 256;
+    IWDG->K = 0xAAAA;									// Ключ, перезагружающий таймер.
 }
 
 //**********************************************************************
