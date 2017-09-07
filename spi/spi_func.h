@@ -289,13 +289,13 @@ EC_SPI_BASE_RESULT spi_master_8bit_hardware_os< SPI_MASTER_HARDWARE_OS_TEMPLATE_
 
 template < SPI_MASTER_HARDWARE_OS_TEMPLATE_HEADING >
 void spi_master_8bit_hardware_os< SPI_MASTER_HARDWARE_OS_TEMPLATE_PARAM >::on ( void ) const {
-    spi_registers_struct*   S = ( spi_registers_struct* )M_EC_TO_U32(SPIx);
+    spi_registers_struct*   S = ( spi_registers_struct* )M_EC_TO_U32( SPIx );
     S->C1 |= M_EC_TO_U32(EC_SPI_C1_REG_BIT_MSK::SPE);
 }
 
 template < SPI_MASTER_HARDWARE_OS_TEMPLATE_HEADING >
 void spi_master_8bit_hardware_os< SPI_MASTER_HARDWARE_OS_TEMPLATE_PARAM >::off ( void ) const {
-    spi_registers_struct*   S = ( spi_registers_struct* )M_EC_TO_U32(SPIx);
+    spi_registers_struct*   S = ( spi_registers_struct* )M_EC_TO_U32( SPIx );
     S->C1 &= ~M_EC_TO_U32(EC_SPI_C1_REG_BIT_MSK::SPE);
 }
 #endif
