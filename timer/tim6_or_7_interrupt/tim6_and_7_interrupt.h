@@ -21,6 +21,10 @@ public:
     void on                     ( void ) const;
     void off                    ( void ) const;
 
+    // Специфичные функции.
+    void period_dev             ( uint32_t dev ) const;     // Уменьшить период в dev раз.
+    void period_reset           ( void )         const;     // Вернуть как было.
+
 private:
     tim_6_and_7_registers_struct*            const tim;
     const tim_6_and_7_registers_struct       cfg;

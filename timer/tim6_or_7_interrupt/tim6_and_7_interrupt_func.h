@@ -5,8 +5,8 @@
 
 // Генератор прерываний.
 #define TIM6_AND_7_COMP_ONE_CHANNEL_CFG_TEMPLATE_HEADING     TIM6_OR_TIM7        P_TIM,              \
-                                                            uint16_t            PRESCALER,          \
-                                                            uint16_t            PERIOD_TOGGLE
+                                                             uint16_t            PRESCALER,          \
+                                                             uint16_t            PERIOD_TOGGLE
 
 #define TIM6_AND_7_COMP_ONE_CHANNEL_CFG_TEMPLATE_PARAM       P_TIM, PRESCALER, PERIOD_TOGGLE
 
@@ -14,7 +14,7 @@ template < TIM6_AND_7_COMP_ONE_CHANNEL_CFG_TEMPLATE_HEADING >
 tim6_and_7_interrupt< TIM6_AND_7_COMP_ONE_CHANNEL_CFG_TEMPLATE_PARAM >::tim6_and_7_interrupt () :
     tim( ( tim_6_and_7_registers_struct* )P_TIM ),
     cfg( {
-            .C1         = 0,
+            .C1         = M_EC_TO_U32( EC_TIM_6_AND_7_C1_REG_BIT_MSK::ARPE ),   // Чтобы при применении функции period_dev/period_reset не получить пролет.
             .C2         = 0,
             .RES_0      = 0,
             .DIE        = M_EC_TO_U32( EC_TIM_6_AND_7_DIE_REG_BIT_MSK::UIE ),
@@ -46,4 +46,16 @@ void tim6_and_7_interrupt< TIM6_AND_7_COMP_ONE_CHANNEL_CFG_TEMPLATE_PARAM >::off
 template < TIM6_AND_7_COMP_ONE_CHANNEL_CFG_TEMPLATE_HEADING >
 void tim6_and_7_interrupt< TIM6_AND_7_COMP_ONE_CHANNEL_CFG_TEMPLATE_PARAM >::clear_interrupt_flag ( void ) const {
     this->tim->S = 0;
+}
+
+// Уменьшить период в dev раз.
+template < TIM6_AND_7_COMP_ONE_CHANNEL_CFG_TEMPLATE_HEADING >
+void tim6_and_7_interrupt< TIM6_AND_7_COMP_ONE_CHANNEL_CFG_TEMPLATE_PARAM >::period_dev ( uint32_t dev ) const {
+    this->tim->AR = PERIOD_TOGGLE / dev - 1;
+}
+
+// Вернуть как было.
+template < TIM6_AND_7_COMP_ONE_CHANNEL_CFG_TEMPLATE_HEADING >
+void tim6_and_7_interrupt< TIM6_AND_7_COMP_ONE_CHANNEL_CFG_TEMPLATE_PARAM >::period_reset ( void ) const {
+    this->tim->AR = this->cfg.AR;
 }
