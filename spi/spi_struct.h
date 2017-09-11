@@ -7,10 +7,6 @@
 namespace SPI {
 
 //**********************************************************************
-// Область enum class-ов.
-//**********************************************************************
-
-//**********************************************************************
 // Позиции битовых полей внутри регистра C1 модуля SPI.
 //**********************************************************************
 enum class C1_R_BF_POS {
@@ -34,20 +30,20 @@ enum class C1_R_BF_POS {
 // Маски бит регистра pllcfg модуля RCC.
 //**********************************************************************
 enum class C1_R_BF_MSK {
-    CPHA        = 1     << M_EC_TO_U8(C1_R_BF_POS::CPHA),
-    CPOL        = 1     << M_EC_TO_U8(C1_R_BF_POS::CPOL),
-    MSTR        = 1     << M_EC_TO_U8(C1_R_BF_POS::MSTR),
-    BR          = 0B111 << M_EC_TO_U8(C1_R_BF_POS::BR),
-    SPE         = 1     << M_EC_TO_U8(C1_R_BF_POS::SPE),
-    LSBFIRST    = 1     << M_EC_TO_U8(C1_R_BF_POS::LSBFIRST),
-    SSI         = 1     << M_EC_TO_U8(C1_R_BF_POS::SSI),
-    SSM         = 1     << M_EC_TO_U8(C1_R_BF_POS::SSM),
-    RXONLY      = 1     << M_EC_TO_U8(C1_R_BF_POS::RXONLY),
-    DFF         = 1     << M_EC_TO_U8(C1_R_BF_POS::DFF),
-    CRCNEXT     = 1     << M_EC_TO_U8(C1_R_BF_POS::CRCNEXT),
-    CRCEN       = 1     << M_EC_TO_U8(C1_R_BF_POS::CRCEN),
-    BIDIOE      = 1     << M_EC_TO_U8(C1_R_BF_POS::BIDIOE),
-    BIDIMODE    = 1     << M_EC_TO_U8(C1_R_BF_POS::BIDIMODE)
+    CPHA        = 1     << M_EC_TO_U8( C1_R_BF_POS::CPHA ),
+    CPOL        = 1     << M_EC_TO_U8( C1_R_BF_POS::CPOL ),
+    MSTR        = 1     << M_EC_TO_U8( C1_R_BF_POS::MSTR ),
+    BR          = 0B111 << M_EC_TO_U8( C1_R_BF_POS::BR ),
+    SPE         = 1     << M_EC_TO_U8( C1_R_BF_POS::SPE ),
+    LSBFIRST    = 1     << M_EC_TO_U8( C1_R_BF_POS::LSBFIRST ),
+    SSI         = 1     << M_EC_TO_U8( C1_R_BF_POS::SSI ),
+    SSM         = 1     << M_EC_TO_U8( C1_R_BF_POS::SSM ),
+    RXONLY      = 1     << M_EC_TO_U8( C1_R_BF_POS::RXONLY ),
+    DFF         = 1     << M_EC_TO_U8( C1_R_BF_POS::DFF ),
+    CRCNEXT     = 1     << M_EC_TO_U8( C1_R_BF_POS::CRCNEXT ),
+    CRCEN       = 1     << M_EC_TO_U8( C1_R_BF_POS::CRCEN ),
+    BIDIOE      = 1     << M_EC_TO_U8( C1_R_BF_POS::BIDIOE ),
+    BIDIMODE    = 1     << M_EC_TO_U8( C1_R_BF_POS::BIDIMODE )
 };
 
 //**********************************************************************
@@ -64,13 +60,13 @@ enum class C2_R_BF_POS {
 };
 
 enum class C2_R_BF_MSK {
-    RXDMAEN     = 1  << M_EC_TO_U8(C2_R_BF_POS::RXDMAEN),
-    TXDMAEN     = 1  << M_EC_TO_U8(C2_R_BF_POS::TXDMAEN),
-    SSOE        = 1  << M_EC_TO_U8(C2_R_BF_POS::SSOE),
-    FRF         = 1  << M_EC_TO_U8(C2_R_BF_POS::FRF),
-    ERRIE       = 1  << M_EC_TO_U8(C2_R_BF_POS::ERRIE),
-    RXNEIE      = 1  << M_EC_TO_U8(C2_R_BF_POS::RXNEIE),
-    TXEIE       = 1  << M_EC_TO_U8(C2_R_BF_POS::TXEIE)
+    RXDMAEN     = 1  << M_EC_TO_U8( C2_R_BF_POS::RXDMAEN ),
+    TXDMAEN     = 1  << M_EC_TO_U8( C2_R_BF_POS::TXDMAEN ),
+    SSOE        = 1  << M_EC_TO_U8( C2_R_BF_POS::SSOE ),
+    FRF         = 1  << M_EC_TO_U8( C2_R_BF_POS::FRF ),
+    ERRIE       = 1  << M_EC_TO_U8( C2_R_BF_POS::ERRIE ),
+    RXNEIE      = 1  << M_EC_TO_U8( C2_R_BF_POS::RXNEIE ),
+    TXEIE       = 1  << M_EC_TO_U8( C2_R_BF_POS::TXEIE )
 };
 
 enum class S_R_BF_POS {
@@ -86,15 +82,15 @@ enum class S_R_BF_POS {
 };
 
 enum class S_R_BF_MSK {
-    RXNE        = 1  << M_EC_TO_U8(S_R_BF_POS::RXNE),
-    TXE         = 1  << M_EC_TO_U8(S_R_BF_POS::TXE),
-    CHSIDE      = 1  << M_EC_TO_U8(S_R_BF_POS::CHSIDE),
-    UDR         = 1  << M_EC_TO_U8(S_R_BF_POS::UDR),
-    CRCERR      = 1  << M_EC_TO_U8(S_R_BF_POS::CRCERR),
-    MODF        = 1  << M_EC_TO_U8(S_R_BF_POS::MODF),
-    OVR         = 1  << M_EC_TO_U8(S_R_BF_POS::OVR),
-    BSY         = 1  << M_EC_TO_U8(S_R_BF_POS::BSY),
-    TIFRFE      = 1  << M_EC_TO_U8(S_R_BF_POS::TIFRFE)
+    RXNE        = 1  << M_EC_TO_U8( S_R_BF_POS::RXNE ),
+    TXE         = 1  << M_EC_TO_U8( S_R_BF_POS::TXE ),
+    CHSIDE      = 1  << M_EC_TO_U8( S_R_BF_POS::CHSIDE ),
+    UDR         = 1  << M_EC_TO_U8( S_R_BF_POS::UDR ),
+    CRCERR      = 1  << M_EC_TO_U8( S_R_BF_POS::CRCERR ),
+    MODF        = 1  << M_EC_TO_U8( S_R_BF_POS::MODF ),
+    OVR         = 1  << M_EC_TO_U8( S_R_BF_POS::OVR ),
+    BSY         = 1  << M_EC_TO_U8( S_R_BF_POS::BSY ),
+    TIFRFE      = 1  << M_EC_TO_U8( S_R_BF_POS::TIFRFE )
 };
 
 //**********************************************************************
@@ -103,7 +99,7 @@ enum class S_R_BF_MSK {
 namespace CFG {
 
 enum class MODE {
-    MASTER  = M_EC_TO_U32(C1_R_BF_MSK::MSTR),
+    MASTER  = M_EC_TO_U32( C1_R_BF_MSK::MSTR ),
     SLAVE   = 0
 };
 
@@ -125,7 +121,7 @@ enum class BAUDRATE_DEV {
 //**********************************************************************
 enum class CLK_POLARITY {
     IDLE_0  = 0,
-    IDLE_1  = M_EC_TO_U32(C1_R_BF_MSK::CPOL)
+    IDLE_1  = M_EC_TO_U32( C1_R_BF_MSK::CPOL )
 };
 
 
@@ -134,14 +130,14 @@ enum class CLK_POLARITY {
 //**********************************************************************
 enum class CLK_PHASE {
     FIRST   = 0,
-    SECOND  = M_EC_TO_U32(C1_R_BF_MSK::CPHA)
+    SECOND  = M_EC_TO_U32( C1_R_BF_MSK::CPHA )
 };
 
 //**********************************************************************
 // Делитель частоты с AHB для шины APB1.
 //**********************************************************************
 enum class NUMBER_LINE {
-    LINE_1  = M_EC_TO_U32(C1_R_BF_MSK::BIDIMODE),
+    LINE_1  = M_EC_TO_U32( C1_R_BF_MSK::BIDIMODE ),
     LINE_2  = 0
 };
 
@@ -150,7 +146,7 @@ enum class NUMBER_LINE {
 //**********************************************************************
 
 enum class INTERRUPT_TX {
-    ON  = M_EC_TO_U32(C2_R_BF_MSK::TXEIE),
+    ON  = M_EC_TO_U32( C2_R_BF_MSK::TXEIE ),
     OFF = 0
 };
 
@@ -158,7 +154,7 @@ enum class INTERRUPT_TX {
 // Вызов прерывания когда буффер по входу не пустой.
 //**********************************************************************
 enum class INTERRUPT_RX {
-    ON  = M_EC_TO_U32(C2_R_BF_MSK::RXNEIE),
+    ON  = M_EC_TO_U32( C2_R_BF_MSK::RXNEIE ),
     OFF = 0
 };
 
@@ -166,7 +162,7 @@ enum class INTERRUPT_RX {
 // При возникновении ошибки.
 //**********************************************************************
 enum class INTERRUPT_ERROR {
-    ON  = M_EC_TO_U32(C2_R_BF_MSK::ERRIE),
+    ON  = M_EC_TO_U32( C2_R_BF_MSK::ERRIE ),
     OFF = 0
 };
 
@@ -175,7 +171,7 @@ enum class INTERRUPT_ERROR {
 //**********************************************************************
 enum class FRAME_FORMAT {
     MOTOROLA    = 0,
-    TI          = M_EC_TO_U32(C2_R_BF_MSK::FRF)
+    TI          = M_EC_TO_U32( C2_R_BF_MSK::FRF )
 };
 
 //**********************************************************************
@@ -183,7 +179,7 @@ enum class FRAME_FORMAT {
 //**********************************************************************
 enum class CS {
     DISABLED   = 0,
-    ENABLED    = M_EC_TO_U32(C2_R_BF_MSK::SSOE)
+    ENABLED    = M_EC_TO_U32( C2_R_BF_MSK::SSOE )
 };
 
 //**********************************************************************
@@ -191,7 +187,7 @@ enum class CS {
 //**********************************************************************
 enum class DMA_TX_BUF {
     DISABLED   = 0,
-    ENABLED    = M_EC_TO_U32(C2_R_BF_MSK::TXDMAEN)
+    ENABLED    = M_EC_TO_U32( C2_R_BF_MSK::TXDMAEN )
 };
 
 //**********************************************************************
@@ -199,7 +195,7 @@ enum class DMA_TX_BUF {
 //**********************************************************************
 enum class DMA_RX_BUF {
     DISABLED   = 0,
-    ENABLED    = M_EC_TO_U32(C2_R_BF_MSK::RXDMAEN)
+    ENABLED    = M_EC_TO_U32( C2_R_BF_MSK::RXDMAEN )
 };
 
 
@@ -211,7 +207,7 @@ enum class DMA_RX_BUF {
 enum class ONE_LINE_MODE {
     USE_2_LINE      = 0xFF,
     RECEIVE_ONLY    = 0,
-    TRANSMIT_ONLY   = M_EC_TO_U32(C1_R_BF_MSK::BIDIOE)
+    TRANSMIT_ONLY   = M_EC_TO_U32( C1_R_BF_MSK::BIDIOE )
 };
 
 //**********************************************************************
@@ -219,7 +215,7 @@ enum class ONE_LINE_MODE {
 //**********************************************************************
 enum class DATA_FRAME {
     FRAME_8_BIT     = 0,
-    FRAME_16_BIT    = M_EC_TO_U32(C1_R_BF_MSK::DFF)
+    FRAME_16_BIT    = M_EC_TO_U32( C1_R_BF_MSK::DFF)
 };
 
 //**********************************************************************
@@ -227,7 +223,7 @@ enum class DATA_FRAME {
 //**********************************************************************
 enum class RECEIVE_MODE {
     FULL_DUPLEX     = 0,
-    RECEIVE_ONLY    = M_EC_TO_U32(C1_R_BF_MSK::RXONLY)
+    RECEIVE_ONLY    = M_EC_TO_U32( C1_R_BF_MSK::RXONLY)
 };
 
 //**********************************************************************
@@ -235,7 +231,7 @@ enum class RECEIVE_MODE {
 //**********************************************************************
 enum class SSM {
     SSM_OFF  = 0,
-    SSM_ON   = M_EC_TO_U32(C1_R_BF_MSK::SSM)
+    SSM_ON   = M_EC_TO_U32( C1_R_BF_MSK::SSM)
 };
 
 //**********************************************************************
@@ -244,7 +240,7 @@ enum class SSM {
 enum class SSM_MODE {
     NO_USE       = 0xFF,
     CS_IGNORED_0 = 0,
-    CS_IGNORED_1 = M_EC_TO_U32(C1_R_BF_MSK::SSI)
+    CS_IGNORED_1 = M_EC_TO_U32( C1_R_BF_MSK::SSI)
 };
 
 enum class NAME {

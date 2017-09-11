@@ -30,3 +30,7 @@
 #ifdef MODULE_WDT
 #include "wdt.h"
 #endif
+
+#ifdef MODULE_ADC
+#include "adc_one_channel.h"
+#endif

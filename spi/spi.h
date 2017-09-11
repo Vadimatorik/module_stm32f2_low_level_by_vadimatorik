@@ -62,7 +62,7 @@ template <  SPI::CFG::NAME              SPIx,           // SPI1, SPI2...
             // выбран режим работы для одной линии ).
             SPI::CFG::ONE_LINE_MODE     ONE_LINE_MODE,
             SPI::CFG::FRAME_FORMAT      FORMAT,         // Формат посылок.
-            SPI::CFG::BAUDRATE_DEV     BR_DEV >        // Определяет делитель частоты передачи.
+            SPI::CFG::BAUDRATE_DEV      BR_DEV >        // Определяет делитель частоты передачи.
 class spi_master_8bit_hardware_os : public spi_master_8bit_base {
 public:
     constexpr spi_master_8bit_hardware_os ( const spi_master_8bit_hardware_os_cfg_t* const cfg );
