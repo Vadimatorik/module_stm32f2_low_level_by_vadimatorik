@@ -77,10 +77,10 @@ public:
 template < EC_PORT_NAME              PORT,
            EC_PORT_PIN_NAME          PIN_NAME >
 class pin_config_adc_check_param : public pin_config_check_param< PORT, PIN_NAME,
-                                                                  EC_PIN_MODE::INPUT,
+                                                                  EC_PIN_MODE::ANALOG,
                                                                   EC_PIN_OUTPUT_CFG::NO_USE,
                                                                   EC_PIN_SPEED::LOW,
-                                                                  EC_PIN_PULL::UP,
+                                                                  EC_PIN_PULL::NO_USE,
                                                                   EC_PIN_AF::NO_USE,
                                                                   EC_LOCKED::LOCKED,
                                                                   EC_PIN_STATE_AFTER_INIT::NO_USE > {

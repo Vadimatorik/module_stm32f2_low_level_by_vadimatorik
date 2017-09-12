@@ -141,6 +141,10 @@ public:
 
     static void   tim7_clk_on               ( void );
     static void   tim7_clk_off              ( void );
+
+    static void   adc1_clk_on               ( void );
+    static void   adc1_clk_off              ( void );
+
 private:
     /*
      * Действия производятся без каких-либо проверок.

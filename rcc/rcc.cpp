@@ -322,4 +322,14 @@ void rcc::tim7_clk_on ( void ) {
 void rcc::tim7_clk_off ( void ) {
     RCC->APB_1_EN &= ~M_EC_TO_U32(EC_APB1_EN_REG_BIT_MSK::TIM7);
 }
+
+// ADC1.
+void rcc::adc1_clk_on ( void ) {
+    RCC->APB_2_EN |= M_EC_TO_U32(EC_APB2_EN_REG_BIT_MSK::ADC1);
+}
+
+void rcc::adc1_clk_off ( void ) {
+    RCC->APB_2_EN &= ~M_EC_TO_U32(EC_APB2_EN_REG_BIT_MSK::ADC1);
+}
+
 #endif

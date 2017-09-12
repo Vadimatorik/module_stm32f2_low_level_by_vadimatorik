@@ -17,7 +17,8 @@ template < ADC_ONE_CHANNEL_CFG_TEMPLATE_HEADING >
 void adc_one_channel< ADC_ONE_CHANNEL_CFG_TEMPLATE_PARAM >::reinit ( void ) const {
     ADC::R_STRUCT* A = ( ADC::R_STRUCT* )ADCx;
     A->C2 = 0;
-    A->C1 = ( uint8_t )RES << M_EC_TO_U32( ADC::C1_R_BF_POS::RES );
+    A->C1 = ( ( uint8_t )RES << M_EC_TO_U32( ADC::C1_R_BF_POS::RES ) ) |
+                                M_EC_TO_U32( ADC::C1_R_BF_MSK::DISCEN );
     A->SMP[0] = ( ( uint8_t )CH > 9 ) ? ( uint8_t )ST << 3 * ( ( uint8_t )CH - 10 ) : 0;
     A->SMP[1] = ( ( uint8_t )CH < 10 ) ? ( uint8_t )ST << 3 * ( uint8_t )CH  : 0;
     A->SQ[0] = 0;
@@ -27,19 +28,19 @@ void adc_one_channel< ADC_ONE_CHANNEL_CFG_TEMPLATE_PARAM >::reinit ( void ) cons
 template < ADC_ONE_CHANNEL_CFG_TEMPLATE_HEADING >
 void adc_one_channel< ADC_ONE_CHANNEL_CFG_TEMPLATE_PARAM >::on ( void ) const {
     ADC::R_STRUCT* A = ( ADC::R_STRUCT* )ADCx;
-    A->C2 = M_EC_TO_U32( ADC::C2_R_BF_POS::ADON );
+    A->C2 |= M_EC_TO_U32( ADC::C2_R_BF_MSK::ADON );
 }
 
 template < ADC_ONE_CHANNEL_CFG_TEMPLATE_HEADING >
 void adc_one_channel< ADC_ONE_CHANNEL_CFG_TEMPLATE_PARAM >::off ( void ) const {
     ADC::R_STRUCT* A = ( ADC::R_STRUCT* )ADCx;
-    A->C2 &= ~M_EC_TO_U32( ADC::C2_R_BF_POS::ADON );
+    A->C2 &= ~M_EC_TO_U32( ADC::C2_R_BF_MSK::ADON );
 }
 
 template < ADC_ONE_CHANNEL_CFG_TEMPLATE_HEADING >
 void adc_one_channel< ADC_ONE_CHANNEL_CFG_TEMPLATE_PARAM >::start_measurement ( void ) const {
     ADC::R_STRUCT* A = ( ADC::R_STRUCT* )ADCx;
-    A->C2 = M_EC_TO_U32( ADC::C2_R_BF_MSK::SWSTART );
+    A->C2 |= M_EC_TO_U32( ADC::C2_R_BF_MSK::SWSTART );
 }
 
 template < ADC_ONE_CHANNEL_CFG_TEMPLATE_HEADING >
@@ -47,10 +48,10 @@ SPI::FUNC_RESULT adc_one_channel< ADC_ONE_CHANNEL_CFG_TEMPLATE_PARAM >::get_meas
     ADC::R_STRUCT* A = ( ADC::R_STRUCT* )ADCx;
     if ( A->S & M_EC_TO_U32( ADC::S_R_BF_MSK::EOC ) ) {
         channel_measurement = A->D;     // S сбросится сам в момент считывания.
+        return SPI::FUNC_RESULT::OK;
     } else {
         return SPI::FUNC_RESULT::MEASUREMENT_IS_MISSING;
     }
-    channel_measurement = 0;
 }
 
 #endif
