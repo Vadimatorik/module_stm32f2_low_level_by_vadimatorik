@@ -16,9 +16,8 @@
 template < ADC_ONE_CHANNEL_CFG_TEMPLATE_HEADING >
 void adc_one_channel< ADC_ONE_CHANNEL_CFG_TEMPLATE_PARAM >::reinit ( void ) const {
     ADC::R_STRUCT* A = ( ADC::R_STRUCT* )ADCx;
-    A->C2 = 0;
-    A->C1 = ( ( uint8_t )RES << M_EC_TO_U32( ADC::C1_R_BF_POS::RES ) ) |
-                                M_EC_TO_U32( ADC::C1_R_BF_MSK::DISCEN );
+    A->C2 = M_EC_TO_U32( ADC::C2_R_BF_MSK::CONT );
+    A->C1 = ( ( uint8_t )RES << M_EC_TO_U32( ADC::C1_R_BF_POS::RES ) );
     A->SMP[0] = ( ( uint8_t )CH > 9 ) ? ( uint8_t )ST << 3 * ( ( uint8_t )CH - 10 ) : 0;
     A->SMP[1] = ( ( uint8_t )CH < 10 ) ? ( uint8_t )ST << 3 * ( uint8_t )CH  : 0;
     A->SQ[0] = 0;
@@ -38,7 +37,7 @@ void adc_one_channel< ADC_ONE_CHANNEL_CFG_TEMPLATE_PARAM >::off ( void ) const {
 }
 
 template < ADC_ONE_CHANNEL_CFG_TEMPLATE_HEADING >
-void adc_one_channel< ADC_ONE_CHANNEL_CFG_TEMPLATE_PARAM >::start_measurement ( void ) const {
+void adc_one_channel< ADC_ONE_CHANNEL_CFG_TEMPLATE_PARAM >::start_continuous_conversion ( void ) const {
     ADC::R_STRUCT* A = ( ADC::R_STRUCT* )ADCx;
     A->C2 |= M_EC_TO_U32( ADC::C2_R_BF_MSK::SWSTART );
 }

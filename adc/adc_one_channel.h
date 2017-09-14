@@ -12,11 +12,11 @@ template < ADC::CFG::NAME           ADCx,
 class adc_one_channel : public adc_one_channel_base {
 public:
     constexpr adc_one_channel () {}
-    void                reinit              ( void ) const;
-    void                on                  ( void ) const;
-    void                off                 ( void ) const;
-    void                start_measurement   ( void ) const;
-    SPI::FUNC_RESULT    get_measurement     ( uint32_t& channel_measurement ) const;
+    void                reinit                          ( void ) const;
+    void                on                              ( void ) const;
+    void                off                             ( void ) const;
+    void                start_continuous_conversion     ( void ) const;
+    SPI::FUNC_RESULT    get_measurement                 ( uint32_t& channel_measurement ) const;
 };
 
 #include "adc_one_channel_func.h"
