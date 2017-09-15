@@ -131,4 +131,36 @@ struct __attribute__((packed)) R_STRUCT {
 
 }
 
+namespace ADC_COM {
+
+struct __attribute__((packed)) R_STRUCT {
+    uint32_t    CS;
+    uint32_t    CC;
+    uint32_t    CD;
+};
+
+enum class CC_R_BF_POS {
+    MULTI       = 0,
+    DELAY       = 8,
+    DDS         = 13,
+    DMA         = 14,
+    ADCPRE      = 16,
+    VBATE       = 22,
+    TSVREFE     = 23
+};
+
+enum class CC_R_BF_MSK {
+    MULTI        = 0b11111       << M_EC_TO_U8( CC_R_BF_POS::MULTI ),
+    DELAY        = 0b1111        << M_EC_TO_U8( CC_R_BF_POS::DELAY ),
+    DDS          = 1             << M_EC_TO_U8( CC_R_BF_POS::DDS ),
+    DMA          = 0b11          << M_EC_TO_U8( CC_R_BF_POS::DMA ),
+    ADCPRE       = 0b11          << M_EC_TO_U8( CC_R_BF_POS::ADCPRE ),
+    VBATE        = 1             << M_EC_TO_U8( CC_R_BF_POS::VBATE ),
+    TSVREFE      = 1             << M_EC_TO_U8( CC_R_BF_POS::TSVREFE )
+};
+
+}
+
+#define ADC_COM_CFG         ( ADC_COM::R_STRUCT* )0x40012300;
+
 #endif
