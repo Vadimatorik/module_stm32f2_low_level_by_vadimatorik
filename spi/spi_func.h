@@ -175,7 +175,7 @@ void spi_master_8bit_hardware_os< SPI_MASTER_HARDWARE_OS_TEMPLATE_PARAM >::reini
 }
 
 template < SPI_MASTER_HARDWARE_OS_TEMPLATE_HEADING >
-SPI::BASE_RESULT spi_master_8bit_hardware_os< SPI_MASTER_HARDWARE_OS_TEMPLATE_PARAM >::tx ( const uint8_t* const  p_array_tx, const uint16_t& length, const uint32_t& timeout_ms ) const {
+SPI::BASE_RESULT spi_master_8bit_hardware_os< SPI_MASTER_HARDWARE_OS_TEMPLATE_PARAM >::tx ( const uint8_t* const  p_array_tx, const uint16_t& length, const uint32_t& timeout_ms, const SPI::STEP_MODE step_mode ) const {
     ( void )timeout_ms; // Игнорим, т.к. все делаем на флагах.
     SPI::R_STRUCT*   S = ( SPI::R_STRUCT* )M_EC_TO_U32(SPIx);
 
@@ -194,7 +194,7 @@ SPI::BASE_RESULT spi_master_8bit_hardware_os< SPI_MASTER_HARDWARE_OS_TEMPLATE_PA
         // мы получаем наложение принятого байта! (этого никак не избежать, скорости не хватает).
         for ( uint16_t loop = 0; loop < length; loop++ ) {
             S->D = *p;
-            p++;
+            p += (int8_t)step_mode;
             while ( ( S->S & M_EC_TO_U32( SPI::S_R_BF_MSK::TXE ) ) == 0  );
             while ( ( S->S & M_EC_TO_U32( SPI::S_R_BF_MSK::RXNE ) ) == 0  );
             buf_read = S->D;

@@ -69,7 +69,7 @@ public:
 
     void    reinit                  ( void ) const;
 
-    SPI::BASE_RESULT tx           ( const uint8_t* const  p_array_tx, const uint16_t& length, const uint32_t& timeout_ms ) const;
+    SPI::BASE_RESULT tx           ( const uint8_t* const  p_array_tx, const uint16_t& length, const uint32_t& timeout_ms, const SPI::STEP_MODE step_mode = SPI::STEP_MODE::INC ) const;
     SPI::BASE_RESULT tx           ( const uint8_t* const  p_array_tx, uint8_t* p_array_rx, const uint16_t& length, const uint32_t& timeout_ms ) const;
     SPI::BASE_RESULT tx_one_item  ( const uint8_t p_item_tx, const uint16_t count, const uint32_t timeout_ms ) const;
     SPI::BASE_RESULT rx           ( uint8_t* p_array_rx, const uint16_t& length, const uint32_t& timeout_ms, const uint8_t& out_value = 0xFF ) const;
