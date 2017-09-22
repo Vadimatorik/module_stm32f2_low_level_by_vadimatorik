@@ -359,6 +359,32 @@ enum class EC_AHB1EN_REG_BIT_MSK {
     OTGHSULPI     = 1   << M_EC_TO_U8(EC_AHB1EN_REG_BIT_FIELD_POS::OTGHSULPI)
 };
 
+enum class EC_CS_REG_BIT_FIELD_POS {
+    LSION         = 0,
+    LSIRDY        = 1,
+    RMVF          = 24,
+    BORRSTF       = 25,
+    PINRSTF       = 26,
+    PORRSTF       = 27,
+    SFTRSTF       = 28,
+    IWDGRSTF      = 29,
+    WWDGRSTF      = 30,
+    LPWRRSTF      = 31
+};
+
+enum class EC_CS_REG_BIT_MSK {
+    LSION         = 1   << M_EC_TO_U8(EC_CS_REG_BIT_FIELD_POS::LSION),
+    LSIRDY        = 1   << M_EC_TO_U8(EC_CS_REG_BIT_FIELD_POS::LSIRDY),
+    RMVF          = 1   << M_EC_TO_U8(EC_CS_REG_BIT_FIELD_POS::RMVF),
+    BORRSTF       = 1   << M_EC_TO_U8(EC_CS_REG_BIT_FIELD_POS::BORRSTF),
+    PINRSTF       = 1   << M_EC_TO_U8(EC_CS_REG_BIT_FIELD_POS::PINRSTF),
+    PORRSTF       = 1   << M_EC_TO_U8(EC_CS_REG_BIT_FIELD_POS::PORRSTF),
+    SFTRSTF       = 1   << M_EC_TO_U8(EC_CS_REG_BIT_FIELD_POS::SFTRSTF),
+    IWDGRSTF      = 1   << M_EC_TO_U8(EC_CS_REG_BIT_FIELD_POS::IWDGRSTF),
+    WWDGRSTF      = 1   << M_EC_TO_U8(EC_CS_REG_BIT_FIELD_POS::WWDGRSTF),
+    LPWRRSTF      = 1   << M_EC_TO_U8(EC_CS_REG_BIT_FIELD_POS::LPWRRSTF)
+};
+
 
 /**********************************************************************
  * Область упакованных структур.

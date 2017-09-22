@@ -332,4 +332,22 @@ void rcc::adc1_clk_off ( void ) {
     RCC->APB_2_EN &= ~M_EC_TO_U32(EC_APB2_EN_REG_BIT_MSK::ADC1);
 }
 
+// LCI.
+void rcc::lsi_clk_on ( void ) {
+    RCC->CS |= M_EC_TO_U32(EC_CS_REG_BIT_MSK::LSION);
+    while ( ( RCC->CS & M_EC_TO_U32(EC_CS_REG_BIT_MSK::LSIRDY) ) == 0 ) {};  // Ожидаем стабилизации LSI.
+}
+
+void rcc::lsi_clk_off ( void ) {
+    RCC->CS &= ~M_EC_TO_U32(EC_CS_REG_BIT_MSK::LSION);
+}
+
+void rcc::wwdg_clk_on ( void ) {
+    RCC->CS |= M_EC_TO_U32(EC_APB1_EN_REG_BIT_MSK::WWDG);
+}
+
+void rcc::wwdg_clk_off ( void ) {
+    RCC->CS &= ~M_EC_TO_U32(EC_APB1_EN_REG_BIT_MSK::WWDG);
+}
+
 #endif

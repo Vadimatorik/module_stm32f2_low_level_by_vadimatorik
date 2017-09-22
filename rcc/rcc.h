@@ -145,6 +145,12 @@ public:
     static void   adc1_clk_on               ( void );
     static void   adc1_clk_off              ( void );
 
+    static void   lsi_clk_on                ( void );
+    static void   lsi_clk_off               ( void );
+
+    static void   wwdg_clk_on               ( void );
+    static void   wwdg_clk_off              ( void );
+
 private:
     /*
      * Действия производятся без каких-либо проверок.
