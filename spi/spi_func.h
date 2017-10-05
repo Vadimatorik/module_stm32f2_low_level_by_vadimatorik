@@ -181,7 +181,8 @@ SPI::BASE_RESULT spi_master_8bit_hardware_os< SPI_MASTER_HARDWARE_OS_TEMPLATE_PA
 
     if ( length == 0 ) return SPI::BASE_RESULT::LENGTH_ERROR;
 
-    USER_OS_TAKE_MUTEX( *this->cfg->mutex, portMAX_DELAY );
+    if ( this->cfg->mutex != nullptr )
+        USER_OS_TAKE_MUTEX( *this->cfg->mutex, portMAX_DELAY );
 
     if ( NUM_LINE == SPI::CFG::NUMBER_LINE::LINE_2 ) {
         uint8_t* p = ( uint8_t* )p_array_tx;
@@ -201,7 +202,9 @@ SPI::BASE_RESULT spi_master_8bit_hardware_os< SPI_MASTER_HARDWARE_OS_TEMPLATE_PA
         }
     }
 
-    USER_OS_GIVE_MUTEX( *this->cfg->mutex );
+    if ( this->cfg->mutex != nullptr )
+        USER_OS_GIVE_MUTEX( *this->cfg->mutex );
+
     return SPI::BASE_RESULT::OK;
 }
 
@@ -212,7 +215,8 @@ SPI::BASE_RESULT spi_master_8bit_hardware_os< SPI_MASTER_HARDWARE_OS_TEMPLATE_PA
 
     if ( length == 0 ) return SPI::BASE_RESULT::LENGTH_ERROR;
 
-    USER_OS_TAKE_MUTEX( *this->cfg->mutex, portMAX_DELAY );
+    if ( this->cfg->mutex != nullptr )
+        USER_OS_TAKE_MUTEX( *this->cfg->mutex, portMAX_DELAY );
 
     if ( NUM_LINE == SPI::CFG::NUMBER_LINE::LINE_2 ) {
         uint8_t* p_out = ( uint8_t* )p_array_tx;
@@ -229,7 +233,9 @@ SPI::BASE_RESULT spi_master_8bit_hardware_os< SPI_MASTER_HARDWARE_OS_TEMPLATE_PA
         }
     }
 
-    USER_OS_GIVE_MUTEX( *this->cfg->mutex );
+    if ( this->cfg->mutex != nullptr )
+        USER_OS_GIVE_MUTEX( *this->cfg->mutex );
+
     return SPI::BASE_RESULT::OK;
 }
 
@@ -240,7 +246,8 @@ SPI::BASE_RESULT spi_master_8bit_hardware_os< SPI_MASTER_HARDWARE_OS_TEMPLATE_PA
 
     if ( count == 0 ) return SPI::BASE_RESULT::LENGTH_ERROR;
 
-    USER_OS_TAKE_MUTEX( *this->cfg->mutex, portMAX_DELAY );
+    if ( this->cfg->mutex != nullptr )
+        USER_OS_TAKE_MUTEX( *this->cfg->mutex, portMAX_DELAY );
 
     if ( NUM_LINE == SPI::CFG::NUMBER_LINE::LINE_2 ) {
         volatile uint32_t buf_read;
@@ -256,7 +263,9 @@ SPI::BASE_RESULT spi_master_8bit_hardware_os< SPI_MASTER_HARDWARE_OS_TEMPLATE_PA
         }
     }
 
-    USER_OS_GIVE_MUTEX( *this->cfg->mutex );
+    if ( this->cfg->mutex != nullptr )
+        USER_OS_GIVE_MUTEX( *this->cfg->mutex );
+
     return SPI::BASE_RESULT::OK;
 }
 
@@ -267,7 +276,8 @@ SPI::BASE_RESULT spi_master_8bit_hardware_os< SPI_MASTER_HARDWARE_OS_TEMPLATE_PA
 
     if ( length == 0 ) return SPI::BASE_RESULT::LENGTH_ERROR;
 
-    USER_OS_TAKE_MUTEX( *this->cfg->mutex, portMAX_DELAY );
+    if ( this->cfg->mutex != nullptr )
+        USER_OS_TAKE_MUTEX( *this->cfg->mutex, portMAX_DELAY );
 
     if ( NUM_LINE == SPI::CFG::NUMBER_LINE::LINE_2 ) {
         uint8_t* p = ( uint8_t* )p_array_rx;
@@ -283,7 +293,9 @@ SPI::BASE_RESULT spi_master_8bit_hardware_os< SPI_MASTER_HARDWARE_OS_TEMPLATE_PA
         }
     }
 
-    USER_OS_GIVE_MUTEX( *this->cfg->mutex );
+    if ( this->cfg->mutex != nullptr )
+        USER_OS_GIVE_MUTEX( *this->cfg->mutex );
+
     return SPI::BASE_RESULT::OK;
 }
 
