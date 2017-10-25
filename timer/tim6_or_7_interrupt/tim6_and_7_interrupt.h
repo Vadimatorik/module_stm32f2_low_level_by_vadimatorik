@@ -4,7 +4,7 @@
 
 #ifdef MODULE_TIMER
 
-#include "mk_hardware_interfaces_timer.h"
+#include "mc_hardware_interfaces_timer.h"
 #include "tim_6_and_7_struct.h"
 
 //

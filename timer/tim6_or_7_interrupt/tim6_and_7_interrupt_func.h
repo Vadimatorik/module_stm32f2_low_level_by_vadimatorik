@@ -1,7 +1,7 @@
 #pragma once
 
 #include "tim_6_and_7_struct.h"
-#include "mk_hardware_interfaces_timer.h"
+#include "mc_hardware_interfaces_timer.h"
 
 // Генератор прерываний.
 #define TIM6_AND_7_COMP_ONE_CHANNEL_CFG_TEMPLATE_HEADING     TIM6_OR_TIM7        P_TIM,              \

@@ -4,7 +4,7 @@
 
 #ifdef MODULE_PORT
 
-#include "mk_hardware_interfaces_pin.h"
+#include "mc_hardware_interfaces_pin.h"
 #include "pin_struct.h"
 
 
@@ -19,10 +19,13 @@ public:
 
     void    set     ( void )                const;
     void    reset   ( void )                const;
+
+    void    toggle  ( void )                const;
+
     void    set     ( uint8_t state )       const;
     void    set     ( bool state )          const;
     void    set     ( int state )           const;
-    void    invert  ( void )                const;
+
     bool    read    ( void )                const;
 
 private:

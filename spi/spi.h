@@ -4,7 +4,7 @@
 
 #ifdef MODULE_SPI
 
-#include "mk_hardware_interfaces_spi.h"
+#include "mc_hardware_interfaces_spi.h"
 #include "spi_struct.h"
 
 //**********************************************************************

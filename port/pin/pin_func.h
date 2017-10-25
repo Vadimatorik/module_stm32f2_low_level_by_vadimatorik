@@ -107,7 +107,7 @@ void pin< PIN_CFG_TEMPLATE_PARAM >::set ( int state ) const {
 // Метод инвертирует состояние на выходе вывода,
 //  если вывод настроен как выход.
 template < PIN_CFG_TEMPLATE_HEADING >
-void pin< PIN_CFG_TEMPLATE_PARAM >::invert( void ) const {
+void pin< PIN_CFG_TEMPLATE_PARAM >::toggle( void ) const {
     if (*M_U32_TO_P_CONST(p_bb_odr_read)) {			// Если был 1, то выставляем 0.
         this->reset();
     } else {

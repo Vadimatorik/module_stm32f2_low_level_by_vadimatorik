@@ -3,7 +3,7 @@
 #include "f2_api_conf.h"
 
 #include "adc_struct.h"
-#include "mk_hardware_interfaces_adc.h"
+#include "mc_hardware_interfaces_adc.h"
 
 template < ADC::CFG::NAME           ADCx,
            uint8_t                  CH,

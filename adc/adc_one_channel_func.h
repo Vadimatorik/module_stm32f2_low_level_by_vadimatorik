@@ -3,7 +3,7 @@
 #include "f2_api_conf.h"
 
 #ifdef MODULE_ADC
-#include "mk_hardware_interfaces_adc.h"
+#include "mc_hardware_interfaces_adc.h"
 #include "adc_struct.h"
 
 #define ADC_ONE_CHANNEL_CFG_TEMPLATE_HEADING            ADC::CFG::NAME           ADCx,  \
